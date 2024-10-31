@@ -28,6 +28,7 @@ public class User {
     private int loginAttemptPeriod;
     private String secretQuestion;
     private String secretAnswer;
+    private boolean admin;
 
     @PrePersist
     protected void onCreate() {
