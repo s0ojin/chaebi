@@ -1,18 +1,22 @@
-package com.backend.service;
+package com.backend.service.user;
 
 import jakarta.servlet.http.Cookie;
-import com.backend.domain.user.User;
+import com.backend.domain.User;
 import com.backend.dto.LoginDTO;
 import com.backend.dto.SignDTO;
 import com.backend.repository.UserRepository;
 import com.backend.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,16 +27,14 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public void signup(SignDTO userDTO) {
-        if (userRepository.existsById(userDTO.getId())) {
+    public void signup(SignDTO userDTO) { //회원가입
+        if (userRepository.existsById(userDTO.getPhone())) {
             throw new RuntimeException("이미 존재하는 아이디입니다.");
         }
 
         User user = User.builder()
-                .id(userDTO.getId())
-                .password(passwordEncoder.encode(userDTO.getPassword()))
                 .phone(userDTO.getPhone())
-                .email(userDTO.getEmail())
+                .password(passwordEncoder.encode(userDTO.getPassword()))
                 .status(true)
                 .loginAttemptPeriod(0)
                 .secretQuestion(userDTO.getSecretQuestion())
@@ -44,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public User login(LoginDTO loginDTO, HttpServletResponse response) {
-        User user = userRepository.findById(loginDTO.getId())
+        User user = userRepository.findById(loginDTO.getPhone())
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
 
         if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
@@ -55,27 +57,41 @@ public class UserServiceImpl implements UserService {
         user.setLastLogin(LocalDateTime.now());
         user.setLoginAttemptPeriod(0);
 
-        Cookie accessCookie = new Cookie("accessToken", jwtUtil.generateAccessToken(user.getEmail()));
+        Cookie accessCookie = new Cookie("accessToken", jwtUtil.generateAccessToken(user.getPhone()));
         //accessCookie.setHttpOnly(true);
         //accessCookie.setSecure(true);
         accessCookie.setPath("/");
         accessCookie.setMaxAge(60*60*12);
-        Cookie refreshCookie = new Cookie("refreshToken", jwtUtil.generateRefreshToken(user.getEmail()));
+        Cookie refreshCookie = new Cookie("refreshToken", jwtUtil.generateRefreshToken(user.getPhone()));
         //refreshCookie.setHttpOnly(true);
         //refreshCookie.setSecure(true);
         refreshCookie.setPath("/");
         refreshCookie.setMaxAge(60*60*24*3);
         response.addCookie(accessCookie);
         response.addCookie(refreshCookie);
-
+        System.out.println(" token " + " " + accessCookie.getValue());
         return userRepository.save(user);
     }
 
     @Transactional
-    public void logout(String id) {
+    public void logout(String id) { //로그아웃 로직 고민
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
 
     }
+
+    @Override
+    public Optional<User> getUser(String id) { //아이디로 유저를 반환
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public Optional<User> getUserByToken(HttpServletRequest request) { //JWT 토큰을 해석한 결과값으로 유저를 추출
+        String userPhone = jwtUtil.getUserByJwt(request);
+        System.out.println("email : " + userPhone);
+        return userRepository.findByPhone(userPhone);
+    }
+
+
 }
 
