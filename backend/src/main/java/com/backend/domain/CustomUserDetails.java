@@ -1,6 +1,5 @@
-package com.backend.domain.customUser;
+package com.backend.domain;
 
-import com.backend.domain.user.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,7 +33,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return user.getPhone();
     }
 
     @Override
@@ -57,7 +56,7 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
     public String getId() {
-        return user.getId();
+        return user.getPhone();
     }
 }
 

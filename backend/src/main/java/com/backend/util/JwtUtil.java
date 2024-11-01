@@ -1,6 +1,7 @@
 package com.backend.util;
 
 import io.jsonwebtoken.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -21,18 +22,18 @@ public class JwtUtil {
     private int refreshExpirationMs;
 
     // 주어진 사용자 이메일로 JWT 토큰을 생성
-    public String generateAccessToken(String userEmail) { //이메일로 할지 전화번호로 할지 고민
+    public String generateAccessToken(String userPhone) { //이메일로 할지 전화번호로 할지 고민
         return Jwts.builder()
-                .setSubject(userEmail) // 토큰의 주체 설정 (사용자 고유 정보)
+                .setSubject(userPhone) // 토큰의 주체 설정 (사용자 고유 정보)
                 .setIssuedAt(new Date()) // 토큰 발급 시간 설정
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)) // 토큰 만료 시간 설정
                 .signWith(SignatureAlgorithm.HS512, jwtSecret.getBytes()) // HS512 알고리즘과 시크릿 키를 사용하여 서명
                 .compact(); // JWT 토큰 생성
     }
 
-    public String generateRefreshToken(String userEmail) {
+    public String generateRefreshToken(String userPhone) {
         return Jwts.builder()
-                .setSubject(userEmail)
+                .setSubject(userPhone)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + refreshExpirationMs))
                 .signWith(SignatureAlgorithm.HS512,jwtSecret.getBytes())
@@ -40,9 +41,22 @@ public class JwtUtil {
     }
 
     // JWT 토큰에서 사용자 이메일을 추출
-    public String getUsernameFromToken(String token) {
+    public String getUserphoneFromToken(String token) {
         // 서명 키를 사용하여 토큰을 파싱하고, 주체(subject)를 반환
         return Jwts.parser().setSigningKey(jwtSecret.getBytes()).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public String getUserByJwt(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7);
+
+            if (validateToken(token)) {
+                return getUserphoneFromToken(token); // 사용자 이메일 추출
+            }
+        }
+        return null; // 유효하지 않은 경우 null 반환
     }
 
     // 주어진 JWT 토큰의 유효성을 검사

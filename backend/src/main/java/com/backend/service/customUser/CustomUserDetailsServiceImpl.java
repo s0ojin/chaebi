@@ -1,7 +1,7 @@
-package com.backend.service;
+package com.backend.service.customUser;
 
-import com.backend.domain.customUser.CustomUserDetails;
-import com.backend.domain.user.User;
+import com.backend.domain.CustomUserDetails;
+import com.backend.domain.User;
 import com.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,11 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 
     @Override
-    public CustomUserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + id));
+    public CustomUserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
+        //Email로 사용자 여부 판단 (추후에 변경될 수 있음)
+        User user = userRepository.findByPhone(phone).orElseThrow(() -> new UsernameNotFoundException("User not found with Phone: " + phone));
         if(user == null) {
-            throw new UsernameNotFoundException("User not found with id: " + id);
+            throw new UsernameNotFoundException("User not found with phone: " + phone);
         }
         return new CustomUserDetails(user);
     }
