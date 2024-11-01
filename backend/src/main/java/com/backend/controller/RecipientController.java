@@ -5,6 +5,7 @@ import com.backend.domain.User;
 import com.backend.service.recipient.RecipientService;
 import com.backend.service.user.UserService;
 import com.backend.util.JwtUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class RecipientController {
 
     private final UserService userService;
 
+    @Operation(summary = "열람자 등록")
     @PostMapping("/create")
     public ResponseEntity<String> createRecipient(@RequestBody Recipient recipient, HttpServletRequest request) {
         Optional<User> user = userService.getUserByToken(request);
@@ -40,11 +42,13 @@ public class RecipientController {
         }
     }
 
+    @Operation(summary = "열람자 상세")
     @GetMapping("/{id}")
     public ResponseEntity<Recipient> getRecipientById(@PathVariable long id) {
         return ResponseEntity.ok(recipientService.getRecipient(id));
     }
 
+    @Operation(summary = "열람자 목록")
     @GetMapping("/list")
     public ResponseEntity<List<Recipient>> getRecipientList(HttpServletRequest request) {
         // JWT를 통해 사용자 정보를 가져옴
@@ -62,6 +66,7 @@ public class RecipientController {
         }
     }
 
+    @Operation(summary = "열람자 정보 수정")
     @PostMapping("/update")
     public ResponseEntity<String> updateRecipient(@RequestBody Recipient recipient, HttpServletRequest request) {
         Optional<User> user = userService.getUserByToken(request);
@@ -75,6 +80,7 @@ public class RecipientController {
         }
     }
 
+    @Operation(summary = "열람자 삭제")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteRecipient(@PathVariable long id) {
         recipientService.deleteRecipient(id);

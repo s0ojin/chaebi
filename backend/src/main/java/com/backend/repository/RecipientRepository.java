@@ -8,5 +8,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RecipientRepository extends JpaRepository<Recipient, Long> {
-    List<Recipient> findByUser(Optional<User> user);
+    List<Recipient> findByUser(User user);
 }

@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface LetterRepository extends JpaRepository<Letter, Long> {
     List<Letter> findByUserAndRecipient(User user, Recipient recipient);
+    List<Letter> findByUser(User user);
 }
