@@ -39,3 +39,6 @@ next-env.d.ts
 public/sw.js
 workbox-*.js
 *.map
+
+# Ignore npm's lock file since Yarn is now being used
+package-lock.json
