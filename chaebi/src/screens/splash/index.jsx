@@ -9,7 +9,7 @@ export default function SplashScreen({navigation}) {
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      {/* <Logo width={150} height={120} /> */}
+      <Logo width={150} height={120} />
       <Text
         style={{
           fontSize: 20,

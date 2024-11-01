@@ -14,7 +14,7 @@ export default function HeaderComp({ pageName }) {
         flexDirection: 'row',
         alignItems: 'center',
       }}>
-      {/* <ArrowLeft width={24} height={24} onPress={() => navigation.goBack()} /> */}
+      <ArrowLeft width={24} height={24} onPress={() => navigation.goBack()} />
       <Text style={{ fontSize: 20, marginLeft: 10 }}>{pageName}</Text>
     </View>
   );
