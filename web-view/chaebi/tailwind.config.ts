@@ -8,6 +8,9 @@ const config: Config = {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
       },
+      fontFamily: {
+        LeeSeoyun: ['var(--font-LeeSeoyun)', 'sans-serif'],
+      },
     },
   },
   plugins: [],

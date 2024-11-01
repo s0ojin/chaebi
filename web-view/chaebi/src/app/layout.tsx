@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import pretendard from '@/utils/fonts'
+import LeeSeoyun from '@/utils/fonts'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${pretendard.variable} font-pretendard w-full`}>
+      <body className={`${LeeSeoyun.variable} font-LeeSeoyun w-full`}>
         {children}
       </body>
     </html>
