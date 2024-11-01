@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "letters")
@@ -21,9 +23,13 @@ public class Letter {
     @JoinColumn(name = "user_id")
     private User user; //작성자
 
-    @ManyToOne
-    @JoinColumn(name = "recipient_id")
-    private Recipient recipient; //열람자
+    @ManyToMany //M:N을 단순히 이렇게 처리할 지 중간다리 하나 넣을지 고민
+    @JoinTable(
+            name = "letter_recipients",
+            joinColumns = @JoinColumn(name = "letter_id"),
+            inverseJoinColumns = @JoinColumn(name = "recipient_id")
+    )
+    private Set<Recipient> recipient = new HashSet<>();
 
     @Column(columnDefinition = "TEXT")
     private String content; //내용

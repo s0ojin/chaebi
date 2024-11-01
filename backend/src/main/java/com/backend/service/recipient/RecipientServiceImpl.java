@@ -29,7 +29,7 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
 
     @Override
     public Optional<List<Recipient>> getRecipients(Optional<User> user) {  //사용자의 열람자 리스트 반환 
-        List<Recipient> recipients = repository.findByUser(user);
+        List<Recipient> recipients = repository.findByUser(user.get());
         if (recipients.isEmpty()) {
             return Optional.empty(); // 결과가 없을 경우 빈 Optional 반환
         }

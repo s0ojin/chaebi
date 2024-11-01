@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public void signup(SignDTO userDTO) { //회원가입
-        if (userRepository.existsById(userDTO.getPhone())) {
+        if (userRepository.existsByPhone(userDTO.getPhone())) {
             throw new RuntimeException("이미 존재하는 아이디입니다.");
         }
 
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public User login(LoginDTO loginDTO, HttpServletResponse response) {
-        User user = userRepository.findById(loginDTO.getPhone())
+        User user = userRepository.findByPhone(loginDTO.getPhone())
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
 
         if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
@@ -74,15 +74,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public void logout(String id) { //로그아웃 로직 고민
-        User user = userRepository.findById(id)
+    public void logout(String phone) { //로그아웃 로직 고민
+        User user = userRepository.findByPhone(phone)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
 
     }
 
     @Override
-    public Optional<User> getUser(String id) { //아이디로 유저를 반환
-        return userRepository.findById(id);
+    public Optional<User> getUser(String phone) { //아이디로 유저를 반환
+        return userRepository.findByPhone(phone);
     }
 
     @Override
