@@ -40,8 +40,8 @@ def img_show(title='image', img=None, figsize=(8, 5)):
         plt.show()
 
 # 사전 학습된 MobileNet SSD 모델 로드
-prototxt_path = 'MobileNetSSD_deploy.prototxt.txt'
-model_path = 'MobileNetSSD_deploy.caffemodel'
+prototxt_path = './AI/MobileNetSSD_deploy.prototxt.txt'
+model_path = './AI/MobileNetSSD_deploy.caffemodel'
 net = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
 
 # MobileNet SSD가 감지하도록 학습된 클래스 레이블 리스트 정의
@@ -54,7 +54,7 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 LABEL_COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 # 객체 감지를 위한 이미지 로드
-img = cv2.imread("sample1.jpg")
+img = cv2.imread("./AI/sample1.jpg")
 
 # 이미지의 크기 가져오기
 (h, w) = img.shape[:2]
