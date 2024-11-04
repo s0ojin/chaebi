@@ -1,5 +1,4 @@
 import { View, Modal, Text, StyleSheet, Pressable } from 'react-native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 
 interface ModalCompProps {
