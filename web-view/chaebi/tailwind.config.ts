@@ -16,6 +16,9 @@ const config: Config = {
         '_gray-300': '#808080',
       },
     },
+    boxShadow: {
+      inner: 'inset 0 0 0 2px #F4F4F4',
+    },
   },
   plugins: [],
 }

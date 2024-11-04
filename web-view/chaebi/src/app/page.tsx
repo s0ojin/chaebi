@@ -1,5 +1,8 @@
+'use client'
+
 import { LogoWhite } from '../../public/svg/index'
 import CodeInput from '@/components/ui/CodeInput'
+import NextButton from '@/components/ui/NextButton'
 
 export default function Home() {
   return (
@@ -10,8 +13,11 @@ export default function Home() {
         <span className="font-bold">채</span>우고,{' '}
         <span className="font-bold">비</span>우기
       </div>
-      <CodeInput mode="code" />
-      <CodeInput mode="answer" />
+      <div className="mb-10">
+        <CodeInput mode="code" />
+      </div>
+      {/* <CodeInput mode="answer" /> */}
+      <NextButton label="다음" />
     </div>
   )
 }
