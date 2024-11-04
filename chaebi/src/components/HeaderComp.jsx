@@ -15,7 +15,14 @@ export default function HeaderComp({pageName}) {
         alignItems: 'center',
       }}>
       <ArrowLeft width={24} height={24} onPress={() => navigation.goBack()} />
-      <Text style={{fontSize: 20, fontFamily: 'NotoSansKR', marginLeft: 10}}>
+      <Text
+        style={{
+          fontSize: 20,
+          fontFamily: 'NotoSansKR',
+          fontWeight: 'bold',
+          marginLeft: 10,
+          marginBottom: 1,
+        }}>
         {pageName}
       </Text>
     </View>

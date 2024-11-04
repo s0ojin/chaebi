@@ -1,11 +1,15 @@
 import {View, Text} from 'react-native';
-import React from 'react';
 import Logo from '../../assets/logo/logo.svg';
+import React from 'react';
 
 export default function SplashScreen({navigation}) {
   setTimeout(() => {
-    navigation.replace('SignIn');
-  }, 500);
+    if (1) {
+      navigation.replace('AppIntro');
+    } else {
+      navigation.replace('SignIn');
+    }
+  }, 1000);
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>

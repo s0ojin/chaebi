@@ -1,12 +1,12 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 
-export default function RoundButtonComp({content, onPress}) {
+export default function RoundButtonComp({content, onPress, disabled}) {
   return (
-    <TouchableOpacity onPress={() => onPress()}>
+    <TouchableOpacity onPress={onPress} disabled={disabled}>
       <View
         style={{
-          backgroundColor: '#444444',
+          backgroundColor: disabled ? '#bbbbbb' : '#444444',
           borderRadius: 12,
           paddingVertical: 22,
         }}>
@@ -14,8 +14,8 @@ export default function RoundButtonComp({content, onPress}) {
           style={{
             fontFamily: '이서윤체',
             fontSize: 24,
-            color: '#ffffff',
             textAlign: 'center',
+            color: disabled ? '#888888' : '#ffffff',
           }}>
           {content}
         </Text>
