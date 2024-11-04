@@ -65,7 +65,9 @@ public class JwtUtil {
             // 서명 키를 사용하여 토큰을 파싱하여 유효한지 확인
             Jwts.parser().setSigningKey(jwtSecret.getBytes()).parseClaimsJws(authToken);
             return true; // 토큰이 유효한 경우 true 반환
-        } catch (SignatureException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+        } catch (ExpiredJwtException e){
+            return false;
+        } catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
             // 서명 오류, 잘못된 형식의 JWT, 만료된 토큰, 지원되지 않는 JWT, 잘못된 인수 등 예외 발생 시 false 반환
             return false;
         }

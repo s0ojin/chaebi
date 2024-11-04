@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
                 .phone(userDTO.getPhone())
                 .password(passwordEncoder.encode(userDTO.getPassword()))
                 .status(true)
+                .name(userDTO.getName())
                 .loginAttemptPeriod(0)
                 .secretQuestion(userDTO.getSecretQuestion())
                 .secretAnswer(userDTO.getSecretAnswer())
@@ -89,6 +90,9 @@ public class UserServiceImpl implements UserService {
     public Optional<User> getUserByToken(HttpServletRequest request) { //JWT 토큰을 해석한 결과값으로 유저를 추출
         String userPhone = jwtUtil.getUserByJwt(request);
         System.out.println("email : " + userPhone);
+        Optional<User> user = userRepository.findByPhone(userPhone);
+        System.out.println("user : " + user.get().getPhone());
+        System.out.println("user OP : " + user);
         return userRepository.findByPhone(userPhone);
     }
 

@@ -2,6 +2,8 @@ package com.backend.controller;
 
 import com.backend.domain.Letter;
 import com.backend.domain.User;
+import com.backend.dto.LetterDTO;
+import com.backend.dto.LetterResDTO;
 import com.backend.repository.LetterRepository;
 import com.backend.service.letter.LetterService;
 import com.backend.service.user.UserService;
@@ -26,27 +28,28 @@ public class LetterController {
 
     @Operation(summary = "편지 작성")
     @PostMapping("/make")
-    public ResponseEntity<?> makeLetter(@RequestBody Letter letter, HttpServletRequest request) {
+    public ResponseEntity<?> makeLetter(@RequestBody LetterDTO letterDTO, HttpServletRequest request) {
         User user = userService.getUserByToken(request).get();
         System.out.println(user.getPhone());
-        letter.setUser(user);
-        letterService.createLetter(letter);
+        letterService.createLetter(user,letterDTO);
         return ResponseEntity.ok("생성되었습니다.");
     }
 
     @Operation(summary = "편지 수정")
-    @PostMapping("/update")
-    public ResponseEntity<?> updateLetter(@RequestBody Letter letter, HttpServletRequest request) {
+    @PostMapping("{id}/letter/update")
+    public ResponseEntity<?> updateLetter(@PathVariable long id,@RequestBody LetterDTO letterDTO, HttpServletRequest request) {
+        System.out.println("통과");
         User user = userService.getUserByToken(request).get();
-        letter.setUser(user);
-        letterService.updateLetter(letter);
+        System.out.println("통과1");
+        System.out.println("controller " + user.getName());
+        letterService.updateLetter(id, letterDTO,user);
         return ResponseEntity.ok("수정되었습니다.");
     }
 
     @Operation(summary = "편지 상세보기")
     @GetMapping("/{id}")
     public ResponseEntity<?> getLetter(@PathVariable Long id) {
-        Letter letter = letterService.getLetter(id);
+        LetterResDTO letter = letterService.getLetter(id);
         return ResponseEntity.ok(letter);
     }
 
@@ -65,6 +68,12 @@ public class LetterController {
         return ResponseEntity.ok("삭제되었습니다.");
     }
 
+    @PostMapping("/{id}/recipient/update")
+    @Operation(summary = "열람자 수정")
+    public ResponseEntity<?> updateLetter(@PathVariable Long id, @RequestBody LetterDTO letterDTO) {
+        letterService.updateRecipients(id,letterDTO.getRecipientIds());
+        return ResponseEntity.ok("열람자 업데이트가 완료되었습니다.");
+    }
 
 
 }
