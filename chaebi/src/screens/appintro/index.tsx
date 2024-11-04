@@ -1,12 +1,13 @@
 import {View, Text} from 'react-native';
 import React, {useState} from 'react';
 import RoundButtonComp from '../../components/RoundButtonComp';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../../App';
 
-// Navigation prop type 정의
 type AppIntroScreenProps = {
-  navigation: NativeStackNavigationProp<any>;
+  navigation: StackNavigationProp<RootStackParamList, 'AppIntro'>;
 };
+
 
 export default function AppIntroScreen({navigation}: AppIntroScreenProps) {
   const [step, setStep] = useState<number>(1);
