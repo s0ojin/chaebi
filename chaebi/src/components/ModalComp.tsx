@@ -1,10 +1,11 @@
 import { View, Modal, Text, StyleSheet, Pressable } from 'react-native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 
-type ModalCompProps = {
+interface ModalCompProps {
   showAuth: boolean
   setShowAuth: (value: boolean) => void
-  showList: string[]
+  showList: {title: string, moveTo: Function}[]
 };
 
 const ModalComp: React.FC<ModalCompProps> = ({
@@ -22,13 +23,12 @@ const ModalComp: React.FC<ModalCompProps> = ({
       }}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>옵션을 선택하세요</Text>
           {showList.map((element, index) => (
             <View key={index}>
               <Pressable
                 style={[styles.option]}
                 onPress={() => setShowAuth(false)}>
-                <Text style={styles.textStyle}>{element}</Text>
+                <Text style={styles.textStyle}>{element.title}</Text>
               </Pressable>
               {index < showList.length - 1 && <View style={styles.separator} />}
             </View>
@@ -61,19 +61,13 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  modalText: {
-    marginBottom: 28,
-    fontFamily: '이서윤체',
-    textAlign: 'center',
-    fontSize: 16,
-  },
   option: {
     borderRadius: 20,
     padding: 10,
   },
   textStyle: {
     fontFamily: '이서윤체',
-    fontSize: 18,
+    fontSize: 20,
     textAlign: 'center',
   },
   separator: {
