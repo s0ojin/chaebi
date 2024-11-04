@@ -1,5 +1,5 @@
 import axios from 'axios';
-import config from '../config';
+import config from 'config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const api = async () =>{

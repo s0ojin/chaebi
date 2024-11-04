@@ -3,8 +3,9 @@ import React, {useState} from 'react';
 import HeaderComp from '../../components/HeaderComp';
 import ModalComp from '../../components/ModalComp';
 import Plus from '../../assets/icon/plus.svg';
+import { NativeStackNavigationProp, } from '@react-navigation/native-stack';
 
-const SignInScreen = function () {
+const RemainScreen = function () {
   const [showAuth, setShowAuth] = useState(false);
 
   return (
@@ -12,7 +13,9 @@ const SignInScreen = function () {
       <ModalComp
         showAuth={showAuth}
         setShowAuth={setShowAuth}
-        showList={['연락처에서 받아오기', '직접 입력하기']}
+        showList={[
+          {title:'연락처에서 받아오기', moveTo: ()=>{}},
+          {title: '직접 입력하기', moveTo:()=>{}}]}
       />
       <HeaderComp pageName={'남기기'} />
       <View style={{marginTop: 32, gap: 36}}>
@@ -60,4 +63,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignInScreen;
+export default RemainScreen;
