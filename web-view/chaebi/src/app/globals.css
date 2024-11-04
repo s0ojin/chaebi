@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --font-LeeSeoyun: 'LeeSeoyun', sans-serif;
+  --font-ChosunNm: 'ChosunNm', sans-serif;
   --background: #575757;
 }
 
 body {
-  font-family: var(--font-LeeSeoyun);
+  font-family: var(--font-ChosunNm);
   background: var(--background);
 }

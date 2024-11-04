@@ -1,3 +1,4 @@
-import Chaebi from './Chaebi.svg'
+import LogoPrimary from './logo-primary.svg'
+import LogoWhite from './logo-white.svg'
 
-export { Chaebi }
+export { LogoPrimary, LogoWhite }

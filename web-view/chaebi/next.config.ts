@@ -9,9 +9,13 @@ const nextConfig: NextConfig = {
 
     config.module.rules.push({
       test: /\.(woff|woff2|eot|ttf|otf)$/,
-      type: 'asset/resource',
-      generator: {
-        filename: 'static/fonts/[name][ext]',
+      use: {
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+          publicPath: '/_next/static/media/',
+          outputPath: 'static/media/',
+        },
       },
     })
 

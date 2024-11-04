@@ -5,10 +5,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        LeeSeoyun: ['var(--font-LeeSeoyun)', 'sans-serif'],
+        ChosunNm: ['var(--font-ChosunNm)', 'sans-serif'],
       },
       colors: {
-        background: 'var(--background)',
         primary: '#444444',
         _black: '#0A0A0A',
         _white: '#FAFAFA',

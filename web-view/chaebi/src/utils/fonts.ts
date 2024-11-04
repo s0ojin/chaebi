@@ -1,14 +1,14 @@
 import localFont from 'next/font/local'
 
-const LeeSeoyun = localFont({
+const ChosunNm = localFont({
   src: [
     {
-      path: '../../public/fonts/LeeSeoyun.woff',
+      path: '../../public/fonts/ChosunNm.woff',
       weight: '400',
     },
   ],
   display: 'swap',
-  variable: '--font-LeeSeoyun',
+  variable: '--font-ChosunNm',
 })
 
-export default LeeSeoyun
+export default ChosunNm
