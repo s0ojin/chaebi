@@ -2,9 +2,16 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import ArrowLeft from '../assets/icon/arrow-left.svg';
 import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../App'; // App.tsx에 RootStackParamList 정의가 필요
 
-export default function HeaderComp({pageName}) {
-  const navigation = useNavigation();
+interface HeaderCompProps {
+  pageName: string;
+}
+
+export default function HeaderComp({pageName}: HeaderCompProps) {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
     <View

@@ -1,9 +1,15 @@
 import {View, Text} from 'react-native';
 import React, {useState} from 'react';
 import RoundButtonComp from '../../components/RoundButtonComp';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-export default function AppIntroScreen({navigation}) {
-  const [step, setStep] = useState(1);
+// Navigation prop type 정의
+type AppIntroScreenProps = {
+  navigation: NativeStackNavigationProp<any>;
+};
+
+export default function AppIntroScreen({navigation}: AppIntroScreenProps) {
+  const [step, setStep] = useState<number>(1);
 
   return (
     <View style={{flex: 1, padding: 20, alignItems: 'center', gap: 20}}>

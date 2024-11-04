@@ -1,7 +1,17 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 
-export default function RoundButtonComp({content, onPress, disabled}) {
+interface RoundButtonCompProps {
+  content: string;
+  onPress: () => void;
+  disabled?: boolean;
+}
+
+export default function RoundButtonComp({
+  content,
+  onPress,
+  disabled = false,
+}: RoundButtonCompProps) {
   return (
     <TouchableOpacity onPress={onPress} disabled={disabled}>
       <View
