@@ -1,15 +1,26 @@
 import {View, Text} from 'react-native';
 import Logo from '../../assets/logo/logo.svg';
-import React from 'react';
+import React, {useEffect} from 'react';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../../App';
 
-export default function SplashScreen({navigation}) {
-  setTimeout(() => {
-    if (1) {
-      navigation.replace('AppIntro');
-    } else {
-      navigation.replace('SignIn');
-    }
-  }, 1000);
+type SplashScreenProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'Splash'>;
+};
+
+export default function SplashScreen({navigation}: SplashScreenProps) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (true) {
+        // 조건을 필요에 맞게 설정하세요.
+        navigation.replace('AppIntro');
+      } else {
+        navigation.replace('SignIn');
+      }
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [navigation]);
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
