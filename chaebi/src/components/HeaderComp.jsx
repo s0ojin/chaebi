@@ -1,9 +1,9 @@
-import { View, Text } from 'react-native';
+import {View, Text} from 'react-native';
 import React from 'react';
 import ArrowLeft from '../assets/icon/arrow-left.svg';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
-export default function HeaderComp({ pageName }) {
+export default function HeaderComp({pageName}) {
   const navigation = useNavigation();
 
   return (
@@ -15,7 +15,9 @@ export default function HeaderComp({ pageName }) {
         alignItems: 'center',
       }}>
       <ArrowLeft width={24} height={24} onPress={() => navigation.goBack()} />
-      <Text style={{ fontSize: 20, marginLeft: 10 }}>{pageName}</Text>
+      <Text style={{fontSize: 20, fontFamily: 'NotoSansKR', marginLeft: 10}}>
+        {pageName}
+      </Text>
     </View>
   );
 }

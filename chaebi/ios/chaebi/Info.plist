@@ -50,6 +50,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>이서윤체.ttf</string>
+		<string>NotoSansKR.ttf</string>
 	</array>
 </dict>
 </plist>
