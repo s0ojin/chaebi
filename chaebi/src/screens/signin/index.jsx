@@ -6,6 +6,8 @@ import RoundButtonComp from '../../components/RoundButtonComp';
 
 export default function SignInScreen() {
   const [showAuth, setShowAuth] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState(''); // 휴대폰 번호 상태
+  const [authCode, setAuthCode] = useState(''); // 인증번호 상태
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -22,6 +24,8 @@ export default function SignInScreen() {
             keyboardType={'phone-pad'}
             disabled={showAuth}
             isPhoneNum={true}
+            value={phoneNumber} // 휴대폰 번호 값 전달
+            onChangeText={setPhoneNumber} // 핸들러 전달
           />
           {!showAuth ? (
             <RoundButtonComp
@@ -29,18 +33,15 @@ export default function SignInScreen() {
               onPress={() => setShowAuth(true)}
               disabled={showAuth}
             />
-          ) : (
-            <></>
-          )}
+          ) : null}
         </View>
         {showAuth ? (
           <View style={{paddingHorizontal: 24, gap: 20}}>
-            {/* <Text style={{fontSize: 24, fontFamily: '이서윤체'}}>
-              인증번호를 입력해주세요.
-            </Text> */}
             <InputFieldComp
               placeholder={'인증번호'}
               keyboardType={'phone-pad'}
+              value={authCode} // 인증번호 값 전달
+              onChangeText={setAuthCode} // 핸들러 전달
             />
             <RoundButtonComp content={'인증하기'} />
             <Text

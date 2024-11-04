@@ -25,10 +25,39 @@ export default function AppIntroScreen({navigation}) {
         {step === 4 ? (
           <RoundButtonComp
             content={'시작하기'}
-            onPress={() => navigation.navigate('SignUp')}
+            onPress={() => {
+              navigation.navigate('SignUp');
+            }}
           />
         ) : (
           <RoundButtonComp content={'다음'} onPress={() => setStep(step + 1)} />
+        )}
+        {step === 4 && (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              marginTop: 36,
+              marginBottom: 16,
+              gap: 8,
+            }}>
+            <Text
+              style={{
+                fontFamily: '이서윤체',
+                fontSize: 20,
+              }}>
+              이미 회원이신가요?
+            </Text>
+            <Text
+              style={{
+                fontFamily: '이서윤체',
+                fontSize: 20,
+                color: 'blue', // '로그인' 텍스트에 색상 추가 (선택 사항)
+              }}
+              onPress={() => navigation.navigate('SignIn')}>
+              로그인
+            </Text>
+          </View>
         )}
       </View>
     </View>

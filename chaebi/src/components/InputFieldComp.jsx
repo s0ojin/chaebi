@@ -1,14 +1,14 @@
 import {View, TextInput} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 
 export default function InputFieldComp({
   placeholder,
   keyboardType,
   disabled,
   isPhoneNum,
+  value, // 추가된 props
+  onChangeText, // 추가된 props
 }) {
-  const [value, setValue] = useState('');
-
   const handleTextChange = text => {
     if (isPhoneNum) {
       // 숫자만 남기기
@@ -26,9 +26,9 @@ export default function InputFieldComp({
         cleaned = cleaned.slice(0, 3) + '-' + cleaned.slice(3);
       }
 
-      setValue(cleaned);
+      onChangeText(cleaned); // 변경된 값을 상위 컴포넌트로 전달
     } else {
-      setValue(text);
+      onChangeText(text); // 변경된 값을 상위 컴포넌트로 전달
     }
   };
 
@@ -43,7 +43,7 @@ export default function InputFieldComp({
         placeholder={placeholder}
         keyboardType={keyboardType}
         editable={!disabled}
-        value={value}
+        value={value} // props로 받은 값 사용
         onChangeText={handleTextChange}
         style={{
           fontFamily: '이서윤체',

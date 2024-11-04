@@ -1,10 +1,10 @@
 import {View, Text} from 'react-native';
-import React from 'react';
 import Logo from '../../assets/logo/logo.svg';
+import React from 'react';
 
-export default function SplashScreen({navigation, isFirstLaunch}) {
+export default function SplashScreen({navigation}) {
   setTimeout(() => {
-    if (!isFirstLaunch) {
+    if (1) {
       navigation.replace('AppIntro');
     } else {
       navigation.replace('SignIn');
