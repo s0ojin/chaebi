@@ -1,14 +1,15 @@
 {
   "extends": [
     "next/core-web-vitals",
-    "airbnb",
-    "airbnb-typescript",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
     "prettier"
   ],
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "ignorePatterns": ["src/firebase/*"],
   "rules": {
     "react/react-in-jsx-scope": "off",
     "import/prefer-default-export": "off",
@@ -16,13 +17,5 @@
     "react/require-default-props": "off",
     "jsx-a11y/label-has-associated-control": "warn",
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
-  },
-  "overrides": [
-    {
-      "files": ["public/firebase-messaging-sw.js"],
-      "parserOptions": {
-        "project": null
-      }
-    }
-  ]
+  }
 }

@@ -5,7 +5,6 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'ChaeBi',
   description: '채우고 비우기, 채비',
-  manifest: '/manifest.json',
 }
 
 export default function RootLayout({

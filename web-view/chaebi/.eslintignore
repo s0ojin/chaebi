@@ -5,8 +5,5 @@ build/
 # 번들링 관련 파일
 webpack.config.js
 
-# 특정 경로의 파일 제외 (예: firebase 관련 파일)
-src/firebase/*
-
 # 타사 라이브러리 폴더
 node_modules/
