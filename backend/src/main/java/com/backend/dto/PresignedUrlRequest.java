@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-public class GalleryDTO {
+public class PresignedUrlRequest {
     private String fileName;
     private String contentType;
     private Set<Long> recipientIds;

@@ -120,7 +120,8 @@ public class LetterServiceImpl implements LetterService {
         dto.setId(letter.getId());
         dto.setUserId(letter.getUser().getId());
         dto.setTitle(letter.getContent()); // 또는 필요한 다른 필드
-
+        dto.setSort(letter.isSort());
+        dto.setLastModifiedDate(letter.getLastModifiedDate());
         // 수신자 id, 이름, 전화번호만 Set에 담기
         Set<RecipientResDTO> recipientDTO = letter.getLetterRecipients().stream()
                 .map(lr -> new RecipientResDTO(

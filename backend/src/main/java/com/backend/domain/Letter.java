@@ -39,7 +39,7 @@ public class Letter {
 
     @PrePersist
     @PreUpdate
-    protected void onCreate() {
+    protected void onUpdate() {
         lastModifiedDate = LocalDateTime.now();
     }
 
