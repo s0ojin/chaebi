@@ -1,17 +1,20 @@
 package com.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "recipients")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Recipient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +28,11 @@ public class Recipient {
 
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate; //마지막 수정날짜
+
+    @OneToMany(mappedBy = "recipient")
+    @JsonManagedReference
+    private Set<LetterRecipient> letterRecipients = new HashSet<>();
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")

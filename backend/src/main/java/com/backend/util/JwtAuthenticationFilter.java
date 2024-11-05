@@ -62,6 +62,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // 보안 컨텍스트에 인증 정보 설정
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
+        }else {
+            // JWT가 null인 경우 또는 만료된 경우 처리
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("JWT Token is expired or invalid");
+            return;
         }
         // 다음 필터로 요청과 응답을 전달
         filterChain.doFilter(request, response);

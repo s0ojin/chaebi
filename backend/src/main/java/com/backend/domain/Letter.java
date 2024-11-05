@@ -1,5 +1,6 @@
 package com.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,13 +24,9 @@ public class Letter {
     @JoinColumn(name = "user_id")
     private User user; //작성자
 
-    @ManyToMany //M:N을 단순히 이렇게 처리할 지 중간다리 하나 넣을지 고민
-    @JoinTable(
-            name = "letter_recipients",
-            joinColumns = @JoinColumn(name = "letter_id"),
-            inverseJoinColumns = @JoinColumn(name = "recipient_id")
-    )
-    private Set<Recipient> recipient = new HashSet<>();
+    @OneToMany(mappedBy = "letter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<LetterRecipient> letterRecipients = new HashSet<>();
 
     @Column(columnDefinition = "TEXT")
     private String content; //내용
@@ -37,9 +34,23 @@ public class Letter {
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate; //마지막 수정날짜
 
+    @Column(name = "last_modified_date")
+    private boolean sort;
+
     @PrePersist
     @PreUpdate
     protected void onCreate() {
         lastModifiedDate = LocalDateTime.now();
+    }
+
+    // 수신자 추가 메서드
+    public void addRecipient(Recipient recipient) {
+        LetterRecipient letterRecipient = new LetterRecipient(this, recipient);
+        letterRecipients.add(letterRecipient);
+    }
+
+    // 수신자 제거 메서드
+    public void removeRecipient(Recipient recipient) {
+        letterRecipients.removeIf(lr -> lr.getRecipient().equals(recipient));
     }
 }

@@ -2,6 +2,7 @@ package com.backend.controller;
 
 import com.backend.domain.Recipient;
 import com.backend.domain.User;
+import com.backend.dto.RecipientDTO;
 import com.backend.service.recipient.RecipientService;
 import com.backend.service.user.UserService;
 import com.backend.util.JwtUtil;
@@ -30,11 +31,10 @@ public class RecipientController {
 
     @Operation(summary = "열람자 등록")
     @PostMapping("/create")
-    public ResponseEntity<String> createRecipient(@RequestBody Recipient recipient, HttpServletRequest request) {
+    public ResponseEntity<String> createRecipient(@RequestBody RecipientDTO recipientDTO, HttpServletRequest request) {
         Optional<User> user = userService.getUserByToken(request);
         if (user.isPresent()) {
-            recipient.setUser(user.get());
-            recipientService.createRecipient(recipient);
+            recipientService.createRecipient(recipientDTO, user.get());
             return ResponseEntity.ok("create successful");
         }
         else {
@@ -68,11 +68,10 @@ public class RecipientController {
 
     @Operation(summary = "열람자 정보 수정")
     @PostMapping("/update")
-    public ResponseEntity<String> updateRecipient(@RequestBody Recipient recipient, HttpServletRequest request) {
+    public ResponseEntity<String> updateRecipient(@RequestBody RecipientDTO recipientDTO, HttpServletRequest request) {
         Optional<User> user = userService.getUserByToken(request);
         if (user.isPresent()) {
-            recipient.setUser(user.get());
-            recipientService.updateRecipient(recipient);
+            recipientService.updateRecipient(recipientDTO, user.get());
             return ResponseEntity.ok("Update successful");
         }
         else {

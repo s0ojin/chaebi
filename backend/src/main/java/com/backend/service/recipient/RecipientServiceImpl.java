@@ -2,6 +2,7 @@ package com.backend.service.recipient;
 
 import com.backend.domain.Recipient;
 import com.backend.domain.User;
+import com.backend.dto.RecipientDTO;
 import com.backend.repository.RecipientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,15 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     private final RecipientRepository repository;
 
     @Override
-    public Recipient createRecipient(Recipient recipient) {
+    public Recipient createRecipient(RecipientDTO recipientDTO, User user) {
+        Recipient recipient = Recipient.builder()
+                .phone(recipientDTO.getPhone())
+                .name(recipientDTO.getName())
+                .securityQuestion(recipientDTO.getSecretQuestion())
+                .securityAnswer(recipientDTO.getSecretAnswer())
+                .user(user)
+                .build();
+
         return repository.save(recipient); //열람자 저장
     }
 
@@ -37,7 +46,14 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     }
 
     @Override
-    public void updateRecipient(Recipient recipient) { // 열람자 업데이트
+    public void updateRecipient(RecipientDTO recipientDTO, User user) { // 열람자 업데이트
+        Recipient recipient = Recipient.builder()
+                .phone(recipientDTO.getPhone())
+                .name(recipientDTO.getName())
+                .securityQuestion(recipientDTO.getSecretQuestion())
+                .securityAnswer(recipientDTO.getSecretAnswer())
+                .user(user)
+                .build();
         repository.save(recipient);
     }
 
