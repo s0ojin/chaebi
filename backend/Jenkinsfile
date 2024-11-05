@@ -11,16 +11,15 @@ pipeline {
         SERVER_IP = "43.201.33.45"
     }
 
-    stages {
-        stage('Shutdown') {
-            parallel {
-                stage('Java Docker Build') {
-                    steps {
-                        sh 'docker container rm -f backend-app'
-                    }
-                }
+   stages {
+        stage('Github Clone') {
+            steps {
+                git branch: "${BRANCH}",
+                credentialsId: "${GITLAB_CREDENTIALS_ID}",
+                url: "${GITLAB_REPO}"
             }
         }
+
         stage('Backend - Add Env') {
             steps {
                 dir('backend') {
@@ -37,56 +36,45 @@ pipeline {
             }
         }
 
-        
-        stage('Github clone') {
+        stage('Shutdown') {
             steps {
-                git branch: "${BRANCH}",
-                credentialsId: "${GITLAB_CREDENTIALS_ID}",
-                url: "${GITLAB_REPO}"
-            }
-        }
-        
-        stage('Build') {
-            parallel {
-                stage('Java Build') {
-                    steps {
-                        dir('./backend') {
-                            sh 'sh gradlew build'
-                        }
-                    }
+                script {
+                    // 이미 실행 중인 컨테이너가 있다면 종료
+                    sh 'docker container rm -f backend-app || true'
                 }
             }
         }
-        
+
+        stage('Build') {
+            steps {
+                dir('backend') {
+                    sh './gradlew build'
+                }
+            }
+        }
+
         stage('Docker Build') {
-            parallel {
-                stage('Java Docker Build') {
-                    steps {
-                        dir('./backend') {
-                            sh 'docker build -t backend . '
-                        }
-                    }
+            steps {
+                dir('backend') {
+                    sh 'docker build -t backend .'
                 }
             }
         }
 
         stage('Create Volume') {
             steps {
-                sh 'docker volume create data'
+                sh 'docker volume create data || true'
             }
         }
-            
+
         stage('Docker Run') {
-            parallel {
-                stage('Java Docker Run') {
-                    steps {
-                        dir('./backend') {
-                            sh 'docker run --name backend-app -d -v data:/data -p 8080:8080 backend'
-                        }
-                    }
+            steps {
+                dir('backend') {
+                    sh 'docker run --name backend-app -d -v data:/data -p 8080:8080 backend'
                 }
             }
         }
     }
+}
 
 }
