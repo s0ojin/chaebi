@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 from transformers import CLIPProcessor, CLIPModel
+import torch
 
 # 사전 학습된 MobileNet SSD 모델 로드
 prototxt_path = './AI/MobileNetSSD_deploy.prototxt.txt'
@@ -13,10 +14,8 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
            "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
            "sofa", "train", "tvmonitor"]
 
-
 # 객체 감지를 위한 이미지 로드
-img = cv2.imread("./AI/sample2.jpg")
-
+img = cv2.imread("./AI/sample1.jpg")
 
 # 이미지의 크기 가져오기
 (h, w) = img.shape[:2]
@@ -60,8 +59,9 @@ model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
 processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
 # 이미지 불러오기
+texts = ["family", "friends", "sky", "abstract", "robots", "travel", "fantasy", "pets", "celebrations", "architecture"]
 image = cv2.imread("./AI/sample2.jpg")
-inputs = processor(text=["family", "friends", "travel"], images=image, return_tensors="pt", padding=True)
+inputs = processor(text=texts, images=image, return_tensors="pt", padding=True)
 
 # CLIP으로 이미지-텍스트 매칭 점수 계산
 outputs = model(**inputs)
@@ -69,5 +69,11 @@ logits_per_image = outputs.logits_per_image
 probs = logits_per_image.softmax(dim=1)  # 텍스트와의 연관성 점수
 
 # 주제 연관성 분석 수행
-print("CLIP 주제 연관성:", probs)
-print(probs[0][1].item())
+# 가장 높은 3개의 주제를 찾기
+print(torch.topk(probs, k=3, dim=1))
+topk_values, topk_indices = torch.topk(probs, k=3, dim=1)
+
+# 가장 높은 3개의 주제와 그 가능성 출력
+top_topics = [(texts[idx], topk_values[0, i].item()) for i, idx in enumerate(topk_indices[0])]
+for topic, prob in top_topics:
+    print(f"CLIP 주제 연관성: {topic} ({prob:.4f})")
