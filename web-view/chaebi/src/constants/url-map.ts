@@ -1,8 +1,8 @@
-type UrlMap = {
-  path: string
-  label?: string
-  goBack?: boolean
-}
+// type UrlMap = {
+//   path: string
+//   label?: string
+//   goBack?: boolean
+// }
 
 // export const URL_WITHOUT_MENU = ['/signup']
 

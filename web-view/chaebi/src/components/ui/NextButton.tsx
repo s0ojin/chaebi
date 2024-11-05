@@ -2,11 +2,13 @@
 
 type NextButtonProps = {
   label: string
+  onClick?: () => void
 }
 
-function NextButton({ label }: NextButtonProps) {
+function NextButton(props: NextButtonProps) {
   return (
     <button
+      onClick={props.onClick}
       className={`
           w-[23.25rem] 
           h-[3.75rem]
@@ -26,7 +28,7 @@ function NextButton({ label }: NextButtonProps) {
           leading-none
         `}
     >
-      {label}
+      {props.label}
     </button>
   )
 }
