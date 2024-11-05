@@ -12,7 +12,6 @@ export default function SplashScreen({navigation}: SplashScreenProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (true) {
-        // 조건을 필요에 맞게 설정하세요.
         navigation.replace('AppIntro');
       } else {
         navigation.replace('SignIn');
@@ -23,24 +22,12 @@ export default function SplashScreen({navigation}: SplashScreenProps) {
   }, [navigation]);
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <View className="flex-1 justify-center items-center">
       <Logo width={150} height={120} />
-      <Text
-        style={{
-          fontSize: 20,
-          fontFamily: '이서윤체',
-          textAlign: 'center',
-          marginTop: 12,
-        }}>
+      <Text className="text-lg font-['이서윤체'] text-center mt-3">
         남은 이들을 위한 채비
       </Text>
-      <Text
-        style={{
-          fontSize: 20,
-          fontFamily: '이서윤체',
-          textAlign: 'center',
-          marginTop: 8,
-        }}>
+      <Text className="text-lg font-['이서윤체'] text-center mt-2">
         채우고, 비우기
       </Text>
     </View>
