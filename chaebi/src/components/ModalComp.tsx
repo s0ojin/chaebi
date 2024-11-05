@@ -1,10 +1,10 @@
-import {View, Modal, Text, StyleSheet, Pressable} from 'react-native';
+import { View, Modal, Text, Pressable } from 'react-native';
 import React from 'react';
 
 interface ModalCompProps {
   showAuth: boolean;
   setShowAuth: (value: boolean) => void;
-  showList: {title: string; moveTo: Function}[];
+  showList: { title: string; moveTo: Function }[];
 }
 
 const ModalComp: React.FC<ModalCompProps> = ({
@@ -19,17 +19,26 @@ const ModalComp: React.FC<ModalCompProps> = ({
       visible={showAuth}
       onRequestClose={() => {
         setShowAuth(!showAuth);
-      }}>
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
+      }}
+    >
+      <View className="flex-1 bg-[rgba(0,0,0,0.7)] justify-center items-center">
+        <View className="m-5 bg-white rounded-2xl p-9 shadow-lg items-center">
           {showList.map((element, index) => (
             <View key={index}>
               <Pressable
-                style={[styles.option]}
-                onPress={() => setShowAuth(false)}>
-                <Text style={styles.textStyle}>{element.title}</Text>
+                className="rounded-2xl py-2 px-4"
+                onPress={() => {
+                  element.moveTo(),
+                  setShowAuth(false)
+                }}
+              >
+                <Text className="font-[이서윤체] text-xl text-center">
+                  {element.title}
+                </Text>
               </Pressable>
-              {index < showList.length - 1 && <View style={styles.separator} />}
+              {index < showList.length - 1 && (
+                <View className="h-px bg-gray-300 my-1 w-full" />
+              )}
             </View>
           ))}
         </View>
@@ -37,44 +46,5 @@ const ModalComp: React.FC<ModalCompProps> = ({
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  centeredView: {
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  option: {
-    borderRadius: 20,
-    padding: 10,
-  },
-  textStyle: {
-    fontFamily: '이서윤체',
-    fontSize: 20,
-    textAlign: 'center',
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#ccc',
-    alignSelf: 'stretch',
-    marginVertical: 5,
-  },
-});
 
 export default ModalComp;
