@@ -18,9 +18,12 @@ const config: Config = {
       lineHeight: {
         _46: '46px',
       },
-    },
-    boxShadow: {
-      inner: 'inset 0 0 0 2px #F4F4F4',
+      spacing: {
+        _72: '72px',
+      },
+      boxShadow: {
+        inner: 'inset 0 0 0 2px #F4F4F4',
+      },
     },
   },
   plugins: [],

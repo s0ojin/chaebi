@@ -13,12 +13,16 @@ export default function GuideContent() {
   }
 
   return (
-    <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-5">
-      <MemorialMessage />
-      <div className="mb-10 w-full flex justify-center">
-        <CodeInput mode="code" />
+    <div className="w-full md:w-1/2 flex flex-col items-center px-5 min-h-[100dvh] md:min-h-screen md:justify-center">
+      <div className="flex-1 md:flex-initial flex flex-col items-center w-full">
+        <MemorialMessage />
+        <div className="mt-8 md:mb-10 w-full flex justify-center">
+          <CodeInput mode="code" />
+        </div>
       </div>
-      <NextButton label="다음" onClick={handleNextClick} />
+      <div className="w-full mb-8 sticky bottom-8 md:flex md:justify-center">
+        <NextButton label="다음" onClick={handleNextClick} />
+      </div>
     </div>
   )
 }
