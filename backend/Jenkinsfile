@@ -21,6 +21,22 @@ pipeline {
                 }
             }
         }
+        stage('Backend - Add Env') {
+            steps {
+                dir('backend') {
+                    withCredentials([
+                        file(credentialsId: 'application', variable: 'application'),
+                    ]) {
+                        sh '''
+                            mkdir -p src/main/resources
+                            chmod -R 777 src/main/resources
+                            cp ${application} src/main/resources/application.yml
+                        '''
+                    }
+                }
+            }
+        }
+
         
         stage('Github clone') {
             steps {
