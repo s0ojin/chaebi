@@ -41,7 +41,8 @@ public class SecurityConfig {
                                 mvcMatcherBuilder.pattern("/api/users/**"),  // 모든 users 관련 엔드포인트
                                 mvcMatcherBuilder.pattern("/api/deposit/**"), // deposit 관련 엔드포인트
                                 mvcMatcherBuilder.pattern("/services/**"),    // Web Services 엔드포인트
-                                mvcMatcherBuilder.pattern("/error")          // 에러 페이지
+                                mvcMatcherBuilder.pattern("/error"),// 에러 페이지
+                                mvcMatcherBuilder.pattern("/")
                         ).permitAll()
                         // Swagger UI 접근 허용 (만약 사용중이라면)
                         .requestMatchers(

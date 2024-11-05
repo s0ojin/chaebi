@@ -29,8 +29,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
         // 로그인과 회원가입을 제외한 모든 경로에 대해 필터 적용
-        return path.startsWith("/api/users/login") || path.startsWith("/api/users/signup"); // api 주소는 변경예정
-    }
+        return path.startsWith("/api/users/login") ||
+                path.startsWith("/api/users/signup") ||
+                path.equals("/") ||
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/v3/api-docs");}
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
