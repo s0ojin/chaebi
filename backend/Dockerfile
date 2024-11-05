@@ -6,6 +6,6 @@ RUN gradle build --no-daemon --refresh-dependencies
 FROM openjdk:17-jdk-slim
 EXPOSE 8080
 
-COPY --from=build /home/gradle/src/build/libs/*.jar app.jar
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/app.jar
 
 ENTRYPOINT ["java","-jar","/app.jar"]
