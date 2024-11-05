@@ -1,9 +1,5 @@
-# 필요한 라이브러리 설치 지침 (터미널에서 실행)
-# pip install torch torchvision transformers pillow tensorflow facenet-pytorch opencv-python
-
 import numpy as np
 import cv2
-from transformers import CLIPProcessor, CLIPModel
 
 # 사전 학습된 MobileNet SSD 모델 로드
 prototxt_path = './AI/MobileNetSSD_deploy.prototxt.txt'
@@ -55,19 +51,3 @@ for i in np.arange(0, detections.shape[2]):
 
 # 감지된 사람 수 출력
 print("[INFO] 감지된 사람 수: {}명".format(person_count))
-
-# CLIP 모델 및 프로세서 로드
-model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
-processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
-
-# 이미지 불러오기
-image = cv2.imread("./AI/sample2.jpg")
-inputs = processor(text=["family", "friends", "travel"], images=image, return_tensors="pt", padding=True)
-
-# CLIP으로 이미지-텍스트 매칭 점수 계산
-outputs = model(**inputs)
-logits_per_image = outputs.logits_per_image
-probs = logits_per_image.softmax(dim=1)  # 텍스트와의 연관성 점수
-
-# 주제 연관성 분석 수행
-print("CLIP 주제 연관성:", probs)
