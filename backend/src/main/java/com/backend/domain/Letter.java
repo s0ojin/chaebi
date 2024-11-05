@@ -34,7 +34,7 @@ public class Letter {
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate; //마지막 수정날짜
 
-    @Column(name = "last_modified_date")
+    @Column(name = "sort")
     private boolean sort;
 
     @PrePersist
