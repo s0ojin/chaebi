@@ -1,15 +1,19 @@
 import {View, Text} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import Logo from '../../assets/logo/logo.svg';
 import RoundButtonComp from '../../components/RoundButtonComp';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
+import WarningModalComp from '../../components/WarningModalComp'; // 모달 컴포넌트 import
 
 type AbsenceScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Absence'>;
 };
 
 export default function AbsenceScreen({navigation}: AbsenceScreenProps) {
+  // 모달 가시성 상태
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <View className="flex-1 p-5">
       <View className="flex-1 justify-center items-center">
@@ -30,12 +34,20 @@ export default function AbsenceScreen({navigation}: AbsenceScreenProps) {
         />
         <RoundButtonComp
           content={'유족이신가요?'}
-          onPress={() => {}}
+          onPress={() => {
+            setModalVisible(true);
+          }}
           backgroundColor={'bg-[#D9D9D9]'}
           fontColor={'text-[#444444]'}
           border={'border-2 border-[#444444]'}
         />
       </View>
+
+      <WarningModalComp
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        navigation={navigation}
+      />
     </View>
   );
 }

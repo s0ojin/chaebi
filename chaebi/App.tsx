@@ -8,6 +8,7 @@ import AppIntroScreen from './src/screens/appintro';
 import SignUpScreen from './src/screens/signup';
 import RemainScreen from './src/screens/remain';
 import AbsenceScreen from './src/screens/absence';
+import SendCodeScreen from './src/screens/sendcode';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -16,6 +17,7 @@ export type RootStackParamList = {
   SignUp: undefined;
   SignIn: undefined;
   Absence: undefined;
+  SendCode: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -30,6 +32,7 @@ const App: React.FC = () => {
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="SignIn" component={SignInScreen} />
         <Stack.Screen name="Absence" component={AbsenceScreen} />
+        <Stack.Screen name="SendCode" component={SendCodeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
