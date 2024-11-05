@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 
 type CodeInputProps = {
   mode: 'code' | 'answer'
@@ -24,23 +24,21 @@ function CodeInput({ mode }: CodeInputProps) {
     [mode],
   )
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value
     validateAndSetValue(value)
   }
 
-  const handleCompositionStart = () => {
+  function handleCompositionStart() {
     setIsComposing(true)
   }
 
-  const handleCompositionEnd = (
-    e: React.CompositionEvent<HTMLInputElement>,
-  ) => {
+  function handleCompositionEnd(e: React.CompositionEvent<HTMLInputElement>) {
     setIsComposing(false)
     validateAndSetValue(e.currentTarget.value)
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (mode === 'answer' && e.key === 'Backspace' && !isComposing) {
       e.preventDefault()
       setInputValue((prev) => prev.slice(0, -1))

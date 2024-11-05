@@ -1,12 +1,10 @@
 'use client'
 
-import React from 'react'
-
-type ButtonProps = {
+type NextButtonProps = {
   label: string
 }
 
-function NextButton({ label }: ButtonProps) {
+function NextButton({ label }: NextButtonProps) {
   return (
     <button
       className={`
