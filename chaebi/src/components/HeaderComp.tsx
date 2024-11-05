@@ -14,7 +14,7 @@ export default function HeaderComp({pageName}: HeaderCompProps) {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
-    <View className="px-4 py-4 flex-row items-center">
+    <View className="px-4 py-5 flex-row items-center">
       <ArrowLeft width={24} height={24} onPress={() => navigation.goBack()} />
       <Text className="text-xl font-bold ml-2 -mb-0.5 font-['NotoSansKR']">
         {pageName}
