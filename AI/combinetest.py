@@ -1,6 +1,3 @@
-# 필요한 라이브러리 설치 지침 (터미널에서 실행)
-# pip install torch torchvision transformers pillow tensorflow facenet-pytorch opencv-python
-
 import numpy as np
 import cv2
 from transformers import CLIPProcessor, CLIPModel
@@ -73,3 +70,4 @@ probs = logits_per_image.softmax(dim=1)  # 텍스트와의 연관성 점수
 
 # 주제 연관성 분석 수행
 print("CLIP 주제 연관성:", probs)
+print(probs[0][1].item())
