@@ -9,7 +9,7 @@ const SendCodeScreen: React.FC = () => {
     new Animated.Value(0),
     new Animated.Value(0),
     new Animated.Value(0),
-    new Animated.Value(0), // 버튼 애니메이션 추가
+    new Animated.Value(0),
   ]).current;
 
   useEffect(() => {
@@ -22,11 +22,10 @@ const SendCodeScreen: React.FC = () => {
       }).start();
     };
 
-    // 요소 순차적으로 애니메이션 시작
     animations.forEach((_, index) => {
       setTimeout(() => {
         startAnimation(index);
-      }, index * 1000); // 600ms 간격으로 애니메이션 시작
+      }, index * 1000);
     });
   }, [animations]);
 
@@ -44,7 +43,7 @@ const SendCodeScreen: React.FC = () => {
                   {
                     translateY: animation.interpolate({
                       inputRange: [0, 1],
-                      outputRange: [20, 0], // 아래에서 위로 올라오는 효과
+                      outputRange: [20, 0],
                     }),
                   },
                 ],
@@ -63,14 +62,14 @@ const SendCodeScreen: React.FC = () => {
       </View>
       <View className="w-full justify-end">
         <Animated.View
-          className="w-full justify-end" // NativeWind 클래스를 사용하여 스타일 적용
+          className="w-full justify-end"
           style={{
-            opacity: animations[4], // 버튼의 opacity 애니메이션 적용
+            opacity: animations[4],
             transform: [
               {
                 translateY: animations[4].interpolate({
                   inputRange: [0, 1],
-                  outputRange: [20, 0], // 아래에서 위로 올라오는 효과
+                  outputRange: [20, 0],
                 }),
               },
             ],
