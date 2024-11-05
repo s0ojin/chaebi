@@ -21,7 +21,7 @@ export default function RoundButtonComp({
   return (
     <TouchableOpacity onPress={onPress} disabled={disabled}>
       <View
-        className={`rounded-lg py-5 ${
+        className={`rounded-xl py-5 ${
           disabled ? 'bg-[#bbbbbb]' : backgroundColor
         } ${border ? border : ''}`}>
         <Text

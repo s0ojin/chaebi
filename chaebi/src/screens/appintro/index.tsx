@@ -25,7 +25,9 @@ export default function AppIntroScreen({navigation}: AppIntroScreenProps) {
       </View>
       <Text className="text-center">앱소개 {step}</Text>
       <View className="flex-1 justify-end w-full">
-      <Text onPress={()=>navigation.navigate('Absence')}>Go to absence</Text>
+        <Text onPress={() => navigation.navigate('Absence')}>
+          Go to absence
+        </Text>
         {step === 4 ? (
           <RoundButtonComp
             content={'시작하기'}

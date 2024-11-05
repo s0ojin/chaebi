@@ -1,11 +1,11 @@
-import { View, Modal, Text, StyleSheet, Pressable } from 'react-native';
+import {View, Modal, Text, StyleSheet, Pressable} from 'react-native';
 import React from 'react';
 
 interface ModalCompProps {
-  showAuth: boolean
-  setShowAuth: (value: boolean) => void
-  showList: {title: string, moveTo: Function}[]
-};
+  showAuth: boolean;
+  setShowAuth: (value: boolean) => void;
+  showList: {title: string; moveTo: Function}[];
+}
 
 const ModalComp: React.FC<ModalCompProps> = ({
   showAuth,
@@ -35,8 +35,8 @@ const ModalComp: React.FC<ModalCompProps> = ({
         </View>
       </View>
     </Modal>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   centeredView: {
