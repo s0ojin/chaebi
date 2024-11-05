@@ -3,7 +3,7 @@ import React from 'react';
 import ArrowLeft from '../assets/icon/arrow-left.svg';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../App'; // App.tsx에 RootStackParamList 정의가 필요
+import {RootStackParamList} from '../../App';
 
 interface HeaderCompProps {
   pageName: string;
@@ -14,22 +14,9 @@ export default function HeaderComp({pageName}: HeaderCompProps) {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
-    <View
-      style={{
-        paddingHorizontal: 16,
-        paddingVertical: 18,
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}>
+    <View className="px-4 py-4 flex-row items-center">
       <ArrowLeft width={24} height={24} onPress={() => navigation.goBack()} />
-      <Text
-        style={{
-          fontSize: 20,
-          fontFamily: 'NotoSansKR',
-          fontWeight: 'bold',
-          marginLeft: 10,
-          marginBottom: 1,
-        }}>
+      <Text className="text-xl font-bold ml-2 -mb-0.5 font-['NotoSansKR']">
         {pageName}
       </Text>
     </View>

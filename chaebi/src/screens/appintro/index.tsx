@@ -1,34 +1,30 @@
 import {View, Text} from 'react-native';
 import React, {useState} from 'react';
 import RoundButtonComp from '../../components/RoundButtonComp';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../App';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../../App';
 
 type AppIntroScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'AppIntro'>;
 };
 
-
 export default function AppIntroScreen({navigation}: AppIntroScreenProps) {
   const [step, setStep] = useState<number>(1);
 
   return (
-    <View style={{flex: 1, padding: 20, alignItems: 'center', gap: 20}}>
-      <View style={{flexDirection: 'row', gap: 20, marginTop: 50}}>
+    <View className="flex-1 p-5 items-center gap-5">
+      <View className="flex-row gap-5 mt-12">
         {[1, 2, 3, 4].map(item => (
           <View
             key={item}
-            style={{
-              width: 10,
-              height: 10,
-              backgroundColor: step === item ? 'black' : '#cccccc',
-              borderRadius: 10,
-            }}
+            className={`w-2.5 h-2.5 rounded-full ${
+              step === item ? 'bg-black' : 'bg-gray-300'
+            }`}
           />
         ))}
       </View>
-      <Text style={{textAlign: 'center'}}>앱소개 {step}</Text>
-      <View style={{flex: 1, justifyContent: 'flex-end', width: '100%'}}>
+      <Text className="text-center">앱소개 {step}</Text>
+      <View className="flex-1 justify-end w-full">
         {step === 4 ? (
           <RoundButtonComp
             content={'시작하기'}
@@ -40,27 +36,12 @@ export default function AppIntroScreen({navigation}: AppIntroScreenProps) {
           <RoundButtonComp content={'다음'} onPress={() => setStep(step + 1)} />
         )}
         {step === 4 && (
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              marginTop: 36,
-              marginBottom: 16,
-              gap: 8,
-            }}>
-            <Text
-              style={{
-                fontFamily: '이서윤체',
-                fontSize: 20,
-              }}>
+          <View className="flex-row justify-center mt-9 mb-4 gap-2">
+            <Text className="font-['이서윤체'] text-xl">
               이미 회원이신가요?
             </Text>
             <Text
-              style={{
-                fontFamily: '이서윤체',
-                fontSize: 20,
-                color: 'blue', // '로그인' 텍스트에 색상 추가 (선택 사항)
-              }}
+              className="font-['이서윤체'] text-xl text-blue-500"
               onPress={() => navigation.navigate('SignIn')}>
               로그인
             </Text>
