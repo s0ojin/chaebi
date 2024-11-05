@@ -2,16 +2,23 @@ import numpy as np
 import cv2
 from transformers import CLIPProcessor, CLIPModel
 import torch
+import os
 
 def add_numbers(a: int, b: int) -> int:
     return a + b
 
 def suggest():
     suggestion = ''
+
+    base_path = os.path.dirname(__file__)
+    prototxt_path = os.path.join(base_path, "..", "data", "MobileNetSSD_deploy.prototxt.txt")
+    model_path = os.path.join(base_path, "..", "data", "MobileNetSSD_deploy.caffemodel")
+    image_path = os.path.join(base_path, "..", "data", "sample2.jpg")
+
     
     # 사전 학습된 MobileNet SSD 모델 로드
-    prototxt_path = "C:/Users/SSAFY/Desktop/A309/S11P31A309/ai/MobileNetSSD_deploy.prototxt.txt"
-    model_path = "C:/Users/SSAFY/Desktop/A309/S11P31A309/ai/MobileNetSSD_deploy.caffemodel"
+    # prototxt_path = "C:/Users/SSAFY/Desktop/A309/S11P31A309/ai/MobileNetSSD_deploy.prototxt.txt"
+    # model_path = "C:/Users/SSAFY/Desktop/A309/S11P31A309/ai/MobileNetSSD_deploy.caffemodel"
     net = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
 
     # MobileNet SSD가 감지하도록 학습된 클래스 레이블 리스트 정의
@@ -21,7 +28,7 @@ def suggest():
             "sofa", "train", "tvmonitor"]
 
     # 객체 감지를 위한 이미지 로드
-    img = cv2.imread("C:/Users/SSAFY/Desktop/A309/S11P31A309/ai/sample2.jpg")
+    img = cv2.imread(image_path)
 
     # 이미지의 크기 가져오기
     (h, w) = img.shape[:2]
