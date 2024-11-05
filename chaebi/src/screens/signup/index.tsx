@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import HeaderComp from '../../components/HeaderComp';
 import InputFieldComp from '../../components/InputFieldComp';
@@ -10,6 +10,30 @@ export default function SignUpScreen() {
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [authCode, setAuthCode] = useState<string>('');
   const [name, setName] = useState<string>('');
+  const [countdown, setCountdown] = useState<number>(300);
+  const [isCounting, setIsCounting] = useState<boolean>(false);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (isCounting && countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown(prev => prev - 1);
+      }, 1000);
+    }
+
+    if (countdown === 0) {
+      setIsCounting(false);
+      setCountdown(300);
+    }
+
+    return () => clearInterval(timer);
+  }, [isCounting, countdown]);
+
+  const handleSendAuthCode = () => {
+    setShowAuth(true);
+    setIsCounting(true);
+  };
 
   return (
     <View className="flex-1 bg-white">
@@ -30,13 +54,17 @@ export default function SignUpScreen() {
               value={phoneNumber}
               onChangeText={setPhoneNumber}
             />
-            {!showAuth ? (
-              <RoundButtonComp
-                content="인증번호 발송"
-                onPress={() => setShowAuth(true)}
-                disabled={showAuth}
-              />
-            ) : null}
+            <RoundButtonComp
+              content={
+                isCounting
+                  ? `남은 시간: ${Math.floor(countdown / 60)}:${String(
+                      countdown % 60,
+                    ).padStart(2, '0')}`
+                  : '인증번호 발송'
+              }
+              onPress={handleSendAuthCode}
+              disabled={showAuth || isCounting}
+            />
           </View>
           {showAuth ? (
             <View className="px-6 gap-5">
