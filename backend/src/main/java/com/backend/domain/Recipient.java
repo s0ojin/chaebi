@@ -33,6 +33,9 @@ public class Recipient {
     @JsonManagedReference
     private Set<LetterRecipient> letterRecipients = new HashSet<>();
 
+    @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<GalleryRecipient> galleryRecipients = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -1,11 +1,14 @@
 package com.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "galleries")
@@ -13,28 +16,40 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class Gallery {
-
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id; //고유 번호
+        private Long id;
 
         @ManyToOne
         @JoinColumn(name = "user_id")
-        private User user; //작성자
+        private User user;
 
-        @ManyToOne
-        @JoinColumn(name = "recipient_id")
-        private Recipient recipient; //열람자
+        @OneToMany(mappedBy = "gallery", cascade = CascadeType.ALL, orphanRemoval = true)
+        @JsonManagedReference
+        private Set<GalleryRecipient> galleryRecipients = new HashSet<>();
 
-        private String fileUrl;  // S3 URL
-        private String fileType; // IMAGE or VIDEO
+        private String fileUrl;
+        private String fileType;
+        private String fileName;
 
         @Column(name = "created_date")
-        private LocalDateTime createdDate; //업로드 날짜
+        private LocalDateTime createdDate;
 
         @PrePersist
         protected void onCreate() {
-            createdDate = LocalDateTime.now();
+                createdDate = LocalDateTime.now();
+        }
+
+        public void addRecipient(Recipient recipient) {
+                GalleryRecipient galleryRecipient = new GalleryRecipient(this, recipient);
+                galleryRecipients.add(galleryRecipient);
+        }
+
+        public void removeRecipient(Recipient recipient) {
+                galleryRecipients.removeIf(gr -> gr.getRecipient().equals(recipient));
+        }
+
+        public void clearRecipients() {
+                galleryRecipients.clear();
         }
 }
-
