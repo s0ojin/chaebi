@@ -27,19 +27,19 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public void signup(SignDTO userDTO) { //회원가입
-        if (userRepository.existsByPhone(userDTO.getPhone())) {
+    public void signup(SignDTO signDTO) { //회원가입
+        if (userRepository.existsByPhone(signDTO.getPhone())) {
             throw new RuntimeException("이미 존재하는 아이디입니다.");
         }
 
         User user = User.builder()
-                .phone(userDTO.getPhone())
-                .password(passwordEncoder.encode(userDTO.getPassword()))
+                .phone(signDTO.getPhone())
+                .password(passwordEncoder.encode(signDTO.getPassword()))
                 .status(true)
-                .name(userDTO.getName())
+                .name(signDTO.getName())
                 .loginAttemptPeriod(0)
-                .secretQuestion(userDTO.getSecretQuestion())
-                .secretAnswer(userDTO.getSecretAnswer())
+                .secretQuestion(signDTO.getSecretQuestion())
+                .secretAnswer(signDTO.getSecretAnswer())
                 .build();
 
         userRepository.save(user);

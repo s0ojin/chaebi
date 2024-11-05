@@ -32,6 +32,7 @@ public class LetterServiceImpl implements LetterService {
         Letter letter = new Letter();
         letter.setUser(user);
         letter.setContent(letterDTO.getContent());
+        letter.setSort(letterDTO.isSort());
 
         // 수신자 추가
         if (letterDTO.getRecipientIds() != null) {
@@ -72,6 +73,8 @@ public class LetterServiceImpl implements LetterService {
         if (letterDTO.getContent() != null) {
             letter.setContent(letterDTO.getContent());
         }
+
+        letterDTO.setSort(letterDTO.isSort());
 
         // 수신자 목록 업데이트 (있는 경우)
         if (letterDTO.getRecipientIds() != null) {

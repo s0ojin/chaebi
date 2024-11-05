@@ -34,6 +34,9 @@ public class Letter {
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate; //마지막 수정날짜
 
+    @Column(name = "last_modified_date")
+    private boolean sort;
+
     @PrePersist
     @PreUpdate
     protected void onCreate() {
