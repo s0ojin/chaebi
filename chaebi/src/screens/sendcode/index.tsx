@@ -31,7 +31,7 @@ const SendCodeScreen: React.FC = () => {
   }, [animations]);
 
   return (
-    <View className="flex-1 p-5">
+    <View className="flex-1 p-5 gap-16">
       <View className="flex-1 items-center justify-center gap-12">
         <Logo width={150} height={120} />
         <View className="gap-9">
