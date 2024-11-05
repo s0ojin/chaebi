@@ -16,8 +16,10 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
            "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
            "sofa", "train", "tvmonitor"]
 
+
 # 객체 감지를 위한 이미지 로드
 img = cv2.imread("./AI/sample2.jpg")
+
 
 # 이미지의 크기 가져오기
 (h, w) = img.shape[:2]
