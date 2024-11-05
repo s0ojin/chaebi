@@ -7,6 +7,8 @@ import SignInScreen from './src/screens/signin';
 import AppIntroScreen from './src/screens/appintro';
 import SignUpScreen from './src/screens/signup';
 import RemainScreen from './src/screens/remain';
+import ContactScreen from './src/screens/remain/contacts';
+import RemainWriteScreen from './src/screens/remain/write';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -15,6 +17,8 @@ export type RootStackParamList = {
   SignUp: undefined;
   SignIn: undefined;
   Absence: undefined;
+  Contacts: undefined;
+  RemainWrite: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -24,10 +28,12 @@ const App: React.FC = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="Splash" component={SplashScreen} />
-        <Stack.Screen name="Remain" component={RemainScreen} />
         <Stack.Screen name="AppIntro" component={AppIntroScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="SignIn" component={SignInScreen} />
+        <Stack.Screen name="Remain" component={RemainScreen} />
+        <Stack.Screen name="Contacts" component={ContactScreen} />
+        <Stack.Screen name="RemainWrite" component={RemainWriteScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
