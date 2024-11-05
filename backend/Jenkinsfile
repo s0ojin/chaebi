@@ -49,6 +49,7 @@ pipeline {
           steps {
             dir('backend') {
               sh 'chmod +x gradlew'     
+              sh 'gradle wrapper'
               sh './gradlew build'
             }
           }
