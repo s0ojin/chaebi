@@ -46,11 +46,12 @@ pipeline {
         }
 
         stage('Build') {
-            steps {
-                dir('backend') {
-                    sh './gradlew build'
-                }
+          steps {
+            dir('backend') {
+              sh 'chmod +x gradlew'     
+              sh './gradlew build'
             }
+          }
         }
 
         stage('Docker Build') {
