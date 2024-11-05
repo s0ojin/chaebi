@@ -5,17 +5,16 @@ import InputFieldComp from '../../components/InputFieldComp';
 import RoundButtonComp from '../../components/RoundButtonComp';
 
 export default function SignInScreen() {
-  // useState 훅을 사용해 각 상태의 타입을 명시적으로 지정
   const [showAuth, setShowAuth] = useState<boolean>(false);
-  const [phoneNumber, setPhoneNumber] = useState<string>(''); // 휴대폰 번호 상태
-  const [authCode, setAuthCode] = useState<string>(''); // 인증번호 상태
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [authCode, setAuthCode] = useState<string>('');
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <View className="flex-1 bg-white">
       <HeaderComp pageName="로그인" />
-      <View style={{marginTop: 32, gap: 36}}>
-        <View style={{paddingHorizontal: 24, gap: 20}}>
-          <Text style={{fontSize: 24, fontFamily: '이서윤체'}}>
+      <View className="mt-8 gap-9">
+        <View className="px-6 gap-5">
+          <Text className="text-2xl font-['이서윤체']">
             {!showAuth
               ? '휴대폰 번호로 로그인해주세요.'
               : '인증번호를 입력해주세요.'}
@@ -25,8 +24,8 @@ export default function SignInScreen() {
             keyboardType="phone-pad"
             disabled={showAuth}
             isPhoneNum={true}
-            value={phoneNumber} // 휴대폰 번호 값 전달
-            onChangeText={setPhoneNumber} // 핸들러 전달
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
           />
           {!showAuth ? (
             <RoundButtonComp
@@ -37,21 +36,15 @@ export default function SignInScreen() {
           ) : null}
         </View>
         {showAuth ? (
-          <View style={{paddingHorizontal: 24, gap: 20}}>
+          <View className="px-6 gap-5">
             <InputFieldComp
               placeholder="인증번호"
               keyboardType="phone-pad"
-              value={authCode} // 인증번호 값 전달
-              onChangeText={setAuthCode} // 핸들러 전달
+              value={authCode}
+              onChangeText={setAuthCode}
             />
             <RoundButtonComp content="인증하기" onPress={() => {}} />
-            <Text
-              style={{
-                fontSize: 24,
-                fontFamily: '이서윤체',
-                textAlign: 'center',
-                marginTop: 28,
-              }}>
+            <Text className="text-2xl font-['이서윤체'] text-center mt-7">
               인증번호 재전송
             </Text>
           </View>

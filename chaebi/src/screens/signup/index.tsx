@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import React, {useState} from 'react';
+import {View, Text} from 'react-native';
 import HeaderComp from '../../components/HeaderComp';
 import InputFieldComp from '../../components/InputFieldComp';
 import RoundButtonComp from '../../components/RoundButtonComp';
@@ -7,17 +7,17 @@ import RoundButtonComp from '../../components/RoundButtonComp';
 const SignUpScreen: React.FC = () => {
   const [showAuth, setShowAuth] = useState<boolean>(false);
   const [doneAuth, setDoneAuth] = useState<boolean>(false);
-  const [phoneNumber, setPhoneNumber] = useState<string>(''); // 휴대폰 번호 상태
-  const [authCode, setAuthCode] = useState<string>(''); // 인증번호 상태
-  const [name, setName] = useState<string>(''); // 이름 상태
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [authCode, setAuthCode] = useState<string>('');
+  const [name, setName] = useState<string>('');
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
+    <View className="flex-1 bg-white">
       <HeaderComp pageName="회원가입" />
       {!doneAuth ? (
-        <View style={{ marginTop: 32, gap: 36 }}>
-          <View style={{ paddingHorizontal: 24, gap: 20 }}>
-            <Text style={{ fontSize: 24, fontFamily: '이서윤체' }}>
+        <View className="mt-8 gap-9">
+          <View className="px-6 gap-5">
+            <Text className="text-2xl font-['이서윤체']">
               {!showAuth
                 ? '휴대폰 번호로 회원가입해주세요!'
                 : '인증번호를 입력해주세요.'}
@@ -27,8 +27,8 @@ const SignUpScreen: React.FC = () => {
               keyboardType="phone-pad"
               disabled={showAuth}
               isPhoneNum={true}
-              value={phoneNumber} // 휴대폰 번호 값 전달
-              onChangeText={setPhoneNumber} // 핸들러 전달
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
             />
             {!showAuth ? (
               <RoundButtonComp
@@ -39,41 +39,34 @@ const SignUpScreen: React.FC = () => {
             ) : null}
           </View>
           {showAuth ? (
-            <View style={{ paddingHorizontal: 24, gap: 20 }}>
+            <View className="px-6 gap-5">
               <InputFieldComp
                 placeholder="인증번호"
                 keyboardType="phone-pad"
-                value={authCode} // 인증번호 값 전달
-                onChangeText={setAuthCode} // 핸들러 전달
+                value={authCode}
+                onChangeText={setAuthCode}
               />
               <RoundButtonComp
                 content="인증하기"
                 onPress={() => setDoneAuth(true)}
               />
-              <Text
-                style={{
-                  fontSize: 24,
-                  fontFamily: '이서윤체',
-                  textAlign: 'center',
-                  marginTop: 28,
-                }}
-              >
+              <Text className="text-2xl font-['이서윤체'] text-center mt-7">
                 인증번호 재전송
               </Text>
             </View>
           ) : null}
         </View>
       ) : (
-        <View style={{ marginTop: 32, gap: 36 }}>
-          <View style={{ paddingHorizontal: 24, gap: 20 }}>
-            <Text style={{ fontSize: 24, fontFamily: '이서윤체' }}>
+        <View className="mt-8 gap-9">
+          <View className="px-6 gap-5">
+            <Text className="text-2xl font-['이서윤체']">
               성함을 알려주세요.
             </Text>
             <InputFieldComp
               placeholder="이름"
               keyboardType="default"
-              value={name} // 이름 값 전달
-              onChangeText={setName} // 핸들러 전달
+              value={name}
+              onChangeText={setName}
             />
             <RoundButtonComp content="회원가입" onPress={() => {}} />
           </View>

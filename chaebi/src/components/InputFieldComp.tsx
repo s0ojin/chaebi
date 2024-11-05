@@ -42,24 +42,16 @@ export default function InputFieldComp({
   };
 
   return (
-    <View
-      style={{
-        backgroundColor: '#F4F4F4',
-        borderRadius: 12,
-        paddingVertical: 10,
-      }}>
+    <View className="bg-gray-200 rounded-lg py-2">
       <TextInput
         placeholder={placeholder}
         keyboardType={keyboardType}
         editable={!disabled}
         value={value}
         onChangeText={handleTextChange}
-        style={{
-          fontFamily: '이서윤체',
-          fontSize: 24,
-          padding: 16,
-          color: disabled ? '#888888' : '#000000',
-        }}
+        className={`font-['이서윤체'] text-2xl px-4 ${
+          disabled ? 'text-[#888888]' : 'text-black'
+        }`}
       />
     </View>
   );

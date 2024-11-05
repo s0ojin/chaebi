@@ -15,18 +15,13 @@ export default function RoundButtonComp({
   return (
     <TouchableOpacity onPress={onPress} disabled={disabled}>
       <View
-        style={{
-          backgroundColor: disabled ? '#bbbbbb' : '#444444',
-          borderRadius: 12,
-          paddingVertical: 22,
-        }}>
+        className={`rounded-lg py-5 ${
+          disabled ? 'bg-[#bbbbbb]' : 'bg-[#444444]'
+        }`}>
         <Text
-          style={{
-            fontFamily: '이서윤체',
-            fontSize: 24,
-            textAlign: 'center',
-            color: disabled ? '#888888' : '#ffffff',
-          }}>
+          className={`font-['이서윤체'] text-2xl text-center ${
+            disabled ? 'text-[#888888]' : 'text-white'
+          }`}>
           {content}
         </Text>
       </View>
