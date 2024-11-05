@@ -15,6 +15,9 @@ const config: Config = {
         '_gray-200': '#D2D2D2',
         '_gray-300': '#808080',
       },
+      lineHeight: {
+        _46: '46px',
+      },
     },
     boxShadow: {
       inner: 'inset 0 0 0 2px #F4F4F4',
