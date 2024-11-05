@@ -4,7 +4,7 @@ import HeaderComp from '../../components/HeaderComp';
 import InputFieldComp from '../../components/InputFieldComp';
 import RoundButtonComp from '../../components/RoundButtonComp';
 
-const SignUpScreen: React.FC = () => {
+export default function SignUpScreen() {
   const [showAuth, setShowAuth] = useState<boolean>(false);
   const [doneAuth, setDoneAuth] = useState<boolean>(false);
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -74,6 +74,4 @@ const SignUpScreen: React.FC = () => {
       )}
     </View>
   );
-};
-
-export default SignUpScreen;
+}

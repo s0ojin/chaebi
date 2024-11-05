@@ -7,6 +7,7 @@ import SignInScreen from './src/screens/signin';
 import AppIntroScreen from './src/screens/appintro';
 import SignUpScreen from './src/screens/signup';
 import RemainScreen from './src/screens/remain';
+import AbsenceScreen from './src/screens/absence';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -28,6 +29,7 @@ const App: React.FC = () => {
         <Stack.Screen name="AppIntro" component={AppIntroScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="SignIn" component={SignInScreen} />
+        <Stack.Screen name="Absence" component={AbsenceScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

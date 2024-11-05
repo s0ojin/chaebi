@@ -13,8 +13,8 @@ export default function RoundButtonComp({
   content,
   onPress,
   disabled = false,
-  backgroundColor = '#444444',
-  fontColor = '#ffffff',
+  backgroundColor = 'bg-[#444444]',
+  fontColor = 'text-[#ffffff]',
 }: RoundButtonCompProps) {
   return (
     <TouchableOpacity onPress={onPress} disabled={disabled}>
