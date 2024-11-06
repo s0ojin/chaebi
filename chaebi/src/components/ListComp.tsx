@@ -59,7 +59,7 @@ export default function RemainListViewComp({
 }: RemainListViewCompProp) {
   return (
     <TouchableOpacity
-      className="flex-row w-96 h-24 px-8 bg-[#F4F4F4] rounded-2xl justify-between items-center"
+      className="flex-row w-full h-24 px-8 bg-[#F4F4F4] rounded-2xl justify-between items-center"
       onPress={() => {}}>
       <View className="flex-row justify-left items-center">
         {/* 사용자 이미지 */}

@@ -4,19 +4,28 @@ import Logo from '../../assets/logo/logo.svg';
 import ArrowRight from '../../assets/icon/arrow-right.svg';
 import FooterComp from '../../components/FooterComp';
 import LightPlus from '../../assets/icon/light-plus.svg';
-
-type LeaveData = {
-  name: string;
-  phone: string;
-  imgUrl: string;
-};
+import RemainListViewComp from '../../components/ListComp';
+import {Message} from '../remain';
 
 export default function MainScreen() {
-  const [leaveData, setLeaveData] = useState<LeaveData | null>(null);
+  const [leaveData, setLeaveData] = useState<Message | null>(null);
   const [fillData, setFillData] = useState<any[]>([]);
 
   useEffect(() => {
-    // 이미지 경로를 require로 미리 지정하여 배열에 추가합니다.
+    setLeaveData({
+      id: 1,
+      content: '잘가시게',
+      userId: 1,
+      recipient: {
+        id: 1,
+        name: '박수진',
+        phone: '010-1111-1111',
+        imgUrl: null,
+      },
+      lastModifiedDate: '2024-11-05T18:03:01.519939',
+      sort: true,
+    });
+
     const images = [
       require('../../assets/dummy/test_image1.jpg'),
       require('../../assets/dummy/test_image2.jpg'),
@@ -56,16 +65,17 @@ export default function MainScreen() {
             <ArrowRight width={20} height={20} />
           </View>
           {leaveData ? (
-            <View className="flex-row w-full bg-[#F4F4F4] px-4 py-2 h-24 rounded-xl gap-4">
-              <View className="bg-[#D9D9D9] rounded-full w-11 h-11 justify-center" />
-              <View className="flex-1 justify-center items-end">
-                <Text>{leaveData.name}</Text>
-                <Text>{leaveData.phone}</Text>
-              </View>
-              <View className="flex-1 justify-end">
-                <Text>{leaveData.imgUrl}</Text>
-              </View>
-            </View>
+            // <View className="flex-row w-full bg-[#F4F4F4] px-4 py-2 h-24 rounded-xl gap-4">
+            //   <View className="bg-[#D9D9D9] rounded-full w-11 h-11 justify-center" />
+            //   <View className="flex-1 justify-center items-end">
+            //     <Text>{leaveData.name}</Text>
+            //     <Text>{leaveData.phone}</Text>
+            //   </View>
+            //   <View className="flex-1 justify-end">
+            //     <Text>{leaveData.imgUrl}</Text>
+            //   </View>
+            // </View>
+            <RemainListViewComp message={leaveData} isSetting={false} />
           ) : (
             <View className="flex-row w-full h-24 bg-[#F4F4F4] rounded-xl items-center justify-center">
               <LightPlus width={40} height={40} />
