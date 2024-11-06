@@ -4,6 +4,7 @@ import HeaderComp from '../../components/HeaderComp';
 import InputFieldComp from '../../components/InputFieldComp';
 import RoundButtonComp from '../../components/RoundButtonComp';
 
+// 직접 연락처 작성하는 페이지
 export default function RemainWriteScreen() {
   const [name, setName] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
