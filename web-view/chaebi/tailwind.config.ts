@@ -16,11 +16,19 @@ const config: Config = {
         '_gray-200': '#D2D2D2',
         '_gray-300': '#808080',
       },
+      stroke: {
+        _white: '#FAFAFA',
+      },
+      strokeWidth: {
+        '0.5': '0.5px',
+      },
       lineHeight: {
         _46: '46px',
       },
       spacing: {
         _72: '72px',
+        _74: '74px',
+        _140: '140px',
       },
       boxShadow: {
         inner: 'inset 0 0 0 2px #F4F4F4',

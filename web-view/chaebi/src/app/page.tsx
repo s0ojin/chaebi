@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="h-full w-full flex flex-col">
       <div className="flex flex-1 items-center md:flex-row flex-col">
-        <div className="w-full md:w-1/2 flex items-center justify-center px-5 mt-_72 mb-10">
+        <div className="w-full md:w-1/2 flex items-center justify-center px-5 md:pl-5 md:pr-0 mt-_72 mb-10">
           <Mum className="h-[8.875rem] md:h-[21.75rem] aspect-[664/348]" />
         </div>
         <GuideContent />

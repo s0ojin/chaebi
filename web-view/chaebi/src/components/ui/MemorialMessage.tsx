@@ -1,7 +1,7 @@
 function MemorialMessage() {
   return (
     <div>
-      <div className="mb-10 text-2xl md:text-4xl text-_white text-center">
+      <div className="mb-10 text-2xl md:text-4xl text-_white text-center stroke-_white stroke-0.5">
         삼가 고인의 명복을 빕니다.
       </div>
       <div>
