@@ -11,6 +11,7 @@
     "lint:fix": "eslint --fix './src/**/*.{ts,tsx,js,jsx}'"
   },
   "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "next": "15.0.2",
     "react": "18.2.0",
     "react-dom": "18.2.0"
