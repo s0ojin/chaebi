@@ -22,7 +22,7 @@ export default function MainScreen() {
     //   phone: '010-3475-6626',
     //   imgUrl: 'https://via.placeholder.com/150',
     // });
-    // setFillData(['https://via.placeholder.com/100', 'https://via.placeholder.com/100', 'https://via.placeholder.com/100']);
+    setFillData(['../../assets/dummy/test_image1.jpg']);
   }, []);
 
   return (
@@ -70,7 +70,20 @@ export default function MainScreen() {
             <ArrowRight width={20} height={20} />
           </View>
           {fillData ? (
-            <View></View>
+            <View>
+              <Image
+                source={require('../../assets/dummy/test_image1.jpg')}
+                // style={{width: 100, height: 100}}
+                resizeMode={'cover'}
+                className="w-1/2 h-52 rounded-lg"
+              />
+              <Image
+                source={require('../../assets/dummy/test_image2.jpg')}
+                // style={{width: 100, height: 100}}
+                resizeMode={'cover'}
+                className="w-1/2 h-52 rounded-lg"
+              />
+            </View>
           ) : (
             <View className="flex-row w-1/2 h-52 bg-[#F4F4F4] rounded-xl items-center justify-center">
               <LightPlus width={40} height={40} />
