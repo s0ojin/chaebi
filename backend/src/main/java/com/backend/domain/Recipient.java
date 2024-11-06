@@ -29,9 +29,7 @@ public class Recipient {
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate; //마지막 수정날짜
 
-    @OneToMany(mappedBy = "recipient")
-    @JsonManagedReference
-    private Set<LetterRecipient> letterRecipients = new HashSet<>();
+
 
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -40,6 +38,8 @@ public class Recipient {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user; //작성자
+
+    private String imgurl;
 
     @PrePersist
     @PreUpdate

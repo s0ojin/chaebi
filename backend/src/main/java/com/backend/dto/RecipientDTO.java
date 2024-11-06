@@ -19,4 +19,5 @@ public class RecipientDTO {
     private String secretQuestion;
     @NotBlank(message = "Answer is required")
     private String secretAnswer;
+    private String imgUrl;
 }

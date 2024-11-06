@@ -12,9 +12,9 @@ import java.util.Set;
 @Setter
 public class LetterResDTO {
     private long id;
-    private String title;
+    private String content;
     private long userId;
-    private Set<RecipientResDTO> recipients = new HashSet<RecipientResDTO>();
+    private RecipientResDTO recipient;
     private LocalDateTime lastModifiedDate;
     private boolean sort;
 }

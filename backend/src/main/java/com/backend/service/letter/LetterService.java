@@ -13,7 +13,6 @@ public interface LetterService { // 편지
     LetterResDTO getLetter(long id);
     List<LetterResDTO> getLetters(User user);
     void updateLetter(Long letterId, LetterDTO letterDTO, User user);
-    void updateRecipients(Long letterId, Set<Long> newRecipientIds);
     void deleteLetter(long id);
     LetterResDTO convertToDTO(Letter letter);
 }
