@@ -33,14 +33,10 @@ public class LetterServiceImpl implements LetterService {
         letter.setUser(user);
         letter.setContent(letterDTO.getContent());
         letter.setSort(letterDTO.isSort());
-
-        // 수신자 추가
-        if (letterDTO.getRecipientIds() != null) {
-            for (Long recipientId : letterDTO.getRecipientIds()) {
-                Recipient recipient = recipientRepository.findById(recipientId)
-                        .orElseThrow(() -> new EntityNotFoundException("Recipient not found"));
-                letter.addRecipient(recipient);
-            }
+        if (letterDTO.getRecipientId() != null) {
+            Recipient recipient = recipientRepository.findById(letterDTO.getRecipientId())
+                    .orElseThrow(() -> new EntityNotFoundException("Recipient not found"));
+            letter.setRecipient(recipient);
         }
 
         repository.save(letter);
@@ -76,39 +72,9 @@ public class LetterServiceImpl implements LetterService {
 
         letterDTO.setSort(letterDTO.isSort());
 
-        // 수신자 목록 업데이트 (있는 경우)
-        if (letterDTO.getRecipientIds() != null) {
-            updateRecipients(letter.getId(), letterDTO.getRecipientIds());
-        }
-
         Letter updatedLetter = repository.save(letter);
     }
 
-
-    public void updateRecipients(Long letterId, Set<Long> newRecipientIds) { //편지에 대한 수신인 병경
-        Letter letter = repository.findById(letterId) //편지를 조회
-                .orElseThrow(() -> new EntityNotFoundException("Letter not found"));
-
-        // 현재 수신자 ID 목록
-        Set<Long> currentRecipientIds = letter.getLetterRecipients().stream()
-                .map(lr -> lr.getRecipient().getId())
-                .collect(Collectors.toSet()); // 현재의 수신인을 가져옴
-
-        // 새로 추가할 수신자 처리
-        for (Long recipientId : newRecipientIds) {
-            if (!currentRecipientIds.contains(recipientId)) {
-                Recipient recipient = recipientRepository.findById(recipientId)
-                        .orElseThrow(() -> new EntityNotFoundException("Recipient not found"));
-                letter.addRecipient(recipient);
-            }
-        }
-
-        // 제거할 수신자 처리
-        letter.getLetterRecipients().removeIf(lr ->
-                !newRecipientIds.contains(lr.getRecipient().getId()));
-
-        repository.save(letter);
-    }
 
     @Override
     public void deleteLetter(long id) {
@@ -119,18 +85,17 @@ public class LetterServiceImpl implements LetterService {
         LetterResDTO dto = new LetterResDTO();
         dto.setId(letter.getId());
         dto.setUserId(letter.getUser().getId());
-        dto.setTitle(letter.getContent()); // 또는 필요한 다른 필드
+        dto.setContent(letter.getContent()); // 또는 필요한 다른 필드
         dto.setSort(letter.isSort());
         dto.setLastModifiedDate(letter.getLastModifiedDate());
-        // 수신자 id, 이름, 전화번호만 Set에 담기
-        Set<RecipientResDTO> recipientDTO = letter.getLetterRecipients().stream()
-                .map(lr -> new RecipientResDTO(
-                        lr.getRecipient().getId(),
-                        lr.getRecipient().getName(),
-                        lr.getRecipient().getPhone()
-                ))
-                .collect(Collectors.toSet());
-        dto.setRecipients(recipientDTO);
+        // 수신자 id, 이름, 전화번호만 resDTO에 담기
+        RecipientResDTO recipientDTO = new RecipientResDTO(letter.getRecipient().getId(),
+                letter.getRecipient().getName(),
+                letter.getRecipient().getPhone(),
+                letter.getRecipient().getImgurl()
+                );
+
+        dto.setRecipient(recipientDTO);
         return dto;
     }
 }

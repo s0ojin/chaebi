@@ -3,6 +3,7 @@ package com.backend.service.recipient;
 import com.backend.domain.Recipient;
 import com.backend.domain.User;
 import com.backend.dto.RecipientDTO;
+import com.backend.exception.AlreadyExistsException;
 import com.backend.repository.RecipientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
 
     @Override
     public Recipient createRecipient(RecipientDTO recipientDTO, User user) {
+        if(repository.findByUserAndPhone(user, recipientDTO.getPhone()) != null){
+            throw new AlreadyExistsException(recipientDTO.getName() +  "님은 이미 등록되었습니다.");
+        }
         Recipient recipient = Recipient.builder()
                 .phone(recipientDTO.getPhone())
                 .name(recipientDTO.getName())

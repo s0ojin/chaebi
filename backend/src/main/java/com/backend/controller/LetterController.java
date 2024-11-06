@@ -68,12 +68,5 @@ public class LetterController {
         return ResponseEntity.ok("삭제되었습니다.");
     }
 
-    @PostMapping("/{id}/recipient/update")
-    @Operation(summary = "열람자 수정")
-    public ResponseEntity<?> updateLetter(@PathVariable Long id, @RequestBody LetterDTO letterDTO) {
-        letterService.updateRecipients(id,letterDTO.getRecipientIds());
-        return ResponseEntity.ok("열람자 업데이트가 완료되었습니다.");
-    }
-
 
 }

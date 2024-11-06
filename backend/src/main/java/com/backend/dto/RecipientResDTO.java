@@ -9,8 +9,8 @@ public class RecipientResDTO {
     private Long id;
     private String name;
     private String phone;
-
-    public RecipientResDTO(Long id, String name, String phone) {
+    private String imgUrl;
+    public RecipientResDTO(Long id, String name, String phone,String imgUrl) {
         this.id = id;
         this.name = name;
         this.phone = phone;

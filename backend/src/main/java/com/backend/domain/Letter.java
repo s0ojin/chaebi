@@ -24,9 +24,9 @@ public class Letter {
     @JoinColumn(name = "user_id")
     private User user; //작성자
 
-    @OneToMany(mappedBy = "letter", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private Set<LetterRecipient> letterRecipients = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "recipient_id")
+    private Recipient recipient;
 
     @Column(columnDefinition = "TEXT")
     private String content; //내용
@@ -43,14 +43,5 @@ public class Letter {
         lastModifiedDate = LocalDateTime.now();
     }
 
-    // 수신자 추가 메서드
-    public void addRecipient(Recipient recipient) {
-        LetterRecipient letterRecipient = new LetterRecipient(this, recipient);
-        letterRecipients.add(letterRecipient);
-    }
 
-    // 수신자 제거 메서드
-    public void removeRecipient(Recipient recipient) {
-        letterRecipients.removeIf(lr -> lr.getRecipient().equals(recipient));
-    }
 }
