@@ -1,6 +1,6 @@
 # main.py
 from fastapi import FastAPI
-from fasttest import add_numbers, suggest
+from app.fasttest import add_numbers, suggest
 
 app = FastAPI()
 
