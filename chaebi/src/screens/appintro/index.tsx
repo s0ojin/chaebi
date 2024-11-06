@@ -28,8 +28,9 @@ export default function AppIntroScreen({navigation}: AppIntroScreenProps) {
         <Text onPress={() => navigation.navigate('Absence')}>
           Go to absence
         </Text>
-        <Text onPress={() => navigation.navigate('Remain')}>
-          Go to Remain
+        <Text onPress={() => navigation.navigate('Remain')}>Go to Remain</Text>
+        <Text onPress={() => navigation.navigate('RemainEditor')}>
+          Go to RemainEditor
         </Text>
         {step === 4 ? (
           <RoundButtonComp
