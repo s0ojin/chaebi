@@ -31,7 +31,7 @@ export default function MainScreen() {
         <Logo width={56} height={42} />
       </View>
       <View className="flex-1 gap-6">
-        {/* Additional Content Section */}
+        {/* 추가 콘텐츠 */}
         <View className="">
           <Text className="text-xl font-semibold">추가 콘텐츠</Text>
           <Text className="text-gray-600 mt-2">
@@ -39,7 +39,7 @@ export default function MainScreen() {
           </Text>
         </View>
 
-        {/* Leave Data Section */}
+        {/* 남기기 */}
         <View className="gap-3">
           <View className="h-16 flex-row justify-between items-center">
             <Text className="text-xl font-semibold">남기기</Text>
@@ -57,47 +57,25 @@ export default function MainScreen() {
               </View>
             </View>
           ) : (
-            <View className="flex-row w-full bg-[#F4F4F4] h-24 rounded-xl items-center justify-center">
+            <View className="flex-row w-full h-24 bg-[#F4F4F4] rounded-xl items-center justify-center">
               <LightPlus width={40} height={40} />
             </View>
           )}
         </View>
 
-        {/* Fill Data Section */}
-        {/* Fill Data Section */}
+        {/* 채우기 */}
         <View className="gap-3">
           <View className="h-16 flex-row justify-between items-center">
             <Text className="text-xl font-semibold">채우기</Text>
             <ArrowRight width={20} height={20} />
           </View>
-          <FlatList
-            data={fillData || [null, null]} // fillData가 없을 때 두 개의 빈 데이터를 추가하여 두 컬럼 유지
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({item}) =>
-              item ? (
-                <View style={{flex: 1, margin: 4, alignItems: 'center'}}>
-                  <Image
-                    source={{uri: item}}
-                    style={{width: 100, height: 100, borderRadius: 8}}
-                  />
-                </View>
-              ) : (
-                <View
-                  style={{
-                    flex: 1,
-                    margin: 4,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#F4F4F4',
-                    height: 100,
-                    borderRadius: 8,
-                  }}>
-                  <LightPlus width={40} height={40} />
-                </View>
-              )
-            }
-            numColumns={2} // 두 개의 컬럼으로 설정
-          />
+          {fillData ? (
+            <View></View>
+          ) : (
+            <View className="flex-row w-1/2 h-48 bg-[#F4F4F4] rounded-xl items-center justify-center">
+              <LightPlus width={40} height={40} />
+            </View>
+          )}
         </View>
       </View>
       <View className="justify-end">
