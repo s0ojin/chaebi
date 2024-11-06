@@ -1,6 +1,6 @@
 import {View, TouchableOpacity} from 'react-native';
 import Text from '../../components/CustomText';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import HeaderComp from '../../components/HeaderComp';
 import ModalComp from '../../components/ModalComp';
 import Plus from '../../assets/icon/plus.svg';
@@ -12,6 +12,8 @@ export interface Recipient {
   id?: number;
   name: string;
   phone: string;
+  secretQuestion?: string;
+  secretAnswer?: string;
   imgUrl?: string;
 }
 
@@ -26,12 +28,16 @@ export interface Message {
 }
 
 type AppIntroScreenProps = {
-  navigation: StackNavigationProp<RootStackParamList, 'AppIntro'>;
+  navigation: StackNavigationProp<RootStackParamList, 'Remain'>;
 };
 
 export default function RemainScreen({navigation}: AppIntroScreenProps) {
   const [showAuth, setShowAuth] = useState<boolean>(false);
-  const [remainList, setRemainList] = useState<Message[]>(JSON.parse(`[
+  const [remainList, setRemainList] = useState<Message[]>([]);
+
+  // API 호출해 오면, remainList를 채워 오겠지요?
+  useEffect(()=>{
+    setRemainList(JSON.parse(`[
     {
       "id": 1,
       "content": "잘가시게",
@@ -42,7 +48,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
         "phone": "010-1111-1111",
         "imgUrl": null
       },
-      "lastModifiedDate": "2024-11-05T18:03:01.519939",
+      "lastModifiedDate": "2024-11-06T10:03:01.519939",
       "sort": true
     },
     {
@@ -58,7 +64,8 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
       "lastModifiedDate": "2024-11-06T10:03:11.653246",
       "sort": true
     }
-  ]`));
+  ]`))
+  },[])
 
   return (
     <View className="bg-white flex-1">
@@ -68,13 +75,13 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
         showList={[
           {
             title: '연락처에서 받아오기',
-            moveTo: function () {
+            moveTo: () => {
               navigation.navigate('Contacts');
             },
           },
           {
             title: '직접 입력하기',
-            moveTo: function () {
+            moveTo: () => {
               navigation.navigate('RemainWrite');
             },
           },
@@ -107,7 +114,10 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
             ))}
             <TouchableOpacity
               className="bg-gray-500 rounded-full w-16 h-16 justify-center items-center mt-5"
-              onPress={() => setShowAuth(true)}>
+              onPress={() => {
+                setShowAuth(true);
+                console.log(showAuth)
+              }}>
               <Plus className="m-auto" />
             </TouchableOpacity>
           </View>
