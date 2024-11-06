@@ -63,11 +63,6 @@ test-output/
 coverage/
 junit-reports/
 
-# Docker 관련 파일들
-*.dockerignore
-docker-compose.yml
-Dockerfile
-.docker/
 
 # IntelliJ IDEA Plugin 설정
 .idea/
