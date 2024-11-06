@@ -72,7 +72,7 @@ export default function MainScreen() {
           {fillData ? (
             <View></View>
           ) : (
-            <View className="flex-row w-1/2 h-48 bg-[#F4F4F4] rounded-xl items-center justify-center">
+            <View className="flex-row w-1/2 h-52 bg-[#F4F4F4] rounded-xl items-center justify-center">
               <LightPlus width={40} height={40} />
             </View>
           )}
