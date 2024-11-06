@@ -3,8 +3,14 @@ import React, {useState, useEffect} from 'react';
 import HeaderComp from '../../components/HeaderComp';
 import InputFieldComp from '../../components/InputFieldComp';
 import RoundButtonComp from '../../components/RoundButtonComp';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../../App';
 
-export default function SignInScreen() {
+type SignInScreenProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'SignIn'>;
+};
+
+export default function SignInScreen({navigation}: SignInScreenProps) {
   const [showAuth, setShowAuth] = useState<boolean>(false);
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [authCode, setAuthCode] = useState<string>('');
@@ -71,7 +77,7 @@ export default function SignInScreen() {
               value={authCode}
               onChangeText={setAuthCode}
             />
-            <RoundButtonComp content="인증하기" onPress={() => {}} />
+            <RoundButtonComp content="인증하기" onPress={() => {navigation.navigate('Main')}} />
             <Text className="text-2xl font-['이서윤체'] text-center mt-7">
               인증번호 재전송
             </Text>

@@ -11,6 +11,7 @@ import AbsenceScreen from './src/screens/absence';
 import SendCodeScreen from './src/screens/sendcode';
 import ContactScreen from './src/screens/remain/contacts';
 import RemainWriteScreen from './src/screens/remain/write';
+import MainScreen from './src/screens/main';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -22,6 +23,7 @@ export type RootStackParamList = {
   SendCode: undefined;
   Contacts: undefined;
   RemainWrite: undefined;
+  Main: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -39,6 +41,7 @@ const App: React.FC = () => {
         <Stack.Screen name="Remain" component={RemainScreen} />
         <Stack.Screen name="Contacts" component={ContactScreen} />
         <Stack.Screen name="RemainWrite" component={RemainWriteScreen} />
+        <Stack.Screen name="Main" component={MainScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
