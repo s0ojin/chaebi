@@ -13,26 +13,36 @@ type LeaveData = {
 
 export default function MainScreen() {
   const [leaveData, setLeaveData] = useState<LeaveData | null>(null);
-  const [fillData, setFillData] = useState<string[] | null>(null);
+  const [fillData, setFillData] = useState<any[]>([]);
 
   useEffect(() => {
-    // 데이터 초기화 예시
-    // setLeaveData({
-    //   name: '박수진',
-    //   phone: '010-3475-6626',
-    //   imgUrl: 'https://via.placeholder.com/150',
-    // });
-    setFillData(['../../assets/dummy/test_image1.jpg']);
+    // 이미지 경로를 require로 미리 지정하여 배열에 추가합니다.
+    const images = [
+      require('../../assets/dummy/test_image1.jpg'),
+      require('../../assets/dummy/test_image2.jpg'),
+      require('../../assets/dummy/test_image5.jpg'),
+      require('../../assets/dummy/test_image6.jpg'),
+    ];
+    setFillData(images);
   }, []);
 
+  const renderImageItem = ({item}: {item: any}) => (
+    <Image
+      source={item}
+      resizeMode="cover"
+      className="w-[48%] h-52 mb-2 rounded-lg"
+    />
+  );
+
   return (
-    <View className="flex-1 p-5 bg-white">
+    <View className="flex-1 p-4 bg-white">
       <View className="flex-row items-center mb-4">
         <Logo width={56} height={42} />
       </View>
+
       <View className="flex-1 gap-6">
         {/* 추가 콘텐츠 */}
-        <View className="">
+        <View>
           <Text className="text-xl font-semibold">추가 콘텐츠</Text>
           <Text className="text-gray-600 mt-2">
             여기에 더 많은 설명을 추가하세요.
@@ -69,21 +79,14 @@ export default function MainScreen() {
             <Text className="text-xl font-semibold">채우기</Text>
             <ArrowRight width={20} height={20} />
           </View>
-          {fillData ? (
-            <View>
-              <Image
-                source={require('../../assets/dummy/test_image1.jpg')}
-                // style={{width: 100, height: 100}}
-                resizeMode={'cover'}
-                className="w-1/2 h-52 rounded-lg"
-              />
-              <Image
-                source={require('../../assets/dummy/test_image2.jpg')}
-                // style={{width: 100, height: 100}}
-                resizeMode={'cover'}
-                className="w-1/2 h-52 rounded-lg"
-              />
-            </View>
+          {fillData.length > 0 ? (
+            <FlatList
+              data={fillData}
+              renderItem={renderImageItem}
+              keyExtractor={(item, index) => index.toString()}
+              numColumns={2}
+              columnWrapperStyle={{justifyContent: 'space-between'}}
+            />
           ) : (
             <View className="flex-row w-1/2 h-52 bg-[#F4F4F4] rounded-xl items-center justify-center">
               <LightPlus width={40} height={40} />
@@ -91,6 +94,7 @@ export default function MainScreen() {
           )}
         </View>
       </View>
+
       <View className="justify-end">
         <FooterComp />
       </View>
