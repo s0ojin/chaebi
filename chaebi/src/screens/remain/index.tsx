@@ -151,7 +151,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
           </View>
         )}
       </View>
-      <FooterComp></FooterComp>
+      <FooterComp currentPage='remain' navigation={navigation}></FooterComp>
     </View>
   );
 }
