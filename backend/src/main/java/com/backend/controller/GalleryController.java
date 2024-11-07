@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/gallery")
 @RequiredArgsConstructor
@@ -43,4 +45,24 @@ public class GalleryController {
         GalleryResDTO response = galleryService.updateRecipients(id, request);
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "유저가 작성한 갤러리")
+    @GetMapping("/userList")
+    public ResponseEntity<?> getGalleryList(HttpServletRequest httpServletRequest) {
+        User user = userService.getUserByToken(httpServletRequest).get();
+        List<GalleryResDTO> list = galleryService.getFileUrlByUser(user);
+        return ResponseEntity.ok(list);
+    }
+
+    @Operation(summary = "열람자만의 갤러리")
+    @PostMapping("/recipientList")
+    public ResponseEntity<?> generatePresignedUrl(
+            @RequestParam Long recipientId,
+            HttpServletRequest httpServletRequest
+    ) {
+        User user = userService.getUserByToken(httpServletRequest).get();
+        List<GalleryResDTO> list = galleryService.getFileUrlByUserAndRecipient(user,recipientId);
+        return ResponseEntity.ok(list);
+    }
+
 }
