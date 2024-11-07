@@ -16,6 +16,7 @@ import QuestionScreen from './src/screens/Remain/question';
 import MainScreen from './src/screens/Main';
 import RemainEditorScreen from './src/screens/RemainEditor';
 import CompleteScreen from './src/screens/Remain/complete';
+import AlbumScreen from './src/screens/Album';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -32,6 +33,7 @@ export type RootStackParamList = {
   Main: undefined;
   SetPw: undefined;
   RemainEditor: undefined;
+  Album: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -54,6 +56,7 @@ const App: React.FC = () => {
         <Stack.Screen name="Main" component={MainScreen} />
         <Stack.Screen name="SetPw" component={SetPasswordScreen} />
         <Stack.Screen name="RemainEditor" component={RemainEditorScreen} />
+        <Stack.Screen name="Album" component={AlbumScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
