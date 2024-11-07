@@ -14,8 +14,8 @@ import {Contact} from 'react-native-contacts/type';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../../App';
 import User from '../../assets/icon/User.svg';
-import HeaderComp from '../../components/HeaderComp';
-import RoundButtonComp from '../../components/RoundButtonComp';
+import HeaderComp from '../../components/Header';
+import RoundButtonComp from '../../components/RoundButton';
 
 // 공식문서에 작성된 연락처 권한 승인
 // PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {

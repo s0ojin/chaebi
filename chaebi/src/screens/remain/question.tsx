@@ -3,12 +3,12 @@ import React, {useEffect, useState} from 'react';
 import Text from '../../components/CustomText';
 import {Recipient} from '.';
 import {Route} from '@react-navigation/native';
-import InputFieldComp from '../../components/InputFieldComp';
-import HeaderComp from '../../components/HeaderComp';
-import RoundButtonComp from '../../components/RoundButtonComp';
+import InputFieldComp from '../../components/InputField';
+import HeaderComp from '../../components/Header';
+import RoundButtonComp from '../../components/RoundButton';
 import {Image} from 'react-native-svg';
 import Info from '../../assets/icon/information.svg';
-import ModalComp from '../../components/ModalComp';
+import ModalComp from '../../components/CustomModal';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
 

@@ -1,7 +1,7 @@
 import {View, Animated, Easing} from 'react-native';
 import React, {useEffect, useRef} from 'react';
 import Logo from '../../assets/logo/logo.svg';
-import RoundButtonComp from '../../components/RoundButtonComp';
+import RoundButtonComp from '../../components/RoundButton';
 
 const SendCodeScreen: React.FC = () => {
   const animations = useRef<Animated.Value[]>([

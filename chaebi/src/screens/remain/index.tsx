@@ -1,14 +1,14 @@
 import {View, TouchableOpacity} from 'react-native';
 import Text from '../../components/CustomText';
 import React, {useEffect, useState} from 'react';
-import HeaderComp from '../../components/HeaderComp';
-import ModalComp from '../../components/ModalComp';
-import {ModalElement} from '../../components/ModalComp';
+import HeaderComp from '../../components/Header';
+import ModalComp from '../../components/CustomModal';
+import {ModalElement} from '../../components/CustomModal';
 import Plus from '../../assets/icon/plus.svg';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
-import ListComp from '../../components/ListComp';
-import FooterComp from '../../components/FooterComp';
+import ListComp from '../../components/RecipientCard';
+import FooterComp from '../../components/Footer';
 
 export interface Recipient {
   id?: number;

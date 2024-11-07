@@ -1,9 +1,9 @@
 import { View } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Text from '../../components/CustomText';
-import HeaderComp from '../../components/HeaderComp';
-import InputFieldComp from '../../components/InputFieldComp';
-import RoundButtonComp from '../../components/RoundButtonComp';
+import HeaderComp from '../../components/Header';
+import InputFieldComp from '../../components/InputField';
+import RoundButtonComp from '../../components/RoundButton';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../../App';
 import { Recipient } from './index';
