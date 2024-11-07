@@ -93,7 +93,8 @@ pipeline {
                 stage('Python Docker Build') {
                     steps {
                           dir('./AI') {
-                              sh 'docker run --name ai-app -d -v data:/code/data -p 8000:8000 ai'
+                              sh 'docker run --name ai-app -d -v /home/ubuntu/code/data:/code/data
+ -p 8000:8000 ai'
                          }
                     }
                 }
