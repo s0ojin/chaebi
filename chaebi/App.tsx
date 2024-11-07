@@ -13,6 +13,7 @@ import ContactScreen from './src/screens/remain/contacts';
 import RemainWriteScreen from './src/screens/remain/write';
 import QuestionScreen from './src/screens/remain/question';
 import MainScreen from './src/screens/main';
+import RemainEditorScreen from './src/screens/RemainEditor';
 import CompleteScreen from './src/screens/remain/complete';
 
 export type RootStackParamList = {
@@ -28,6 +29,7 @@ export type RootStackParamList = {
   RemainQuestion: Recipient;
   RemainComplete: Recipient;
   Main: undefined;
+  RemainEditor: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -48,6 +50,7 @@ const App: React.FC = () => {
         <Stack.Screen name="RemainQuestion" component={QuestionScreen} />
         <Stack.Screen name="RemainComplete" component={CompleteScreen} />
         <Stack.Screen name="Main" component={MainScreen} />
+        <Stack.Screen name="RemainEditor" component={RemainEditorScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
