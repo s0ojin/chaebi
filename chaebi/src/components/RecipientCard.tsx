@@ -1,8 +1,8 @@
-import {View, TouchableOpacity, Image} from 'react-native';
+import {View, TouchableOpacity, Image, Pressable} from 'react-native';
 import React from 'react';
 import Setting from '../assets/icon/settings-alt.svg';
 import Text from './CustomText';
-import {Message} from '../screens/remain/index';
+import {Message} from '../screens/Remain/index';
 
 /*
   export interface Message {
@@ -51,16 +51,18 @@ const calculateDate = function(date : string){
 interface RemainListViewCompProp {
   message: Message;
   isSetting: boolean;
+  setOnPress?: ()=>void;
 }
 
 export default function RemainListViewComp({
   message,
   isSetting,
+  setOnPress
 }: RemainListViewCompProp) {
   return (
     <TouchableOpacity
       className="flex-row w-full h-24 px-8 bg-[#F4F4F4] rounded-2xl justify-between items-center"
-      onPress={() => {}}>
+      onPress={setOnPress}>
       <View className="flex-row justify-left items-center">
         {/* 사용자 이미지 */}
         {message.recipient.imgUrl === null ||

@@ -2,12 +2,18 @@ import {View, Text, Image, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Logo from '../../assets/logo/logo.svg';
 import ArrowRight from '../../assets/icon/arrow-right.svg';
-import FooterComp from '../../components/FooterComp';
+import FooterComp from '../../components/Footer';
 import LightPlus from '../../assets/icon/light-plus.svg';
-import RemainListViewComp from '../../components/ListComp';
-import {Message} from '../remain';
+import RemainListViewComp from '../../components/RecipientCard';
+import {Message} from '../Remain';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../../App';
 
-export default function MainScreen() {
+interface MainScreenProps {
+  navigation: StackNavigationProp<RootStackParamList>
+}
+
+export default function MainScreen({navigation} : MainScreenProps) {
   const [leaveData, setLeaveData] = useState<Message | null>(null);
   const [fillData, setFillData] = useState<any[]>([]);
 
@@ -20,6 +26,7 @@ export default function MainScreen() {
         id: 1,
         name: '박수진',
         phone: '010-1111-1111',
+        imgUrl: '',
       },
       lastModifiedDate: '2024-11-05T18:03:01.519939',
       sort: true,
@@ -105,7 +112,7 @@ export default function MainScreen() {
       </View>
 
       <View className="justify-end">
-        <FooterComp />
+        <FooterComp currentPage='home' navigation={navigation}/>
       </View>
     </View>
   );

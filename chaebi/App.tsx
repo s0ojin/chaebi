@@ -4,15 +4,18 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SplashScreen from './src/screens/splash';
 import SignInScreen from './src/screens/signin';
-import AppIntroScreen from './src/screens/appintro';
+import AppIntroScreen from './src/screens/Appintro';
 import SignUpScreen from './src/screens/signup';
-import RemainScreen from './src/screens/remain';
-import AbsenceScreen from './src/screens/absence';
+import RemainScreen, {Recipient} from './src/screens/Remain';
+import AbsenceScreen from './src/screens/Absence';
 import SendCodeScreen from './src/screens/sendcode';
-import ContactScreen from './src/screens/remain/contacts';
-import RemainWriteScreen from './src/screens/remain/write';
-import MainScreen from './src/screens/main';
 import SetPasswordScreen from './src/screens/setpw';
+import ContactScreen from './src/screens/Remain/contacts';
+import RemainWriteScreen from './src/screens/Remain/write';
+import QuestionScreen from './src/screens/Remain/question';
+import MainScreen from './src/screens/Main';
+import RemainEditorScreen from './src/screens/RemainEditor';
+import CompleteScreen from './src/screens/Remain/complete';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -24,8 +27,11 @@ export type RootStackParamList = {
   SendCode: undefined;
   Contacts: undefined;
   RemainWrite: undefined;
+  RemainQuestion: Recipient;
+  RemainComplete: Recipient;
   Main: undefined;
   SetPw: undefined;
+  RemainEditor: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -43,8 +49,11 @@ const App: React.FC = () => {
         <Stack.Screen name="Remain" component={RemainScreen} />
         <Stack.Screen name="Contacts" component={ContactScreen} />
         <Stack.Screen name="RemainWrite" component={RemainWriteScreen} />
+        <Stack.Screen name="RemainQuestion" component={QuestionScreen} />
+        <Stack.Screen name="RemainComplete" component={CompleteScreen} />
         <Stack.Screen name="Main" component={MainScreen} />
         <Stack.Screen name="SetPw" component={SetPasswordScreen} />
+        <Stack.Screen name="RemainEditor" component={RemainEditorScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

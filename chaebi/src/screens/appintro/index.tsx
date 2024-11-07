@@ -1,6 +1,6 @@
 import {View, Text} from 'react-native';
 import React, {useState} from 'react';
-import RoundButtonComp from '../../components/RoundButtonComp';
+import RoundButtonComp from '../../components/RoundButton';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
 
@@ -30,6 +30,9 @@ export default function AppIntroScreen({navigation}: AppIntroScreenProps) {
         </Text>
         <Text onPress={() => navigation.navigate('Remain')}>Go to Remain</Text>
         <Text onPress={() => navigation.navigate('SetPw')}>Go to SetPw</Text>
+        <Text onPress={() => navigation.navigate('RemainEditor')}>
+          Go to RemainEditor
+        </Text>
         {step === 4 ? (
           <RoundButtonComp
             content={'시작하기'}

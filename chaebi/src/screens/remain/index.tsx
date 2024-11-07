@@ -1,17 +1,21 @@
 import {View, TouchableOpacity} from 'react-native';
 import Text from '../../components/CustomText';
-import React, {useState} from 'react';
-import HeaderComp from '../../components/HeaderComp';
-import ModalComp from '../../components/ModalComp';
+import React, {useEffect, useState} from 'react';
+import HeaderComp from '../../components/Header';
+import ModalComp from '../../components/CustomModal';
+import {ModalElement} from '../../components/CustomModal';
 import Plus from '../../assets/icon/plus.svg';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
-import ListComp from '../../components/ListComp';
+import ListComp from '../../components/RecipientCard';
+import FooterComp from '../../components/Footer';
 
 export interface Recipient {
   id?: number;
   name: string;
   phone: string;
+  secretQuestion?: string;
+  secretAnswer?: string;
   imgUrl?: string;
 }
 
@@ -26,12 +30,18 @@ export interface Message {
 }
 
 type AppIntroScreenProps = {
-  navigation: StackNavigationProp<RootStackParamList, 'AppIntro'>;
+  navigation: StackNavigationProp<RootStackParamList, 'Remain'>;
 };
 
 export default function RemainScreen({navigation}: AppIntroScreenProps) {
   const [showAuth, setShowAuth] = useState<boolean>(false);
-  const [remainList, setRemainList] = useState<Message[]>(JSON.parse(`[
+  const [remainList, setRemainList] = useState<Message[]>([]);
+  const [moveToList, setMoveToList] = useState<ModalElement[]>([]);
+
+  // API 호출해 오면, remainList를 채워 오겠지요?
+  useEffect(() => {
+    setRemainList(
+      JSON.parse(`[
     {
       "id": 1,
       "content": "잘가시게",
@@ -40,9 +50,11 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
         "id": 1,
         "name": "장비",
         "phone": "010-1111-1111",
-        "imgUrl": null
+        "imgUrl": null,
+        "secretQuestion": "담임선생님 성함",
+        "secretAnswer": "박세영"
       },
-      "lastModifiedDate": "2024-11-05T18:03:01.519939",
+      "lastModifiedDate": "2024-11-06T10:03:01.519939",
       "sort": true
     },
     {
@@ -58,30 +70,19 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
       "lastModifiedDate": "2024-11-06T10:03:11.653246",
       "sort": true
     }
-  ]`));
+  ]`),
+    );
+  }, []);
 
   return (
     <View className="bg-white flex-1">
       <ModalComp
         showAuth={showAuth}
         setShowAuth={setShowAuth}
-        showList={[
-          {
-            title: '연락처에서 받아오기',
-            moveTo: function () {
-              navigation.navigate('Contacts');
-            },
-          },
-          {
-            title: '직접 입력하기',
-            moveTo: function () {
-              navigation.navigate('RemainWrite');
-            },
-          },
-        ]}
+        showList={moveToList}
       />
       <HeaderComp pageName="남기기" />
-      <View className="mt-8 gap-9">
+      <View className="flex-1 mt-8 gap-9">
         {remainList.length === 0 ? (
           <View className="flex-col px-6 gap-5 items-center">
             {/* 남긴 메시지가 없을 때 띄울 메시지 */}
@@ -103,16 +104,54 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
         ) : (
           <View className="flex-col px-6 gap-5 items-center">
             {remainList.map((element, index) => (
-              <ListComp key={index} message={element} isSetting={true} />
+              <ListComp
+                key={index}
+                message={element}
+                isSetting={true}
+                setOnPress={async () => {
+                  await setMoveToList([
+                    {
+                      title: '질문 수정하기',
+                      moveTo: () => {
+                        navigation.navigate('RemainQuestion', element.recipient);
+                      },
+                    },
+                    {
+                      title: '삭제하기',
+                      moveTo: () => {
+                        navigation.navigate('RemainWrite');
+                      },
+                    },
+                  ])
+                  setShowAuth(true)
+                }}
+              />
             ))}
             <TouchableOpacity
               className="bg-gray-500 rounded-full w-16 h-16 justify-center items-center mt-5"
-              onPress={() => setShowAuth(true)}>
+              onPress={async () => {
+                await setMoveToList([
+                  {
+                    title: '연락처에서 받아오기',
+                    moveTo: () => {
+                      navigation.navigate('Contacts');
+                    },
+                  },
+                  {
+                    title: '직접 입력하기',
+                    moveTo: () => {
+                      navigation.navigate('RemainWrite');
+                    },
+                  },
+                ]);
+                setShowAuth(true);
+              }}>
               <Plus className="m-auto" />
             </TouchableOpacity>
           </View>
         )}
       </View>
+      <FooterComp currentPage='remain' navigation={navigation}></FooterComp>
     </View>
   );
 }
