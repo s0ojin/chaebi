@@ -20,15 +20,15 @@ const config: Config = {
         _white: '#FAFAFA',
       },
       strokeWidth: {
-        '0.5': '0.5px',
+        '0.5': '.0313rem',
       },
       lineHeight: {
-        _46: '46px',
+        _46: '2.875rem',
       },
       spacing: {
-        _72: '72px',
-        _74: '74px',
-        _140: '140px',
+        _72: '4.5rem',
+        _74: '4.625rem',
+        _140: '8.75rem',
       },
       boxShadow: {
         inner: 'inset 0 0 0 2px #F4F4F4',

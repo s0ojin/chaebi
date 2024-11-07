@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import ChosunNm from '@/utils/fonts'
 import { LogoWhite } from 'public/svg'
 import './globals.css'
@@ -6,6 +6,14 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'ChaeBi',
   description: '채우고 비우기, 채비',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({

@@ -37,7 +37,7 @@ export default function SecurityContent() {
   }
 
   return (
-    <div className="w-full flex flex-col items-center p-5 min-h-screen md:min-h-screen md:justify-center">
+    <div className="w-full flex flex-col items-center p-5 min-h-screen md:min-h-screen md:justify-start">
       <div className="flex-1 md:flex-initial flex flex-col items-center w-full">
         <div className="mt-_140 mb-_72 md:mt-0 md:mb-24">
           <GuideMessage senderName="김싸피" receiverName="박수진" />
