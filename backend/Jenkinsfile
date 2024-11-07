@@ -22,7 +22,7 @@ pipeline {
 
         stage('Backend - Add Env') {
             steps {
-                dir('backend') {
+                dir('./backend') {
                     withCredentials([
                         file(credentialsId: 'application', variable: 'application'),
                     ]) {
@@ -60,7 +60,7 @@ pipeline {
             parallel {
                 stage('Java Docker Build') {
                     steps {
-                        dir('./Backend') {
+                        dir('./backend') {
                             sh 'docker build -t backend . '
                         }
                     }
