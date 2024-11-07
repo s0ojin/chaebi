@@ -5,6 +5,7 @@ type EditorStore = {
   align: 'left' | 'center';
   setText: (text: string) => void;
   setAlign: (align: 'left' | 'center') => void;
+  blurTextInput: () => void;
 };
 
 const useEditorStore = create<EditorStore>(set => ({
@@ -12,6 +13,7 @@ const useEditorStore = create<EditorStore>(set => ({
   align: 'center',
   setText: text => set({text}),
   setAlign: align => set({align}),
+  blurTextInput: () => {},
 }));
 
 export default useEditorStore;

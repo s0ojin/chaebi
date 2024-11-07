@@ -7,7 +7,7 @@ import CheckIcon from '../assets/icon/check.svg';
 import useEditorStore from '../stores/editorStore';
 
 export default function EditorInputAccessory() {
-  const {text, align, setText, setAlign} = useEditorStore();
+  const {text, align, setText, setAlign, blurTextInput} = useEditorStore();
 
   const handleInsertCurrentTime = () => {
     const now = new Date();
@@ -18,10 +18,14 @@ export default function EditorInputAccessory() {
     }:${now.getMinutes()}`;
     setText(text + ' ' + formattedTime);
   };
+
   const handleToggleAlignment = () => {
     setAlign(align === 'left' ? 'center' : 'left');
   };
-  const handleSaveText = () => {};
+
+  const handleSaveText = () => {
+    blurTextInput();
+  };
 
   return (
     <View className="flex flex-row gap-5 px-5 h-11 items-center">
@@ -29,7 +33,7 @@ export default function EditorInputAccessory() {
         <ClockIcon />
       </Pressable>
       <Pressable onPress={handleToggleAlignment}>
-        {align === 'left' ? <SortLeftIcon /> : <SortCenterIcon />}
+        {align === 'left' ? <SortCenterIcon /> : <SortLeftIcon />}
       </Pressable>
       <Pressable onPress={handleSaveText} className="ml-auto">
         <CheckIcon width={32} height={32} />
