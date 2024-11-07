@@ -141,9 +141,39 @@ export default function App() {
 
   useEffect(() => {
     if (receiveSmsPermission === PermissionsAndroid.RESULTS.GRANTED) {
-      let subscriber = SmsListener.addListener(message => {
+      const subscriber = SmsListener.addListener(async message => {
         setSmsContent(message);
         console.log(message);
+
+        // message를 바로 postSms 함수에 전달
+        const postSms = async message => {
+          try {
+            const response = await fetch(
+              'https://k11a309.p.ssafy.io/api/sms/analyze',
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  body: message.body,
+                  originatingAddress: message.originatingAddress,
+                  timestamp: message.timestamp,
+                }),
+              },
+            );
+            if (!response.ok) {
+              throw new Error('Failed to fetch data');
+            }
+            const data = await response.json();
+            console.log('Fetching data successfully');
+          } catch (error) {
+            console.log('Error fetching data:', error);
+          }
+        };
+
+        // postSms 함수 호출
+        postSms(message);
       });
 
       return () => {
@@ -154,7 +184,7 @@ export default function App() {
 
   return (
     <View style={{padding: 20}}>
-      <Text>SMS Listener App</Text>.
+      <Text>SMS Listener App</Text>
       {smsContent ? (
         <View>
           <Text>Received SMS address: {smsContent.originatingAddress}</Text>
