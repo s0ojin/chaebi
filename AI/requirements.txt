@@ -5,5 +5,4 @@ torch
 fastapi
 uvicorn
 pillow
-boto3
 requests
