@@ -8,7 +8,7 @@ import EditorInputAccessory from '../../components/EditorInputAccessory';
 import useEditorStore from '../../stores/editorStore';
 
 export default function RemainEditorScreen() {
-  const {text, setText} = useEditorStore();
+  const {align, text, setText} = useEditorStore();
 
   return (
     <>
@@ -30,7 +30,7 @@ ex) 내 옷장아래 매일 오만원씩 적립하는중`}
         onChangeText={newText => setText(newText)}
         multiline={true}
         textAlignVertical="top"
-        textAlign="center"
+        textAlign={align}
         className=" bg-transparent p-5 mt-5 text-xl"
       />
       <EditorInputAccessory />

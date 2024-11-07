@@ -2,12 +2,12 @@ import React from 'react';
 import {Pressable, View} from 'react-native';
 import ClockIcon from '../assets/icon/clock.svg';
 import SortLeftIcon from '../assets/icon/sort-left.svg';
-// import SortCenterIcon from '../assets/icon/sort-center.svg';
+import SortCenterIcon from '../assets/icon/sort-center.svg';
 import CheckIcon from '../assets/icon/check.svg';
 import useEditorStore from '../stores/editorStore';
 
 export default function EditorInputAccessory() {
-  const {text, setText} = useEditorStore();
+  const {text, align, setText, setAlign} = useEditorStore();
 
   const handleInsertCurrentTime = () => {
     const now = new Date();
@@ -18,7 +18,9 @@ export default function EditorInputAccessory() {
     }:${now.getMinutes()}`;
     setText(text + ' ' + formattedTime);
   };
-  const handleToggleAlignment = () => {};
+  const handleToggleAlignment = () => {
+    setAlign(align === 'left' ? 'center' : 'left');
+  };
   const handleSaveText = () => {};
 
   return (
@@ -27,7 +29,7 @@ export default function EditorInputAccessory() {
         <ClockIcon />
       </Pressable>
       <Pressable onPress={handleToggleAlignment}>
-        <SortLeftIcon />
+        {align === 'left' ? <SortLeftIcon /> : <SortCenterIcon />}
       </Pressable>
       <Pressable onPress={handleSaveText} className="ml-auto">
         <CheckIcon width={32} height={32} />
