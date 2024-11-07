@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import HeaderComp from '../../components/Header';
+import Header from '../../components/Header';
 import {TextInput as TextInputType, View} from 'react-native';
 import Text from '../../components/CustomText';
 import SettingIcon from '../../assets/icon/settings-alt.svg';
@@ -19,7 +19,7 @@ export default function RemainEditorScreen() {
 
   return (
     <>
-      <HeaderComp pageName="" />
+      <Header pageName="" />
       <View className="flex flex-row items-center justify-between w-full h-20 border-y border-primary-400 border-dashed px-5">
         <View className="flex flex-row items-center gap-4 my-auto">
           <View className="w-12 h-12 rounded-full bg-primary-200" />

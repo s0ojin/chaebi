@@ -1,14 +1,14 @@
 import {View, TouchableOpacity} from 'react-native';
 import Text from '../../components/CustomText';
 import React, {useEffect, useState} from 'react';
-import HeaderComp from '../../components/Header';
-import ModalComp from '../../components/CustomModal';
+import Header from '../../components/Header';
+import Modal from '../../components/CustomModal';
 import {ModalElement} from '../../components/CustomModal';
 import Plus from '../../assets/icon/plus.svg';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
-import ListComp from '../../components/RecipientCard';
-import FooterComp from '../../components/Footer';
+import List from '../../components/RecipientCard';
+import Footer from '../../components/Footer';
 
 export interface Recipient {
   id?: number;
@@ -76,12 +76,12 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
 
   return (
     <View className="bg-white flex-1">
-      <ModalComp
+      <Modal
         showAuth={showAuth}
         setShowAuth={setShowAuth}
         showList={moveToList}
       />
-      <HeaderComp pageName="남기기" />
+      <Header pageName="남기기" />
       <View className="flex-1 mt-8 gap-9">
         {remainList.length === 0 ? (
           <View className="flex-col px-6 gap-5 items-center">
@@ -104,7 +104,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
         ) : (
           <View className="flex-col px-6 gap-5 items-center">
             {remainList.map((element, index) => (
-              <ListComp
+              <List
                 key={index}
                 message={element}
                 isSetting={true}
@@ -113,7 +113,10 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
                     {
                       title: '질문 수정하기',
                       moveTo: () => {
-                        navigation.navigate('RemainQuestion', element.recipient);
+                        navigation.navigate(
+                          'RemainQuestion',
+                          element.recipient,
+                        );
                       },
                     },
                     {
@@ -122,8 +125,8 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
                         navigation.navigate('RemainWrite');
                       },
                     },
-                  ])
-                  setShowAuth(true)
+                  ]);
+                  setShowAuth(true);
                 }}
               />
             ))}
@@ -151,7 +154,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
           </View>
         )}
       </View>
-      <FooterComp currentPage='remain' navigation={navigation}></FooterComp>
+      <Footer currentPage="remain" navigation={navigation}></Footer>
     </View>
   );
 }

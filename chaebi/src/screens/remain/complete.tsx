@@ -3,8 +3,8 @@ import React from 'react';
 import Text from '../../components/CustomText';
 import {Recipient} from '.';
 import {Route} from '@react-navigation/native';
-import HeaderComp from '../../components/Header';
-import RoundButtonComp from '../../components/RoundButton';
+import Header from '../../components/Header';
+import RoundButton from '../../components/RoundButton';
 import DecoTopIcon from '../../assets/icon/deco-top.svg';
 import DecoBotIcon from '../../assets/icon/deco-bottom.svg';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -24,7 +24,7 @@ export default function CompleteScreen({
 
   return (
     <View className="flex-1 bg-white">
-      <HeaderComp pageName="열람인 등록하기" />
+      <Header pageName="열람인 등록하기" />
       <View className="flex-1 px-6 my-8 justify-between">
         {/* 입력 필드 */}
         <View className="flex-col items-center gap-4">
@@ -43,14 +43,14 @@ export default function CompleteScreen({
 
         {/* 버튼 필드 */}
         <View className="mt-4 gap-5 ]">
-          <RoundButtonComp
+          <RoundButton
             content={`${recipient.name} 님께 편지 남기기`}
             onPress={() => {
               // 편지 작성 페이지로 이동하기
               navigation.navigate;
             }}
           />
-          <RoundButtonComp
+          <RoundButton
             content="다음에 남기기"
             backgroundColor={'bg-[#D9D9D9]'}
             fontColor={'text-[#444444]'}

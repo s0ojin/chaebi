@@ -1,16 +1,16 @@
-// WarningModalComp.tsx
+// WarningModal.tsx
 import {View, Text, Modal, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../App';
 
-interface WarningModalCompProps {
+interface WarningModalProps {
   visible: boolean;
   onClose: () => void;
   navigation: StackNavigationProp<RootStackParamList>;
 }
 
-const WarningModalComp: React.FC<WarningModalCompProps> = ({
+const WarningModal: React.FC<WarningModalProps> = ({
   visible,
   onClose,
   navigation,
@@ -58,4 +58,4 @@ const WarningModalComp: React.FC<WarningModalCompProps> = ({
   );
 };
 
-export default WarningModalComp;
+export default WarningModal;

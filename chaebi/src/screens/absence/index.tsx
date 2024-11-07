@@ -1,10 +1,10 @@
 import {View, Text} from 'react-native';
 import React, {useState} from 'react';
 import Logo from '../../assets/logo/logo.svg';
-import RoundButtonComp from '../../components/RoundButton';
+import RoundButton from '../../components/RoundButton';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
-import WarningModalComp from '../../components/WarningModal'; // 모달 컴포넌트 import
+import WarningModal from '../../components/WarningModal'; // 모달 컴포넌트 import
 
 type AbsenceScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Absence'>;
@@ -26,13 +26,13 @@ export default function AbsenceScreen({navigation}: AbsenceScreenProps) {
         </Text>
       </View>
       <View className="justify-end w-full gap-5">
-        <RoundButtonComp
+        <RoundButton
           content={'박수진님이신가요?'}
           onPress={() => {
             navigation.navigate('SignIn');
           }}
         />
-        <RoundButtonComp
+        <RoundButton
           content={'유족이신가요?'}
           onPress={() => {
             setModalVisible(true);
@@ -43,7 +43,7 @@ export default function AbsenceScreen({navigation}: AbsenceScreenProps) {
         />
       </View>
 
-      <WarningModalComp
+      <WarningModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         navigation={navigation}

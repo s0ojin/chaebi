@@ -1,8 +1,8 @@
 import {View, Text} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import HeaderComp from '../../components/Header';
-import InputFieldComp from '../../components/InputField';
-import RoundButtonComp from '../../components/RoundButton';
+import Header from '../../components/Header';
+import InputField from '../../components/InputField';
+import RoundButton from '../../components/RoundButton';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
 
@@ -41,7 +41,7 @@ export default function SignInScreen({navigation}: SignInScreenProps) {
 
   return (
     <View className="flex-1 bg-white">
-      <HeaderComp pageName="로그인" />
+      <Header pageName="로그인" />
       <View className="mt-8 gap-9">
         <View className="px-6 gap-5">
           <Text className="text-2xl font-['이서윤체']">
@@ -49,7 +49,7 @@ export default function SignInScreen({navigation}: SignInScreenProps) {
               ? '휴대폰 번호로 로그인해주세요.'
               : '인증번호를 입력해주세요.'}
           </Text>
-          <InputFieldComp
+          <InputField
             placeholder="휴대폰 번호"
             keyboardType="phone-pad"
             disabled={showAuth}
@@ -57,7 +57,7 @@ export default function SignInScreen({navigation}: SignInScreenProps) {
             value={phoneNumber}
             onChangeText={setPhoneNumber}
           />
-          <RoundButtonComp
+          <RoundButton
             content={
               isCounting
                 ? `남은 시간: ${Math.floor(countdown / 60)}:${String(
@@ -71,13 +71,13 @@ export default function SignInScreen({navigation}: SignInScreenProps) {
         </View>
         {showAuth ? (
           <View className="px-6 gap-5">
-            <InputFieldComp
+            <InputField
               placeholder="인증번호"
               keyboardType="phone-pad"
               value={authCode}
               onChangeText={setAuthCode}
             />
-            <RoundButtonComp
+            <RoundButton
               content="인증하기"
               onPress={() => {
                 navigation.navigate('Main');

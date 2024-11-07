@@ -2,18 +2,18 @@ import {View, Text, Image, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Logo from '../../assets/logo/logo.svg';
 import ArrowRight from '../../assets/icon/arrow-right.svg';
-import FooterComp from '../../components/Footer';
+import Footer from '../../components/Footer';
 import LightPlus from '../../assets/icon/light-plus.svg';
-import RemainListViewComp from '../../components/RecipientCard';
+import RemainListView from '../../components/RecipientCard';
 import {Message} from '../Remain';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../App';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../../App';
 
 interface MainScreenProps {
-  navigation: StackNavigationProp<RootStackParamList>
+  navigation: StackNavigationProp<RootStackParamList>;
 }
 
-export default function MainScreen({navigation} : MainScreenProps) {
+export default function MainScreen({navigation}: MainScreenProps) {
   const [leaveData, setLeaveData] = useState<Message | null>(null);
   const [fillData, setFillData] = useState<any[]>([]);
 
@@ -81,7 +81,7 @@ export default function MainScreen({navigation} : MainScreenProps) {
             //     <Text>{leaveData.imgUrl}</Text>
             //   </View>
             // </View>
-            <RemainListViewComp message={leaveData} isSetting={false} />
+            <RemainListView message={leaveData} isSetting={false} />
           ) : (
             <View className="flex-row w-full h-24 bg-[#F4F4F4] rounded-xl items-center justify-center">
               <LightPlus width={40} height={40} />
@@ -112,7 +112,7 @@ export default function MainScreen({navigation} : MainScreenProps) {
       </View>
 
       <View className="justify-end">
-        <FooterComp currentPage='home' navigation={navigation}/>
+        <Footer currentPage="home" navigation={navigation} />
       </View>
     </View>
   );

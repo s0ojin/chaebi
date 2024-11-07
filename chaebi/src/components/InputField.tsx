@@ -1,7 +1,7 @@
 import {View, TextInput, TextInputProps} from 'react-native';
 import React from 'react';
 
-interface InputFieldCompProps {
+interface InputFieldProps {
   placeholder: string;
   keyboardType?: TextInputProps['keyboardType'];
   disabled?: boolean;
@@ -10,14 +10,14 @@ interface InputFieldCompProps {
   onChangeText: (text: string) => void;
 }
 
-export default function InputFieldComp({
+export default function InputField({
   placeholder,
   keyboardType = 'default',
   disabled = false,
   isPhoneNum = false,
   value,
   onChangeText,
-}: InputFieldCompProps) {
+}: InputFieldProps) {
   const handleTextChange = (text: string) => {
     if (isPhoneNum) {
       // 숫자만 남기기

@@ -22,43 +22,43 @@ import {Message} from '../screens/Remain/index';
     imgUrl: string;
   }
 */
-const calculateDate = function(date : string){
+const calculateDate = function (date: string) {
   let update = new Date(date);
   let now = new Date();
   console.log(now.getHours());
   // 차이 구하고
   let sub = now.getTime() - update.getTime();
-  const minutes = Math.floor(sub / (1000*60)); // 분 단위로 변환
+  const minutes = Math.floor(sub / (1000 * 60)); // 분 단위로 변환
   if (minutes < 60) {
     return '방금 전';
   }
   const hours = Math.floor(minutes / 60); // 시간 단위로 변환
   if (hours < 24) {
-    return `${hours}시간 전`
+    return `${hours}시간 전`;
   }
   const days = Math.floor(hours / 24); // 일 단위로 변환
   if (days <= 30) {
-    return `${hours}일 전`
+    return `${hours}일 전`;
   }
   const months = Math.floor(days / 30); // 월 단위로 변환
   if (months < 12) {
-    return `${months}달 전`
+    return `${months}달 전`;
   }
   const years = Math.floor(days / 365); // 년 단위로 변환
-  return `${years}년 전`
-}
+  return `${years}년 전`;
+};
 
-interface RemainListViewCompProp {
+interface RemainListViewProp {
   message: Message;
   isSetting: boolean;
-  setOnPress?: ()=>void;
+  setOnPress?: () => void;
 }
 
-export default function RemainListViewComp({
+export default function RemainListView({
   message,
   isSetting,
-  setOnPress
-}: RemainListViewCompProp) {
+  setOnPress,
+}: RemainListViewProp) {
   return (
     <TouchableOpacity
       className="flex-row w-full h-24 px-8 bg-[#F4F4F4] rounded-2xl justify-between items-center"

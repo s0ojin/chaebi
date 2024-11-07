@@ -7,15 +7,14 @@ import PersonIcon from '../assets/icon/person.svg';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../App';
 
-interface FooterCompProps {
+interface FooterProps {
   // 이동할 경로
   currentPage: string;
   // 이동 시킬 네비게이션
   navigation: StackNavigationProp<RootStackParamList>;
 }
 
-export default function FooterComp({currentPage, navigation}: FooterCompProps) {
-
+export default function Footer({currentPage, navigation}: FooterProps) {
   return (
     <View className="flex-row justify-between px-2 my-2">
       {currentPage === 'home' ? (
@@ -42,7 +41,7 @@ export default function FooterComp({currentPage, navigation}: FooterCompProps) {
       ) : (
         <Pressable
           onPress={() => {
-            navigation.navigate('Remain')
+            navigation.navigate('Remain');
           }}
           className="items-center w-20">
           <BoxIcon width={32} height={32} color="#D2D2D2" />
@@ -59,7 +58,7 @@ export default function FooterComp({currentPage, navigation}: FooterCompProps) {
         <Pressable
           onPress={() => {
             // 채우기로 이동
-            navigation.navigate
+            navigation.navigate;
           }}
           className="items-center w-20">
           <LayoutIcon width={32} height={32} color="#D2D2D2" />
@@ -76,7 +75,7 @@ export default function FooterComp({currentPage, navigation}: FooterCompProps) {
         <Pressable
           onPress={() => {
             // 마이페이지로 이동
-            navigation.navigate
+            navigation.navigate;
           }}
           className="items-center w-20">
           <PersonIcon width={32} height={32} color="#D2D2D2" />

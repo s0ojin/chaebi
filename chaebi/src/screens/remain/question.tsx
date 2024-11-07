@@ -1,14 +1,13 @@
-import {Touchable, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Text from '../../components/CustomText';
 import {Recipient} from '.';
 import {Route} from '@react-navigation/native';
-import InputFieldComp from '../../components/InputField';
-import HeaderComp from '../../components/Header';
-import RoundButtonComp from '../../components/RoundButton';
-import {Image} from 'react-native-svg';
+import InputField from '../../components/InputField';
+import Header from '../../components/Header';
+import RoundButton from '../../components/RoundButton';
 import Info from '../../assets/icon/information.svg';
-import ModalComp from '../../components/CustomModal';
+import Modal from '../../components/CustomModal';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
 
@@ -48,7 +47,7 @@ export default function QuestionScreen({
 
   return (
     <View className="flex-1 bg-white">
-      <ModalComp
+      <Modal
         showAuth={modalVisiable}
         setShowAuth={setModalVisible}
         showList={[
@@ -72,7 +71,7 @@ export default function QuestionScreen({
           },
         ]}
       />
-      <HeaderComp pageName="열람인 등록하기" />
+      <Header pageName="열람인 등록하기" />
       <View className="flex-1 px-6 my-8 justify-between">
         {/* 입력 필드 */}
         <View className="flex-col gap-4">
@@ -116,7 +115,7 @@ export default function QuestionScreen({
                 질문을 선택하세요
               </Text>
             </TouchableOpacity>
-            <InputFieldComp
+            <InputField
               placeholder="질문을 입력하세요"
               keyboardType="default"
               isPhoneNum={false}
@@ -126,7 +125,7 @@ export default function QuestionScreen({
           </View>
           <View className="gap-5">
             <Text className="text-2xl mt-5">답변</Text>
-            <InputFieldComp
+            <InputField
               placeholder="답변을 입력하세요"
               keyboardType="default"
               isPhoneNum={false}
@@ -138,7 +137,7 @@ export default function QuestionScreen({
 
         {/* 버튼 필드 */}
         <View className="mt-4">
-          <RoundButtonComp
+          <RoundButton
             content="등록"
             onPress={() => {
               recipient.secretQuestion = question;

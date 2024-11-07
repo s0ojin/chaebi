@@ -1,24 +1,20 @@
-import {View, Modal, Text, Pressable} from 'react-native';
+import {View, Modal as RNModal, Text, Pressable} from 'react-native';
 import React from 'react';
 
 export interface ModalElement {
   title: string;
-  moveTo: ()=>void;
+  moveTo: () => void;
 }
 
-interface ModalCompProps {
+interface ModalProps {
   showAuth: boolean;
   setShowAuth: (value: boolean) => void;
   showList: ModalElement[];
 }
 
-const ModalComp: React.FC<ModalCompProps> = ({
-  showAuth,
-  setShowAuth,
-  showList,
-}) => {
+const Modal: React.FC<ModalProps> = ({showAuth, setShowAuth, showList}) => {
   return (
-    <Modal
+    <RNModal
       animationType="fade"
       transparent={true}
       visible={showAuth}
@@ -27,7 +23,7 @@ const ModalComp: React.FC<ModalCompProps> = ({
       }}>
       <Pressable
         className="flex-1 bg-[rgba(0,0,0,0.7)] justify-center items-center"
-        onPress={()=>setShowAuth(false)}>
+        onPress={() => setShowAuth(false)}>
         <View className="m-5 bg-white rounded-2xl p-9 shadow-lg items-center">
           {showList.map((element, index) => (
             <View key={index}>
@@ -47,8 +43,8 @@ const ModalComp: React.FC<ModalCompProps> = ({
           ))}
         </View>
       </Pressable>
-    </Modal>
+    </RNModal>
   );
 };
 
-export default ModalComp;
+export default Modal;
