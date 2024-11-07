@@ -1,3 +1,4 @@
+#fasttest.py
 import numpy as np
 import cv2
 from transformers import CLIPProcessor, CLIPModel
