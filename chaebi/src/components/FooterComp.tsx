@@ -7,7 +7,7 @@ import Person from '../assets/icon/person.svg';
 
 export default function FooterComp() {
   return (
-    <View className="flex-row justify-between">
+    <View className="flex-row justify-between px-2 my-4">
       <View className="items-center w-20">
         <Home width={32} height={32} />
         <Text className="text-xs text-center text-[#D2D2D2]">홈</Text>
