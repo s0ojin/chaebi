@@ -11,6 +11,7 @@ import com.backend.dto.PresignedUrlRequest;
 import com.backend.dto.PresignedUrlResponse;
 import com.backend.dto.UpdateRecipientsReqDTO;
 import com.backend.exception.NotFoundException;
+import com.backend.exception.UnauthorizedException;
 import com.backend.repository.GalleryRecipientRepository;
 import com.backend.repository.GalleryRepository;
 import com.backend.repository.RecipientRepository;
@@ -18,6 +19,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -25,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +40,7 @@ public class GalleryServiceImpl implements GalleryService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    //Presigned URL 반환
     @Transactional
     public PresignedUrlResponse generatePresignedUrl(PresignedUrlRequest request, User user) {
 
@@ -76,6 +80,7 @@ public class GalleryServiceImpl implements GalleryService {
         );
     }
 
+    //열람자 업데이트
     @Transactional
     public GalleryResDTO updateRecipients(Long galleryId, UpdateRecipientsReqDTO request) {
         Gallery gallery = galleryRepository.findById(galleryId)
@@ -96,6 +101,7 @@ public class GalleryServiceImpl implements GalleryService {
         return new GalleryResDTO(gallery);
     }
 
+    //읽었는지 확인
     @Transactional
     public void markAsRead(Long galleryId, Long recipientId) {
         GalleryRecipient galleryRecipient = galleryRecipientRepository
@@ -105,7 +111,16 @@ public class GalleryServiceImpl implements GalleryService {
         galleryRecipient.markAsRead();
         galleryRecipientRepository.save(galleryRecipient);
     }
+    
+    
+    //업로드 하는 메소드(미완)
+    @Override
+    public void uploadFile(PresignedUrlRequest request, User user, MultipartFile file) {
+        //presignedUrl 생성
+        String presignedUrl = this.generatePresignedUrl(request, user).getPresignedUrl();
+    }
 
+    //유니크 키 생성
     private String generateUniqueKey(String fileName) {
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         String randomString = UUID.randomUUID().toString().substring(0, 8);
@@ -118,14 +133,17 @@ public class GalleryServiceImpl implements GalleryService {
         return String.format("uploads/%s_%s%s", timestamp, randomString, extension);
     }
 
+    
+    //presignedUrl 만료시간 설정
     private Date getPresignedUrlExpiration() {
         Date expiration = new Date();
         long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000 * 60 * 30; // 30 minutes
+        expTimeMillis += 1000 * 60 * 30; // 30 분
         expiration.setTime(expTimeMillis);
         return expiration;
     }
 
+    //File 타입 확인
     private String determineFileType(String contentType) {
         if (contentType.startsWith("image/")) {
             return "IMAGE";
@@ -134,5 +152,29 @@ public class GalleryServiceImpl implements GalleryService {
         } else {
             return "OTHER";
         }
+    }
+
+    //유저의 갤러리 파일명 들을 반환
+    public List<GalleryResDTO> getFileUrlByUser(User user) {
+        List<Gallery> urls = galleryRepository.findAllByUser(user);
+        List<GalleryResDTO> list = toGalleryResDTOList(urls);
+        return list;
+    }
+
+    //갤러리 소유자이거나 지정된 수신자인 경우 파일 URL을 반환
+
+    //유저와 열람자의 파일명을 반환(마지막 송신했을 때 용)
+    public List<GalleryResDTO> getFileUrlByUserAndRecipient(User user, Long recipientId) {
+
+        List<Gallery> urls = galleryRepository.findByRecipientUserAndRecipientId(user, recipientId);
+        // 갤러리 소유자 체크
+        List<GalleryResDTO> list = toGalleryResDTOList(urls);
+        return list;
+    }
+
+    private static List<GalleryResDTO> toGalleryResDTOList(List<Gallery> galleries) {
+        return galleries.stream()
+                .map(gallery -> new GalleryResDTO(gallery))
+                .collect(Collectors.toList());
     }
 }
