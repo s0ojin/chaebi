@@ -30,6 +30,15 @@ export default function QuestionScreen({
   const [showNext, setShowNext] = useState<boolean>(false);
 
   useEffect(() => {
+    if (recipient.secretQuestion) {
+      setQuestion(recipient.secretQuestion);
+    }
+    if (recipient.secretAnswer) {
+      setAnswer(recipient.secretAnswer);
+    }
+  }, []);
+
+  useEffect(() => {
     if (question !== '' && answer !== '') {
       setShowNext(true);
     } else {

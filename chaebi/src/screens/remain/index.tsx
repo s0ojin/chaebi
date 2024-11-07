@@ -8,6 +8,7 @@ import Plus from '../../assets/icon/plus.svg';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
 import ListComp from '../../components/ListComp';
+import FooterComp from '../../components/FooterComp';
 
 export interface Recipient {
   id?: number;
@@ -49,7 +50,9 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
         "id": 1,
         "name": "장비",
         "phone": "010-1111-1111",
-        "imgUrl": null
+        "imgUrl": null,
+        "secretQuestion": "담임선생님 성함",
+        "secretAnswer": "박세영"
       },
       "lastModifiedDate": "2024-11-06T10:03:01.519939",
       "sort": true
@@ -79,7 +82,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
         showList={moveToList}
       />
       <HeaderComp pageName="남기기" />
-      <View className="mt-8 gap-9">
+      <View className="flex-1 mt-8 gap-9">
         {remainList.length === 0 ? (
           <View className="flex-col px-6 gap-5 items-center">
             {/* 남긴 메시지가 없을 때 띄울 메시지 */}
@@ -148,6 +151,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
           </View>
         )}
       </View>
+      <FooterComp currentPage='remain' navigation={navigation}></FooterComp>
     </View>
   );
 }
