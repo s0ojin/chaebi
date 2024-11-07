@@ -2,10 +2,10 @@ import {View, Text, Image, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Logo from '../../assets/logo/logo.svg';
 import ArrowRight from '../../assets/icon/arrow-right.svg';
-import FooterComp from '../../components/FooterComp';
+import FooterComp from '../../components/Footer';
 import LightPlus from '../../assets/icon/light-plus.svg';
-import RemainListViewComp from '../../components/ListComp';
-import {Message} from '../remain';
+import RemainListViewComp from '../../components/RecipientCard';
+import {Message} from '../Remain';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../../App';
 
@@ -20,13 +20,13 @@ export default function MainScreen({navigation} : MainScreenProps) {
   useEffect(() => {
     setLeaveData({
       id: 1,
-      content: '잘가시게',
+      title: '잘가시게',
       userId: 1,
       recipient: {
         id: 1,
         name: '박수진',
         phone: '010-1111-1111',
-        imgUrl: null,
+        imgUrl: '',
       },
       lastModifiedDate: '2024-11-05T18:03:01.519939',
       sort: true,

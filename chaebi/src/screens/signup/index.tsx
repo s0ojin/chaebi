@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
-import HeaderComp from '../../components/HeaderComp';
-import InputFieldComp from '../../components/InputFieldComp';
-import RoundButtonComp from '../../components/RoundButtonComp';
+import HeaderComp from '../../components/Header';
+import InputFieldComp from '../../components/InputField';
+import RoundButtonComp from '../../components/RoundButton';
 
 export default function SignUpScreen() {
   const [showAuth, setShowAuth] = useState<boolean>(false);

@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import HeaderComp from '../../components/HeaderComp';
+import HeaderComp from '../../components/Header';
 import {TextInput as TextInputType, View} from 'react-native';
 import Text from '../../components/CustomText';
 import SettingIcon from '../../assets/icon/settings-alt.svg';
