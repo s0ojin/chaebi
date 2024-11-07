@@ -80,36 +80,87 @@
 //     </View>
 //   );
 // }
-import { useEffect, useState } from 'react';
-import { View, Text, Alert } from 'react-native';
-import SmsListener from 'react-native-android-sms-listener'; // SmsListener import
+// import { useEffect, useState } from 'react';
+// import { View, Text, Alert } from 'react-native';
+// import SmsListener from 'react-native-android-sms-listener'; // SmsListener import
+
+// export default function App() {
+//   const [smsContent, setSmsContent] = useState(null);
+
+//   useEffect(() => {
+//     // SMS 리스너 시작
+//     const subscription = SmsListener.addListener((message) => {
+//       try {
+//         console.log('Received SMS:', message.body);  // 수신된 SMS 출력
+//         setSmsContent(message.body);  // 화면에 SMS 내용 표시
+//       } catch (error) {
+//         console.error('Error processing SMS:', error);
+//         Alert.alert('Error', 'An error occurred while processing the SMS.');
+//       }
+//     });
+
+//     // 컴포넌트 언마운트 시 리스너 제거
+//     return () => {
+//       subscription.remove();  // 리스너 취소
+//     };
+//   }, []);
+
+//   return (
+//     <View style={{ padding: 20 }}>
+//       <Text>SMS Listener App</Text>
+//       {smsContent ? (
+//         <Text>Received SMS: {smsContent}</Text>
+//       ) : (
+//         <Text>Waiting for SMS...</Text>
+//       )}
+//     </View>
+//   );
+// }
+
+import React, {useEffect, useState} from 'react';
+import {View, Text, PermissionsAndroid} from 'react-native';
+import SmsListener from 'react-native-android-sms-listener';
 
 export default function App() {
-  const [smsContent, setSmsContent] = useState(null);
+  const [receiveSmsPermission, setReceiveSmsPermission] = useState('');
+  const [smsContent, setSmsContent] = useState();
 
   useEffect(() => {
-    // SMS 리스너 시작
-    const subscription = SmsListener.addListener((message) => {
+    const requestSmsPermission = async () => {
       try {
-        console.log('Received SMS:', message.body);  // 수신된 SMS 출력
-        setSmsContent(message.body);  // 화면에 SMS 내용 표시
-      } catch (error) {
-        console.error('Error processing SMS:', error);
-        Alert.alert('Error', 'An error occurred while processing the SMS.');
+        const permission = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,
+        );
+        setReceiveSmsPermission(permission);
+      } catch (err) {
+        console.log(err);
       }
-    });
-
-    // 컴포넌트 언마운트 시 리스너 제거
-    return () => {
-      subscription.remove();  // 리스너 취소
     };
+    requestSmsPermission();
   }, []);
 
+  useEffect(() => {
+    if (receiveSmsPermission === PermissionsAndroid.RESULTS.GRANTED) {
+      let subscriber = SmsListener.addListener(message => {
+        setSmsContent(message);
+        console.log(message);
+      });
+
+      return () => {
+        subscriber.remove();
+      };
+    }
+  }, [receiveSmsPermission]);
+
   return (
-    <View style={{ padding: 20 }}>
-      <Text>SMS Listener App</Text>
+    <View style={{padding: 20}}>
+      <Text>SMS Listener App</Text>.
       {smsContent ? (
-        <Text>Received SMS: {smsContent}</Text>
+        <View>
+          <Text>Received SMS address: {smsContent.originatingAddress}</Text>
+          <Text>Received SMS body: {smsContent.body}</Text>
+          <Text>Received SMS timestamp: {smsContent.timestamp}</Text>
+        </View>
       ) : (
         <Text>Waiting for SMS...</Text>
       )}
