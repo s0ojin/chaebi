@@ -71,7 +71,7 @@ export default function QuestionScreen({
           <View className="flex-row h-24 px-8 bg-[#F4F4F4] rounded-2xl justify-between items-center">
             <View className="flex-row justify-left items-center">
               {/* 사용자 이미지 */}
-              <View className="bg-[#000] rounded-full w-12 h-12" />
+              <View className="bg-[#D9D9D9] rounded-full w-12 h-12" />
               {/* {recipient.imgUrl === null || recipient.imgUrl === '' ? (
                 <View className="bg-[#000] rounded-full w-12 h-12" />
               ) : (
@@ -81,9 +81,9 @@ export default function QuestionScreen({
                 />
               )} */}
               {/* 사용자 정보 */}
-              <View className="ml-4 gap-2">
-                <Text className="text-[14px]">{recipient.name}</Text>
-                <Text className="text-[14px]">{recipient.phone}</Text>
+              <View className="ml-4 gap-1">
+                <Text className="text-xl">{recipient.name}</Text>
+                <Text className="text-base">{recipient.phone}</Text>
               </View>
             </View>
           </View>
@@ -135,7 +135,7 @@ export default function QuestionScreen({
               recipient.secretQuestion = question;
               recipient.secretAnswer = answer;
               console.log(recipient);
-              navigation.navigate;
+              navigation.navigate('RemainComplete', recipient);
             }}
             disabled={!showNext}
           />
