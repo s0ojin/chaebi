@@ -6,8 +6,14 @@ import FooterComp from '../../components/FooterComp';
 import LightPlus from '../../assets/icon/light-plus.svg';
 import RemainListViewComp from '../../components/ListComp';
 import {Message} from '../remain';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../../App';
 
-export default function MainScreen() {
+interface MainScreenProps {
+  navigation: StackNavigationProp<RootStackParamList>
+}
+
+export default function MainScreen({navigation} : MainScreenProps) {
   const [leaveData, setLeaveData] = useState<Message | null>(null);
   const [fillData, setFillData] = useState<any[]>([]);
 
@@ -106,7 +112,7 @@ export default function MainScreen() {
       </View>
 
       <View className="justify-end">
-        <FooterComp />
+        <FooterComp currentPage='home' navigation={navigation}/>
       </View>
     </View>
   );

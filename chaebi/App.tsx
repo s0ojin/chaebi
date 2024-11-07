@@ -6,13 +6,15 @@ import SplashScreen from './src/screens/splash';
 import SignInScreen from './src/screens/signin';
 import AppIntroScreen from './src/screens/appintro';
 import SignUpScreen from './src/screens/signup';
-import RemainScreen from './src/screens/remain';
+import RemainScreen, {Recipient} from './src/screens/remain';
 import AbsenceScreen from './src/screens/absence';
 import SendCodeScreen from './src/screens/sendcode';
 import ContactScreen from './src/screens/remain/contacts';
 import RemainWriteScreen from './src/screens/remain/write';
+import QuestionScreen from './src/screens/remain/question';
 import MainScreen from './src/screens/main';
 import RemainEditorScreen from './src/screens/RemainEditor';
+import CompleteScreen from './src/screens/remain/complete';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -24,6 +26,8 @@ export type RootStackParamList = {
   SendCode: undefined;
   Contacts: undefined;
   RemainWrite: undefined;
+  RemainQuestion: Recipient;
+  RemainComplete: Recipient;
   Main: undefined;
   RemainEditor: undefined;
 };
@@ -43,6 +47,8 @@ const App: React.FC = () => {
         <Stack.Screen name="Remain" component={RemainScreen} />
         <Stack.Screen name="Contacts" component={ContactScreen} />
         <Stack.Screen name="RemainWrite" component={RemainWriteScreen} />
+        <Stack.Screen name="RemainQuestion" component={QuestionScreen} />
+        <Stack.Screen name="RemainComplete" component={CompleteScreen} />
         <Stack.Screen name="Main" component={MainScreen} />
         <Stack.Screen name="RemainEditor" component={RemainEditorScreen} />
       </Stack.Navigator>
