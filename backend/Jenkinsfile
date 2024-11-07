@@ -41,6 +41,7 @@ pipeline {
                 script {
                     // 이미 실행 중인 컨테이너가 있다면 종료
                     sh 'docker container rm -f backend-app || true'
+                    sh 'docker container rm -f ai-app || true'
                 }
             }
         }
