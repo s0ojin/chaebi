@@ -9,6 +9,7 @@ import SignUpScreen from './src/screens/signup';
 import RemainScreen, {Recipient} from './src/screens/Remain';
 import AbsenceScreen from './src/screens/Absence';
 import SendCodeScreen from './src/screens/sendcode';
+import SetPasswordScreen from './src/screens/setpw';
 import ContactScreen from './src/screens/Remain/contacts';
 import RemainWriteScreen from './src/screens/Remain/write';
 import QuestionScreen from './src/screens/Remain/question';
@@ -29,6 +30,7 @@ export type RootStackParamList = {
   RemainQuestion: Recipient;
   RemainComplete: Recipient;
   Main: undefined;
+  SetPw: undefined;
   RemainEditor: undefined;
 };
 
@@ -50,6 +52,7 @@ const App: React.FC = () => {
         <Stack.Screen name="RemainQuestion" component={QuestionScreen} />
         <Stack.Screen name="RemainComplete" component={CompleteScreen} />
         <Stack.Screen name="Main" component={MainScreen} />
+        <Stack.Screen name="SetPw" component={SetPasswordScreen} />
         <Stack.Screen name="RemainEditor" component={RemainEditorScreen} />
       </Stack.Navigator>
     </NavigationContainer>

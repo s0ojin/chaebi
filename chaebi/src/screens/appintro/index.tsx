@@ -29,6 +29,7 @@ export default function AppIntroScreen({navigation}: AppIntroScreenProps) {
           Go to absence
         </Text>
         <Text onPress={() => navigation.navigate('Remain')}>Go to Remain</Text>
+        <Text onPress={() => navigation.navigate('SetPw')}>Go to SetPw</Text>
         <Text onPress={() => navigation.navigate('RemainEditor')}>
           Go to RemainEditor
         </Text>
