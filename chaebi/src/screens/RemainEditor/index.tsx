@@ -4,6 +4,7 @@ import {View} from 'react-native';
 import Text from '../../components/CustomText';
 import SettingIcon from '../../assets/icon/settings-alt.svg';
 import TextInput from '../../components/CustomTextInput';
+import EditorInputAccessory from '../../components/EditorInputAccessory';
 
 export default function RemainEditorScreen() {
   const [text, setText] = useState('');
@@ -28,8 +29,9 @@ ex) 내 옷장아래 매일 오만원씩 적립하는중`}
         multiline={true}
         textAlignVertical="top"
         textAlign="center"
-        className="h-full bg-transparent p-5 mt-5 text-xl"
+        className=" bg-transparent p-5 mt-5 text-xl"
       />
+      <EditorInputAccessory />
     </>
   );
 }
