@@ -1,4 +1,4 @@
-import { SecurityQuestionProps } from '@/types/securityQusetion'
+import { SecurityQuestionProps } from '@/types/security'
 
 function SecurityQuestion({ question }: SecurityQuestionProps) {
   return (

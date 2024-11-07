@@ -1,4 +1,4 @@
-function MemorialMessage() {
+function GuideMessage() {
   return (
     <div>
       <div className="mb-10 text-2xl md:text-4xl text-_white text-center stroke-_white stroke-0.5">
@@ -20,4 +20,4 @@ function MemorialMessage() {
   )
 }
 
-export default MemorialMessage
+export default GuideMessage

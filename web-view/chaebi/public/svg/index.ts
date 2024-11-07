@@ -1,5 +1,4 @@
-import LogoPrimary from './logo-primary.svg'
-import LogoWhite from './logo-white.svg'
+import Logo from './logo.svg'
 import Mum from './mum.svg'
 
-export { LogoPrimary, LogoWhite, Mum }
+export { Logo, Mum }

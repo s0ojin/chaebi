@@ -1,6 +1,6 @@
-import { GuideMessageProps } from '@/types/guideMessage'
+import { GuideMessageProps } from '@/types/guide'
 
-function GuideMessage(props: GuideMessageProps) {
+function QuestionIntro(props: GuideMessageProps) {
   return (
     <div className="md:mt-10 text-center text-lg md:text-2xl leading-8 md:leading-_46 text-_white">
       <p>안녕하세요, {props.receiverName}님.</p>
@@ -12,4 +12,4 @@ function GuideMessage(props: GuideMessageProps) {
   )
 }
 
-export default GuideMessage
+export default QuestionIntro
