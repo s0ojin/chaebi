@@ -77,7 +77,12 @@ export default function SignInScreen({navigation}: SignInScreenProps) {
               value={authCode}
               onChangeText={setAuthCode}
             />
-            <RoundButtonComp content="인증하기" onPress={() => {navigation.navigate('Main')}} />
+            <RoundButtonComp
+              content="인증하기"
+              onPress={() => {
+                navigation.navigate('Main');
+              }}
+            />
             <Text className="text-2xl font-['이서윤체'] text-center mt-7">
               인증번호 재전송
             </Text>

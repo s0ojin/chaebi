@@ -14,13 +14,12 @@ export default function MainScreen() {
   useEffect(() => {
     setLeaveData({
       id: 1,
-      content: '잘가시게',
+      title: '잘가시게',
       userId: 1,
       recipient: {
         id: 1,
         name: '박수진',
         phone: '010-1111-1111',
-        imgUrl: null,
       },
       lastModifiedDate: '2024-11-05T18:03:01.519939',
       sort: true,
