@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/gallery")
 @RequiredArgsConstructor
-@Tag(name = "Gallery", description = "Gallery API")
+@Tag(name = "앨범관리", description = "앨범 API")
 public class GalleryController {
 
     private final GalleryServiceImpl galleryService;
