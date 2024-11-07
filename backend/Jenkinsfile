@@ -56,23 +56,45 @@ pipeline {
         }
 
         stage('Docker Build') {
-            steps {
-                dir('backend') {
-                    sh 'docker build -t backend .'
+            parallel {
+                stage('Java Docker Build') {
+                    steps {
+                        dir('./Backend') {
+                            sh 'docker build -t backend . '
+                        }
+                    }
+                }
+                stage('Python Docker Build') {
+                    steps {
+                        dir('./AI/FastAPI-project') {
+                            sh 'docker build -t ai . '
+                        }
+                    }
                 }
             }
         }
 
-        stage('Create Volume') {
-            steps {
-                sh 'docker volume create data || true'
-            }
-        }
+//         stage('Create Volume') {
+//             steps {
+//                 sh 'docker volume create data || true'
+//             }
+//         }
 
         stage('Docker Run') {
-            steps {
-                dir('backend') {
-                    sh 'docker run --name backend-app -d -v data:/data -p 8080:8080 backend'
+            parallel {
+                stage('Java Docker Run') {
+                    steps {
+                        dir('./backend') {
+                            sh 'docker run --name backend-app -d -v data:/data -p 8080:8080 backend'
+                        }
+                    }
+                }
+                stage('Python Docker Build') {
+                    steps {
+                          dir('./AI') {
+                              sh 'docker run --name ai-app -d -v data:/code/data -p 8000:8000 ai'
+                         }
+                    }
                 }
             }
         }

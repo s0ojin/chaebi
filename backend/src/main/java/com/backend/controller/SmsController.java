@@ -2,15 +2,14 @@ package com.backend.controller;
 
 import com.backend.dto.CertReqDTO;
 import com.backend.dto.MessageDTO;
+import com.backend.dto.PairDTO;
 import com.backend.dto.VerifyDTO;
+import com.backend.service.idconvert.IdConverterService;
 import com.backend.service.sms.SmsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/sms")
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SmsController {
 
     private final SmsService smsService;
+    private final IdConverterService idConverterService;
 
     @PostMapping("/analyze")
     public ResponseEntity<String> analyzeMessage(@RequestBody MessageDTO message) {
@@ -45,5 +45,21 @@ public class SmsController {
                 request.getCode()
         );
         return ResponseEntity.ok(isValid);
+    }
+
+    // ID 변환 테스트
+    @GetMapping("/combine")
+    public ResponseEntity<String> combineIds(
+            @RequestParam String userId,
+            @RequestParam String recipientId
+    ) {
+        String combined = idConverterService.combineIds(userId, recipientId);
+        return ResponseEntity.ok(combined);
+    }
+
+    @GetMapping("/extract/{combinedId}")
+    public ResponseEntity<PairDTO> extractIds(@PathVariable String combinedId) {
+        PairDTO ids = idConverterService.extractIds(combinedId);
+        return ResponseEntity.ok(ids);
     }
 }
