@@ -13,7 +13,7 @@ def suggest():
     base_path = os.path.dirname(__file__)
     prototxt_path = os.path.join(base_path, "..", "data", "MobileNetSSD_deploy.prototxt.txt")
     model_path = os.path.join(base_path, "..", "data", "MobileNetSSD_deploy.caffemodel")
-    image_path = os.path.join(base_path, "..", "data", "sample3.jpg")
+    image_path = os.path.join(base_path, "..", "data", "sample4.jpg")
 
     
     # 사전 학습된 MobileNet SSD 모델 로드
