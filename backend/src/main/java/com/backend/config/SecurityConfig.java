@@ -56,7 +56,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 mvcMatcherBuilder.pattern("/api/users/**"),
                                 mvcMatcherBuilder.pattern("/api/deposit/**"),
-                                mvcMatcherBuilder.pattern("/sms/**"),
+                                mvcMatcherBuilder.pattern("/api/sms/**"),
                                 mvcMatcherBuilder.pattern("/error"),
                                 mvcMatcherBuilder.pattern("/")
                         ).permitAll()

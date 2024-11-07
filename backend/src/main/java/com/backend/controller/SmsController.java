@@ -1,6 +1,8 @@
 package com.backend.controller;
 
+import com.backend.dto.CertReqDTO;
 import com.backend.dto.MessageDTO;
+import com.backend.dto.VerifyDTO;
 import com.backend.service.sms.SmsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +28,22 @@ public class SmsController {
         } else {
             return ResponseEntity.ok("일반 문자입니다.");
         }
+    }
+
+    // SMS 인증번호 발송
+    @PostMapping("/send")
+    public ResponseEntity<?> sendSms(@RequestBody CertReqDTO request) {
+        smsService.SendSms(request);
+        return ResponseEntity.ok().build();
+    }
+
+    // SMS 인증번호 검증
+    @PostMapping("/verify")
+    public ResponseEntity<Boolean> verifySms(@RequestBody VerifyDTO request) {
+        boolean isValid = smsService.verifyCode(
+                request.getPhoneNum(),
+                request.getCode()
+        );
+        return ResponseEntity.ok(isValid);
     }
 }
