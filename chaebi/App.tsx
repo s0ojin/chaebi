@@ -4,17 +4,17 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SplashScreen from './src/screens/splash';
 import SignInScreen from './src/screens/signin';
-import AppIntroScreen from './src/screens/appintro';
+import AppIntroScreen from './src/screens/Appintro';
 import SignUpScreen from './src/screens/signup';
-import RemainScreen, {Recipient} from './src/screens/remain';
-import AbsenceScreen from './src/screens/absence';
+import RemainScreen, {Recipient} from './src/screens/Remain';
+import AbsenceScreen from './src/screens/Absence';
 import SendCodeScreen from './src/screens/sendcode';
-import ContactScreen from './src/screens/remain/contacts';
-import RemainWriteScreen from './src/screens/remain/write';
-import QuestionScreen from './src/screens/remain/question';
-import MainScreen from './src/screens/main';
+import ContactScreen from './src/screens/Remain/contacts';
+import RemainWriteScreen from './src/screens/Remain/write';
+import QuestionScreen from './src/screens/Remain/question';
+import MainScreen from './src/screens/Main';
 import RemainEditorScreen from './src/screens/RemainEditor';
-import CompleteScreen from './src/screens/remain/complete';
+import CompleteScreen from './src/screens/Remain/complete';
 
 export type RootStackParamList = {
   Splash: undefined;

@@ -3,10 +3,10 @@ import React from 'react';
 import Text from '../../components/CustomText';
 import {Recipient} from '.';
 import {Route} from '@react-navigation/native';
-import HeaderComp from '../../components/HeaderComp';
-import RoundButtonComp from '../../components/RoundButtonComp';
-import DecoTop from '../../assets/icon/deco-top.svg';
-import DecoBot from '../../assets/icon/deco-bottom.svg';
+import HeaderComp from '../../components/Header';
+import RoundButtonComp from '../../components/RoundButton';
+import DecoTopIcon from '../../assets/icon/deco-top.svg';
+import DecoBotIcon from '../../assets/icon/deco-bottom.svg';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
 
@@ -31,14 +31,14 @@ export default function CompleteScreen({
           <Text className="text-2xl text-center">
             열람인 등록이 완료되었습니다!
           </Text>
-          <DecoTop />
+          <DecoTopIcon />
           <View className="gap-3">
             <Text className="text-2xl text-center">{recipient.name}</Text>
             <Text className="text-xl text-center">{recipient.phone}</Text>
             <Text className="text-xl text-center">{`Q: ${recipient.secretQuestion}`}</Text>
             <Text className="text-xl text-center">{`A: ${recipient.secretAnswer}`}</Text>
           </View>
-          <DecoBot />
+          <DecoBotIcon />
         </View>
 
         {/* 버튼 필드 */}

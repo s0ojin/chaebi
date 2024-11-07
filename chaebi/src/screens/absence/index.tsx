@@ -1,10 +1,10 @@
 import {View, Text} from 'react-native';
 import React, {useState} from 'react';
 import Logo from '../../assets/logo/logo.svg';
-import RoundButtonComp from '../../components/RoundButtonComp';
+import RoundButtonComp from '../../components/RoundButton';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
-import WarningModalComp from '../../components/WarningModalComp'; // 모달 컴포넌트 import
+import WarningModalComp from '../../components/WarningModal'; // 모달 컴포넌트 import
 
 type AbsenceScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Absence'>;
