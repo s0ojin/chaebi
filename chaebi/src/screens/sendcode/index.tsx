@@ -1,7 +1,7 @@
 import {View, Animated, Easing} from 'react-native';
 import React, {useEffect, useRef} from 'react';
 import Logo from '../../assets/logo/logo.svg';
-import RoundButtonComp from '../../components/RoundButton';
+import RoundButton from '../../components/RoundButton';
 
 const SendCodeScreen: React.FC = () => {
   const animations = useRef<Animated.Value[]>([
@@ -74,7 +74,7 @@ const SendCodeScreen: React.FC = () => {
               },
             ],
           }}>
-          <RoundButtonComp content="코드 전송하기" onPress={() => {}} />
+          <RoundButton content="코드 전송하기" onPress={() => {}} />
         </Animated.View>
       </View>
     </View>
