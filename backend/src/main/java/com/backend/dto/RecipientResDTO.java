@@ -3,6 +3,8 @@ package com.backend.dto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,4 +17,5 @@ public class RecipientResDTO {
     private String imgUrl;
     private String secretQuestion;
     private String secretAnswer;
+    private LocalDateTime lastModified;
 }
