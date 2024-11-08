@@ -45,7 +45,7 @@ export default function MainScreen({navigation}: MainScreenProps) {
     <Image
       source={item}
       resizeMode="cover"
-      className="w-[48%] h-52 mb-2 rounded-lg"
+      className="w-[49%] h-52 mb-2 rounded-lg"
     />
   );
 
@@ -71,16 +71,6 @@ export default function MainScreen({navigation}: MainScreenProps) {
             <ArrowRight width={20} height={20} />
           </View>
           {leaveData ? (
-            // <View className="flex-row w-full bg-[#F4F4F4] px-4 py-2 h-24 rounded-xl gap-4">
-            //   <View className="bg-[#D9D9D9] rounded-full w-11 h-11 justify-center" />
-            //   <View className="flex-1 justify-center items-end">
-            //     <Text>{leaveData.name}</Text>
-            //     <Text>{leaveData.phone}</Text>
-            //   </View>
-            //   <View className="flex-1 justify-end">
-            //     <Text>{leaveData.imgUrl}</Text>
-            //   </View>
-            // </View>
             <RemainListView message={leaveData} isSetting={false} />
           ) : (
             <View className="flex-row w-full h-24 bg-[#F4F4F4] rounded-xl items-center justify-center">

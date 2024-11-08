@@ -1,4 +1,5 @@
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
+import Text from '../../components/CustomText';
 import React, {useState, useEffect} from 'react';
 import Header from '../../components/Header';
 import InputField from '../../components/InputField';
@@ -44,7 +45,7 @@ export default function SignInScreen({navigation}: SignInScreenProps) {
       <Header pageName="로그인" />
       <View className="mt-8 gap-9">
         <View className="px-6 gap-5">
-          <Text className="text-2xl font-['이서윤체']">
+          <Text className="text-2xl">
             {!showAuth
               ? '휴대폰 번호로 로그인해주세요.'
               : '인증번호를 입력해주세요.'}
@@ -83,7 +84,7 @@ export default function SignInScreen({navigation}: SignInScreenProps) {
                 navigation.navigate('Main');
               }}
             />
-            <Text className="text-2xl font-['이서윤체'] text-center mt-7">
+            <Text className="text-2xl text-center mt-7">
               인증번호 재전송
             </Text>
           </View>

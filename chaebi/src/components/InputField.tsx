@@ -49,7 +49,7 @@ export default function InputField({
         editable={!disabled}
         value={value}
         onChangeText={handleTextChange}
-        className={`font-['이서윤체'] text-2xl px-4 ${
+        className={`font-leeseoyoon text-2xl px-4 ${
           disabled ? 'text-[#888888]' : 'text-black'
         }`}
       />

@@ -1,4 +1,5 @@
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
+import Text from '../../components/CustomText';
 import React, {useState} from 'react';
 import RoundButton from '../../components/RoundButton';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -45,11 +46,9 @@ export default function AppIntroScreen({navigation}: AppIntroScreenProps) {
         )}
         {step === 4 && (
           <View className="flex-row justify-center mt-9 mb-4 gap-2">
-            <Text className="font-['이서윤체'] text-xl">
-              이미 회원이신가요?
-            </Text>
+            <Text className="text-xl">이미 회원이신가요?</Text>
             <Text
-              className="font-['이서윤체'] text-xl text-blue-500"
+              className="text-xl text-blue-500"
               onPress={() => navigation.navigate('SignIn')}>
               로그인
             </Text>

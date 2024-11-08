@@ -25,7 +25,7 @@ export default function RoundButton({
           disabled ? 'bg-[#bbbbbb]' : backgroundColor
         } ${border ? border : ''}`}>
         <Text
-          className={`font-['이서윤체'] text-2xl text-center ${
+          className={`font-leeseoyoon text-2xl text-center ${
             disabled ? 'text-[#888888]' : fontColor
           }`}>
           {content}
