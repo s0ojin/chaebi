@@ -3,8 +3,10 @@ package com.backend.service.recipient;
 import com.backend.domain.Recipient;
 import com.backend.domain.User;
 import com.backend.dto.RecipientDTO;
+import com.backend.dto.RecipientResDTO;
 import com.backend.exception.AlreadyExistsException;
 import com.backend.repository.RecipientRepository;
+import com.backend.service.letter.LetterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 구현
 
     private final RecipientRepository repository;
+    private final LetterService letterService;
 
     @Override
     public String createRecipient(RecipientDTO recipientDTO, User user) {
@@ -32,7 +35,8 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
                 .user(user)
                 .build();
         repository.save(recipient); //열람자 저장
-
+        //편지 생성
+        letterService.createLetter(user, recipient);
         return "success";
     }
 
@@ -49,7 +53,7 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     }
 
     @Override
-    public Optional<List<RecipientDTO>> getRecipients(Optional<User> user) {
+    public Optional<List<RecipientResDTO>> getRecipients(Optional<User> user) {
         // 사용자 열람자 리스트 조회
         List<Recipient> recipients = repository.findByUser(user.orElseThrow(() -> new IllegalArgumentException("User not found")));
 
@@ -59,8 +63,8 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
         }
 
         // Recipient 엔티티 리스트를 RecipientDTO 리스트로 변환
-        List<RecipientDTO> recipientDTOs = recipients.stream()
-                .map(recipient -> RecipientDTO.builder()
+        List<RecipientResDTO> recipientDTOs = recipients.stream()
+                .map(recipient -> RecipientResDTO.builder()
                         .phone(recipient.getPhone())  // 전화번호
                         .name(recipient.getName())    // 이름
                         .secretQuestion(recipient.getSecurityQuestion()) // 비밀 질문
