@@ -15,5 +15,5 @@ public class LetterDTO {
 
     private Long recipientId; // 수신자 ID 목록
     @NotBlank(message = "sort is required")
-    private boolean sort;
+    private String sort;
 }
