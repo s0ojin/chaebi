@@ -22,6 +22,15 @@ export interface Recipient {
   lastModifiedDate?: string;
 }
 
+export interface Message {
+  id?: number;
+  content: string;
+  userId?: number;
+  recipient: Recipient;
+  lastModifiedDate: string;
+  sort: string;
+}
+
 type AppIntroScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Remain'>;
 };

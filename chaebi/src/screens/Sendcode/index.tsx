@@ -2,6 +2,7 @@ import {View, Animated, Easing} from 'react-native';
 import React, {useEffect, useRef} from 'react';
 import Logo from '../../assets/logo/logo.svg';
 import RoundButton from '../../components/RoundButton';
+import {INFO_TEXT} from '../../constants/sendcode';
 
 const SendCodeScreen: React.FC = () => {
   const animations = useRef<Animated.Value[]>([
@@ -48,14 +49,14 @@ const SendCodeScreen: React.FC = () => {
                   },
                 ],
               }}
-              className="text-center text-2xl font-['이서윤체']">
+              className="text-center text-2xl font-leeseoyoon">
               {index === 0
-                ? '안녕하세요.'
+                ? INFO_TEXT[0]
                 : index === 1
-                ? '삶을 기록하고, 기록자가 떠나면\n남은분들께 전달해 드리는\n채비입니다.'
+                ? INFO_TEXT[1]
                 : index === 2
-                ? '코드받기 버튼을 누르면\n생전에 고인이 등록해두셨던\n열람인 분들께 코드가 전송됩니다.\n'
-                : '기록자가 떠나셨다면\n기록이 전달될 수 있게\n버튼을 눌러주세요.'}
+                ? INFO_TEXT[2]
+                : INFO_TEXT[3]}
             </Animated.Text>
           ))}
         </View>
