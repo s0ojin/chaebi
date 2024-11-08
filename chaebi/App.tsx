@@ -2,6 +2,7 @@ import './global.css';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {ToastProvider} from './src/components/ToastContext';
 import SplashScreen from './src/screens/Splash';
 import SignInScreen from './src/screens/Signin';
 import AppIntroScreen from './src/screens/Appintro';
@@ -38,24 +39,26 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const App: React.FC = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Splash" component={SplashScreen} />
-        <Stack.Screen name="AppIntro" component={AppIntroScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="SignIn" component={SignInScreen} />
-        <Stack.Screen name="Absence" component={AbsenceScreen} />
-        <Stack.Screen name="SendCode" component={SendCodeScreen} />
-        <Stack.Screen name="Remain" component={RemainScreen} />
-        <Stack.Screen name="Contacts" component={ContactScreen} />
-        <Stack.Screen name="RemainWrite" component={RemainWriteScreen} />
-        <Stack.Screen name="RemainQuestion" component={QuestionScreen} />
-        <Stack.Screen name="RemainComplete" component={CompleteScreen} />
-        <Stack.Screen name="Main" component={MainScreen} />
-        <Stack.Screen name="SetPw" component={SetPasswordScreen} />
-        <Stack.Screen name="RemainEditor" component={RemainEditorScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ToastProvider>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+          <Stack.Screen name="Splash" component={SplashScreen} />
+          <Stack.Screen name="AppIntro" component={AppIntroScreen} />
+          <Stack.Screen name="SignUp" component={SignUpScreen} />
+          <Stack.Screen name="SignIn" component={SignInScreen} />
+          <Stack.Screen name="Absence" component={AbsenceScreen} />
+          <Stack.Screen name="SendCode" component={SendCodeScreen} />
+          <Stack.Screen name="Remain" component={RemainScreen} />
+          <Stack.Screen name="Contacts" component={ContactScreen} />
+          <Stack.Screen name="RemainWrite" component={RemainWriteScreen} />
+          <Stack.Screen name="RemainQuestion" component={QuestionScreen} />
+          <Stack.Screen name="RemainComplete" component={CompleteScreen} />
+          <Stack.Screen name="Main" component={MainScreen} />
+          <Stack.Screen name="SetPw" component={SetPasswordScreen} />
+          <Stack.Screen name="RemainEditor" component={RemainEditorScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ToastProvider>
   );
 };
 

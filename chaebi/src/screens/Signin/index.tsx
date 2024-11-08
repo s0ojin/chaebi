@@ -6,6 +6,7 @@ import InputField from '../../components/InputField';
 import RoundButton from '../../components/RoundButton';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
+import {useToast} from '../../components/ToastContext';
 
 type SignInScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'SignIn'>;
@@ -17,6 +18,7 @@ export default function SignInScreen({navigation}: SignInScreenProps) {
   const [authCode, setAuthCode] = useState<string>('');
   const [countdown, setCountdown] = useState<number>(300);
   const [isCounting, setIsCounting] = useState<boolean>(false);
+  const {showToast} = useToast();
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -81,12 +83,11 @@ export default function SignInScreen({navigation}: SignInScreenProps) {
             <RoundButton
               content="인증하기"
               onPress={() => {
+                showToast('XXX님 환영합니다.');
                 navigation.navigate('Main');
               }}
             />
-            <Text className="text-2xl text-center mt-7">
-              인증번호 재전송
-            </Text>
+            <Text className="text-2xl text-center mt-7">인증번호 재전송</Text>
           </View>
         ) : null}
       </View>
