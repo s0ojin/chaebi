@@ -32,7 +32,7 @@ public class LetterServiceImpl implements LetterService {
         Letter letter = new Letter();
         letter.setUser(user);
         letter.setContent(letterDTO.getContent());
-        letter.setSort(letterDTO.isSort());
+        letter.setSort(letterDTO.getSort());
         if (letterDTO.getRecipientId() != null) {
             Recipient recipient = recipientRepository.findById(letterDTO.getRecipientId())
                     .orElseThrow(() -> new EntityNotFoundException("Recipient not found"));
@@ -70,7 +70,7 @@ public class LetterServiceImpl implements LetterService {
             letter.setContent(letterDTO.getContent());
         }
 
-        letterDTO.setSort(letterDTO.isSort());
+        letterDTO.setSort(letterDTO.getSort());
 
         Letter updatedLetter = repository.save(letter);
     }
@@ -86,7 +86,7 @@ public class LetterServiceImpl implements LetterService {
         dto.setId(letter.getId());
         dto.setUserId(letter.getUser().getId());
         dto.setContent(letter.getContent()); // 또는 필요한 다른 필드
-        dto.setSort(letter.isSort());
+        dto.setSort(letter.getSort());
         dto.setLastModifiedDate(letter.getLastModifiedDate());
         // 수신자 id, 이름, 전화번호만 resDTO에 담기
         RecipientResDTO recipientDTO = new RecipientResDTO(letter.getRecipient().getId(),

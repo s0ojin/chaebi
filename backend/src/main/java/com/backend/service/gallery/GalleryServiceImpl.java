@@ -114,47 +114,72 @@ public class GalleryServiceImpl implements GalleryService {
 
 
     @Transactional
-    public GalleryResDTO uploadFile(MultipartFile file,UploadDTO uploadDTO, User user) {
+    public GalleryResDTO uploadFile(MultipartFile file, UploadDTO uploadDTO, User user) {
         try {
+            System.out.println("1. Starting file upload process");
+            System.out.println("File name: " + file.getOriginalFilename());
+            System.out.println("File size: " + file.getSize());
+            System.out.println("Content type: " + file.getContentType());
+
             // 파일 유효성 검사
             validateFile(file);
+            System.out.println("2. File validation passed");
 
             // 유니크 키(파일명) 생성
             String fileName = file.getOriginalFilename();
             String key = generateUniqueKey(uploadDTO.getFileName());
+            System.out.println("3. Generated key: " + key);
 
-            // ObjectMetadata 설정
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType(file.getContentType());
-            metadata.setContentLength(file.getSize());
-            System.out.println("S3 진입 전");
-            // S3에 파일 업로드
-            PutObjectRequest putObjectRequest = new PutObjectRequest(
-                    bucket,
-                    key,
-                    file.getInputStream(),
-                    metadata
-            );
-            s3Client.putObject(putObjectRequest);
-            System.out.println("S3 진입 후");
-            // Gallery 엔티티 생성 및 저장
+            // Gallery 엔티티 먼저 생성
             Gallery gallery = new Gallery();
             gallery.setUser(user);
             gallery.setFileUrl("https://" + bucket + ".s3.amazonaws.com/" + key);
             gallery.setFileType(determineFileType(file.getContentType()));
             gallery.setFileName(fileName);
+            System.out.println("4. Created Gallery entity");
 
             // 수신자 설정
             if (uploadDTO.getRecipientIds() != null && !uploadDTO.getRecipientIds().isEmpty()) {
-                for (Long id : uploadDTO.getRecipientIds()) {
-                    Gallery g = galleryRepository.findById(id).get();
-                    galleryRepository.save(g);
+                List<Recipient> recipients = recipientRepository.findAllById(uploadDTO.getRecipientIds());
+                System.out.println("5. Found " + recipients.size() + " recipients");
+                for (Recipient recipient : recipients) {
+                    gallery.addRecipient(recipient);
                 }
             }
+
+            // Gallery 먼저 저장
+            gallery = galleryRepository.save(gallery);
+            System.out.println("6. Saved Gallery entity");
+
+            // ObjectMetadata 설정
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
+            System.out.println("7. Set up S3 metadata");
+
+            try (var inputStream = file.getInputStream()) {
+                // S3에 파일 업로드
+                PutObjectRequest putObjectRequest = new PutObjectRequest(
+                        bucket,
+                        key,
+                        inputStream,
+                        metadata
+                );
+                System.out.println("8. Starting S3 upload to bucket: " + bucket);
+                s3Client.putObject(putObjectRequest);
+                System.out.println("9. Successfully uploaded to S3");
+            }
+
             return new GalleryResDTO(gallery);
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to upload file to S3", e);
+            System.err.println("IOException during upload: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to upload file to S3: " + e.getMessage(), e);
+        } catch (Exception e) {
+            System.err.println("Unexpected error during upload: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error during file upload: " + e.getMessage(), e);
         }
     }
 
