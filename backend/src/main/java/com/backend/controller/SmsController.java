@@ -22,6 +22,7 @@ public class SmsController {
 
     @PostMapping("/analyze")
     public void analyzeMessage(@RequestBody MessageDTO message) {
+        System.out.println(message.getBody());
         if (smsService.isObituaryMessage(message.getBody())) {
             String deceasedName = smsService.extractDeceasedName(message.getBody());
             System.out.println("문자 받음");
