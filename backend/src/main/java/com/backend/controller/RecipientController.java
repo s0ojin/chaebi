@@ -3,6 +3,8 @@ package com.backend.controller;
 import com.backend.domain.Recipient;
 import com.backend.domain.User;
 import com.backend.dto.RecipientDTO;
+import com.backend.dto.RecipientResDTO;
+import com.backend.service.letter.LetterService;
 import com.backend.service.recipient.RecipientService;
 import com.backend.service.user.UserService;
 import com.backend.util.JwtUtil;
@@ -26,7 +28,7 @@ import java.util.Optional;
 @Validated
 public class RecipientController {
     private final RecipientService recipientService;
-
+    private final LetterService letterService;
     private final UserService userService;
 
     @Operation(summary = "열람자 등록")
@@ -50,16 +52,16 @@ public class RecipientController {
 
     @Operation(summary = "열람자 목록")
     @GetMapping("/list")
-    public ResponseEntity<List<RecipientDTO>> getRecipientList(HttpServletRequest request) {
+    public ResponseEntity<List<RecipientResDTO>> getRecipientList(HttpServletRequest request) {
         // JWT를 통해 사용자 정보를 가져옴
         Optional<User> user = userService.getUserByToken(request);
         if (user.isPresent()) {
-            Optional<List<RecipientDTO>> recipients = recipientService.getRecipients(user);
+            Optional<List<RecipientResDTO>> recipients = recipientService.getRecipients(user);
             if (recipients.isPresent()) {
                 return ResponseEntity.ok(recipients.get());
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Collections.singletonList(new RecipientDTO())); // 빈배열
+                        .body(Collections.singletonList(new RecipientResDTO())); // 빈배열
             }
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 유효하지 않은 토큰

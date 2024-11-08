@@ -26,17 +26,9 @@ public class LetterController {
     private final UserService userService;
     private final LetterRepository letterRepository;
 
-    @Operation(summary = "편지 작성")
-    @PostMapping("/make")
-    public ResponseEntity<?> makeLetter(@RequestBody LetterDTO letterDTO, HttpServletRequest request) {
-        User user = userService.getUserByToken(request).get();
-        System.out.println(user.getPhone());
-        letterService.createLetter(user,letterDTO);
-        return ResponseEntity.ok("생성되었습니다.");
-    }
 
     @Operation(summary = "편지 수정")
-    @PostMapping("{id}/letter/update")
+    @PostMapping("{id}/update")
     public ResponseEntity<?> updateLetter(@PathVariable long id,@RequestBody LetterDTO letterDTO, HttpServletRequest request) {
         System.out.println("통과");
         User user = userService.getUserByToken(request).get();

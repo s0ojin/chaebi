@@ -17,7 +17,7 @@ public interface LetterRepository extends JpaRepository<Letter, Long> {
     @Query("SELECT l FROM Letter l " +
             "WHERE l.user = :user " +
             "AND l.recipient.id = :recipientId")
-    List<Letter> findByUserAndRecipientId(
+    Letter findByUserAndRecipientId( // 한사람당 하나의 편지
             @Param("user") User user,
             @Param("recipientId") Long recipientId
     );
