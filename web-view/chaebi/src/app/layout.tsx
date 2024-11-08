@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import ChosunNm from '@/utils/fonts'
-import { LogoWhite } from 'public/svg'
+import { Logo } from 'public/svg'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -26,9 +26,9 @@ export default function RootLayout({
       <body className={`${ChosunNm.variable} font-ChosunNm w-full h-screen`}>
         <div className="h-full flex flex-col">
           <header className="hidden md:flex w-full p-5 bg-_gray-800 justify-start shrink-0">
-            <LogoWhite />
+            <Logo />
           </header>
-          <main className="flex-1 overflow-hidden">{children}</main>
+          {children}
         </div>
       </body>
     </html>

@@ -8,7 +8,7 @@ export default function Guide() {
   const router = useRouter()
 
   function handleNextClick() {
-    router.push('/auth')
+    router.push('/security')
   }
 
   return (
