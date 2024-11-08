@@ -5,9 +5,17 @@ import SortLeftIcon from '../assets/icon/sort-left.svg';
 import SortCenterIcon from '../assets/icon/sort-center.svg';
 import CheckIcon from '../assets/icon/check.svg';
 import useEditorStore from '../stores/editorStore';
+import {useMutation} from '@tanstack/react-query';
+import {Remain} from '../types/remain';
+import {postSaveRemain} from '../api/remain';
 
 export default function EditorInputAccessory() {
   const {text, align, setText, setAlign, blurTextInput} = useEditorStore();
+  const recipientId = 2;
+  const textMutation = useMutation({
+    mutationFn: (payload: Remain) => postSaveRemain(payload, recipientId),
+    onSuccess: data => console.log(data),
+  });
 
   const handleInsertCurrentTime = () => {
     const now = new Date();
@@ -24,6 +32,11 @@ export default function EditorInputAccessory() {
   };
 
   const handleSaveText = () => {
+    const payload = {
+      content: text,
+      sort: align,
+    };
+    textMutation.mutate(payload);
     blurTextInput();
   };
 

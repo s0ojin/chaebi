@@ -33,6 +33,7 @@ export default function AppIntroScreen({navigation}: AppIntroScreenProps) {
         <Text onPress={() => navigation.navigate('RemainEditor')}>
           Go to RemainEditor
         </Text>
+        <Text onPress={() => navigation.navigate('Album')}>Go to album</Text>
         {step === 4 ? (
           <RoundButton
             content={'시작하기'}
