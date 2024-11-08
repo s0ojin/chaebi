@@ -1,10 +1,12 @@
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
+import Text from '../../components/CustomText';
 import React, {useState, useEffect} from 'react';
 import Header from '../../components/Header';
 import InputField from '../../components/InputField';
 import RoundButton from '../../components/RoundButton';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
+import {useToast} from '../../components/ToastContext';
 
 type SignInScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'SignIn'>;
@@ -16,6 +18,7 @@ export default function SignInScreen({navigation}: SignInScreenProps) {
   const [authCode, setAuthCode] = useState<string>('');
   const [countdown, setCountdown] = useState<number>(300);
   const [isCounting, setIsCounting] = useState<boolean>(false);
+  const {showToast} = useToast();
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -44,7 +47,7 @@ export default function SignInScreen({navigation}: SignInScreenProps) {
       <Header pageName="로그인" />
       <View className="mt-8 gap-9">
         <View className="px-6 gap-5">
-          <Text className="text-2xl font-['이서윤체']">
+          <Text className="text-2xl">
             {!showAuth
               ? '휴대폰 번호로 로그인해주세요.'
               : '인증번호를 입력해주세요.'}
@@ -80,12 +83,11 @@ export default function SignInScreen({navigation}: SignInScreenProps) {
             <RoundButton
               content="인증하기"
               onPress={() => {
+                showToast('XXX님 환영합니다.');
                 navigation.navigate('Main');
               }}
             />
-            <Text className="text-2xl font-['이서윤체'] text-center mt-7">
-              인증번호 재전송
-            </Text>
+            <Text className="text-2xl text-center mt-7">인증번호 재전송</Text>
           </View>
         ) : null}
       </View>

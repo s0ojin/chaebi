@@ -66,7 +66,7 @@ export default function SetPasswordScreen({
         length={isConfirming ? checkword.length : password.length}
       />
       {error ? (
-        <Text className="mt-4 text-center text-red-500">{error}</Text>
+        <Text className="mt-4 text-center text-xl text-_red">{error}</Text>
       ) : null}
       <View className="my-16" />
       <CustomNumberpad
