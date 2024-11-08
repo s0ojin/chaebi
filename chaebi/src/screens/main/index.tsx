@@ -81,7 +81,7 @@ export default function MainScreen({navigation}: MainScreenProps) {
             //     <Text>{leaveData.imgUrl}</Text>
             //   </View>
             // </View>
-            <RemainListView message={leaveData} isSetting={false} />
+            <RemainListView recipient={leaveData} isSetting={false} />
           ) : (
             <View className="flex-row w-full h-24 bg-[#F4F4F4] rounded-xl items-center justify-center">
               <LightPlus width={40} height={40} />
