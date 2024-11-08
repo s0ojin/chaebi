@@ -2,6 +2,7 @@ import './global.css';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {ToastProvider} from './src/components/ToastContext';
 import SplashScreen from './src/screens/Splash';
 import SignInScreen from './src/screens/Signin';
 import AppIntroScreen from './src/screens/Appintro';
@@ -45,6 +46,7 @@ const queryClient = new QueryClient();
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
+        <ToastProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name="Splash" component={SplashScreen} />
@@ -63,6 +65,7 @@ const App: React.FC = () => {
           <Stack.Screen name="RemainEditor" component={RemainEditorScreen} />
         </Stack.Navigator>
       </NavigationContainer>
+    </ToastProvider>
     </QueryClientProvider>
   );
 };

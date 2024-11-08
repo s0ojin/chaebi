@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
+import Text from '../../components/CustomText';
 import Header from '../../components/Header';
 import InputField from '../../components/InputField';
 import RoundButton from '../../components/RoundButton';
@@ -41,7 +42,7 @@ export default function SignUpScreen() {
       {!doneAuth ? (
         <View className="mt-8 gap-9">
           <View className="px-6 gap-5">
-            <Text className="text-2xl font-['이서윤체']">
+            <Text className="text-2xl">
               {!showAuth
                 ? '휴대폰 번호로 회원가입해주세요!'
                 : '인증번호를 입력해주세요.'}
@@ -78,7 +79,7 @@ export default function SignUpScreen() {
                 content="인증하기"
                 onPress={() => setDoneAuth(true)}
               />
-              <Text className="text-2xl font-['이서윤체'] text-center mt-7">
+              <Text className="text-2xl text-center mt-7">
                 인증번호 재전송
               </Text>
             </View>
@@ -87,7 +88,7 @@ export default function SignUpScreen() {
       ) : (
         <View className="mt-8 gap-9">
           <View className="px-6 gap-5">
-            <Text className="text-2xl font-['이서윤체']">
+            <Text className="text-2xl">
               성함을 알려주세요.
             </Text>
             <InputField

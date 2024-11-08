@@ -20,7 +20,7 @@ export default function Header({pageName}: HeaderProps) {
         height={24}
         onPress={() => navigation.goBack()}
       />
-      <Text className="text-xl font-bold ml-2 -mb-0.5 font-['NotoSansKR']">
+      <Text className="text-xl font-bold ml-2 -mb-0.5 font-notosans">
         {pageName}
       </Text>
     </View>
