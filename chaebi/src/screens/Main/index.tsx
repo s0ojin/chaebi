@@ -57,11 +57,16 @@ export default function MainScreen({navigation}: MainScreenProps) {
 
       <View className="flex-1 gap-6">
         {/* 추가 콘텐츠 */}
-        <View>
-          <Text className="text-xl font-semibold">추가 콘텐츠</Text>
-          <Text className="text-gray-600 mt-2">
-            여기에 더 많은 설명을 추가하세요.
+        <View className="bg-[#BAC3D0] rounded-2xl justify-center p-6">
+          <Text className="text-3xl font-leeseoyoon">
+            법적 효력이 있는 유언장?
           </Text>
+          <Text className="text-gray-600 mt-2">
+            법적 효력있는 유언장 작성하는 법 알아보기
+          </Text>
+          <View className="absolute bottom-3 right-3 bg-[#8E9299] rounded-full py-1 px-3">
+            <Text className="text-white">1/1</Text>
+          </View>
         </View>
 
         {/* 남기기 */}
