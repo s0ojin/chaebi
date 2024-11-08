@@ -13,13 +13,13 @@ export default function AppIntroScreen({navigation}: AppIntroScreenProps) {
   const [step, setStep] = useState<number>(1);
 
   return (
-    <View className="flex-1 p-5 items-center gap-5">
+    <View className="flex-1 p-5 items-center gap-5 bg-white">
       <View className="flex-row gap-5 mt-12">
         {[1, 2, 3, 4].map(item => (
           <View
             key={item}
             className={`w-2.5 h-2.5 rounded-full ${
-              step === item ? 'bg-black' : 'bg-gray-300'
+              step === item ? 'bg-black' : 'bg-primary-200'
             }`}
           />
         ))}

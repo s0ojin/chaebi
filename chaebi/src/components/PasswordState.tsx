@@ -13,7 +13,7 @@ export default function PasswordState({length}: PasswordStateProps) {
           <View
             key={index}
             className={`w-6 h-6 rounded-full ${
-              index < length ? 'bg-black' : 'bg-[#D9D9D9]'
+              index < length ? 'bg-black' : 'bg-primary-200'
             }`}
           />
         ))}

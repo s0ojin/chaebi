@@ -25,7 +25,7 @@ const WarningModal: React.FC<WarningModalProps> = ({
       onRequestClose={onClose}>
       <View className="flex-1 justify-center items-center bg-[rgba(0,0,0,0.4)]">
         <View className="bg-white rounded-xl p-5 w-3/4">
-          <Text className="text-2xl text-[#E10000] text-center">
+          <Text className="text-2xl text-_red text-center">
             경고
           </Text>
           <Text className="text-lg text-center">

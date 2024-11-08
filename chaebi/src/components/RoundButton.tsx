@@ -14,19 +14,19 @@ export default function RoundButton({
   content,
   onPress,
   disabled = false,
-  backgroundColor = 'bg-[#444444]',
-  fontColor = 'text-[#ffffff]',
+  backgroundColor = 'bg-primary-400',
+  fontColor = 'text-white',
   border,
 }: RoundButtonProps) {
   return (
     <TouchableOpacity onPress={onPress} disabled={disabled}>
       <View
         className={`rounded-xl py-5 ${
-          disabled ? 'bg-[#bbbbbb]' : backgroundColor
+          disabled ? 'bg-primary-200' : backgroundColor
         } ${border ? border : ''}`}>
         <Text
           className={`font-leeseoyoon text-2xl text-center ${
-            disabled ? 'text-[#888888]' : fontColor
+            disabled ? 'text-primary-300' : fontColor
           }`}>
           {content}
         </Text>

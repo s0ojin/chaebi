@@ -50,7 +50,7 @@ export default function InputField({
         value={value}
         onChangeText={handleTextChange}
         className={`font-leeseoyoon text-2xl px-4 ${
-          disabled ? 'text-[#888888]' : 'text-black'
+          disabled ? 'text-primary-300' : 'text-black'
         }`}
       />
     </View>

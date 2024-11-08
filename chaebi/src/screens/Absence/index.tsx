@@ -39,9 +39,9 @@ export default function AbsenceScreen({navigation}: AbsenceScreenProps) {
           onPress={() => {
             setModalVisible(true);
           }}
-          backgroundColor={'bg-[#D9D9D9]'}
-          fontColor={'text-[#444444]'}
-          border={'border-2 border-[#444444]'}
+          backgroundColor={'bg-primary-200'}
+          fontColor={'text-primary-400'}
+          border={'border-2 border-primary-400'}
         />
       </View>
 

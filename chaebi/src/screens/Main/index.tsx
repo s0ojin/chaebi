@@ -94,7 +94,7 @@ export default function MainScreen({navigation}: MainScreenProps) {
               columnWrapperStyle={{justifyContent: 'space-between'}}
             />
           ) : (
-            <View className="flex-row w-1/2 h-52 bg-[#F4F4F4] rounded-xl items-center justify-center">
+            <View className="flex-row w-1/2 h-52 bg-_white rounded-xl items-center justify-center">
               <LightPlus width={40} height={40} />
             </View>
           )}
