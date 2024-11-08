@@ -17,6 +17,9 @@ import QuestionScreen from './src/screens/Remain/question';
 import MainScreen from './src/screens/Main';
 import RemainEditorScreen from './src/screens/RemainEditor';
 import CompleteScreen from './src/screens/Remain/complete';
+import AlbumScreen from './src/screens/Album';
+
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -33,13 +36,17 @@ export type RootStackParamList = {
   Main: undefined;
   SetPw: undefined;
   RemainEditor: undefined;
+  Album: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+const queryClient = new QueryClient();
+
 const App: React.FC = () => {
   return (
-    <ToastProvider>
+    <QueryClientProvider client={queryClient}>
+        <ToastProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name="Splash" component={SplashScreen} />
@@ -59,6 +66,7 @@ const App: React.FC = () => {
         </Stack.Navigator>
       </NavigationContainer>
     </ToastProvider>
+    </QueryClientProvider>
   );
 };
 
