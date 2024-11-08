@@ -75,8 +75,7 @@ public class GalleryServiceImpl implements GalleryService {
 
         return new PresignedUrlResponse(
                 presignedUrl.toString(),
-                gallery.getId(),
-                gallery.getFileUrl()
+                gallery.getId()
         );
     }
 
@@ -219,7 +218,7 @@ public class GalleryServiceImpl implements GalleryService {
     private Date getPresignedUrlExpiration() {
         Date expiration = new Date();
         long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000 * 60 * 30; // 30 분
+        expTimeMillis += 1000 * 60 * 60 * 24 * 15; // 15일
         expiration.setTime(expTimeMillis);
         return expiration;
     }

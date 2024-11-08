@@ -44,22 +44,22 @@ public class RecipientController {
 
     @Operation(summary = "열람자 상세")
     @GetMapping("/{id}")
-    public ResponseEntity<Recipient> getRecipientById(@PathVariable long id) {
+    public ResponseEntity<?> getRecipientById(@PathVariable long id) {
         return ResponseEntity.ok(recipientService.getRecipient(id));
     }
 
     @Operation(summary = "열람자 목록")
     @GetMapping("/list")
-    public ResponseEntity<List<Recipient>> getRecipientList(HttpServletRequest request) {
+    public ResponseEntity<List<RecipientDTO>> getRecipientList(HttpServletRequest request) {
         // JWT를 통해 사용자 정보를 가져옴
         Optional<User> user = userService.getUserByToken(request);
         if (user.isPresent()) {
-            Optional<List<Recipient>> recipients = recipientService.getRecipients(user);
+            Optional<List<RecipientDTO>> recipients = recipientService.getRecipients(user);
             if (recipients.isPresent()) {
                 return ResponseEntity.ok(recipients.get());
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Collections.singletonList(new Recipient())); // 빈배열
+                        .body(Collections.singletonList(new RecipientDTO())); // 빈배열
             }
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 유효하지 않은 토큰
