@@ -28,6 +28,7 @@ public class Gallery {
         @JsonManagedReference
         private Set<GalleryRecipient> galleryRecipients = new HashSet<>();
 
+        @Column(columnDefinition = "TEXT")
         private String fileUrl;
         private String fileType;
         private String fileName;

@@ -65,6 +65,7 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
         // Recipient 엔티티 리스트를 RecipientDTO 리스트로 변환
         List<RecipientResDTO> recipientDTOs = recipients.stream()
                 .map(recipient -> RecipientResDTO.builder()
+                        .id(recipient.getId())
                         .phone(recipient.getPhone())  // 전화번호
                         .name(recipient.getName())    // 이름
                         .secretQuestion(recipient.getSecurityQuestion()) // 비밀 질문
