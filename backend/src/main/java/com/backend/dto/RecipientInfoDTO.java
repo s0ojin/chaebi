@@ -11,11 +11,13 @@ import java.time.LocalDateTime;
 public class RecipientInfoDTO {
     private Long recipientId;
     private String recipientName;
+    private String phoneNumber;
 
 
 
     public RecipientInfoDTO(GalleryRecipient galleryRecipient) {
         this.recipientId = galleryRecipient.getRecipient().getId();
-        this.recipientName = galleryRecipient.getRecipient().getName(); // Recipient 엔티티에 name 필드가 있다고 가정
+        this.recipientName = galleryRecipient.getRecipient().getName();
+        this.phoneNumber = galleryRecipient.getRecipient().getPhone();// Recipient 엔티티에 name 필드가 있다고 가정
     }
 }

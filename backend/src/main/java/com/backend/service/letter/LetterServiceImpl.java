@@ -28,17 +28,13 @@ public class LetterServiceImpl implements LetterService {
     private final RecipientRepository recipientRepository;
 
     @Override
-    public void createLetter(User user, LetterDTO letterDTO) {
+    public void createLetter(User user, Recipient recipient) {
+        //열람자 등록시 빈 편지 생성
         Letter letter = new Letter();
         letter.setUser(user);
-        letter.setContent(letterDTO.getContent());
-        letter.setSort(letterDTO.getSort());
-        if (letterDTO.getRecipientId() != null) {
-            Recipient recipient = recipientRepository.findById(letterDTO.getRecipientId())
-                    .orElseThrow(() -> new EntityNotFoundException("Recipient not found"));
-            letter.setRecipient(recipient);
-        }
-
+        letter.setContent("");
+        letter.setSort("");
+        letter.setRecipient(recipient);//수정중
         repository.save(letter);
     }
 
@@ -56,9 +52,8 @@ public class LetterServiceImpl implements LetterService {
                 .collect(Collectors.toList());
     }
 
-    public void updateLetter(Long letterId, LetterDTO letterDTO, User user) {
-        Letter letter = repository.findById(letterId)
-                .orElseThrow(() -> new EntityNotFoundException("Letter not found"));
+    public void updateLetter(Long recipientId, LetterDTO letterDTO, User user) {
+        Letter letter = repository.findByUserAndRecipientId(user, recipientId);
 
         // 작성자 확인
         if (!letter.getUser().getPhone().equals(user.getPhone())) {
@@ -89,11 +84,14 @@ public class LetterServiceImpl implements LetterService {
         dto.setSort(letter.getSort());
         dto.setLastModifiedDate(letter.getLastModifiedDate());
         // 수신자 id, 이름, 전화번호만 resDTO에 담기
-        RecipientResDTO recipientDTO = new RecipientResDTO(letter.getRecipient().getId(),
-                letter.getRecipient().getName(),
-                letter.getRecipient().getPhone(),
-                letter.getRecipient().getImgurl()
-                );
+        RecipientResDTO recipientDTO = RecipientResDTO.builder()
+                .id(letter.getRecipient().getId())
+                .name(letter.getRecipient().getName())
+                .imgUrl(letter.getRecipient().getImgurl())
+                .phone(letter.getRecipient().getPhone())
+                .secretQuestion(letter.getRecipient().getSecurityQuestion())
+                .secretAnswer(letter.getRecipient().getSecurityAnswer())
+                .build();
 
         dto.setRecipient(recipientDTO);
         return dto;
