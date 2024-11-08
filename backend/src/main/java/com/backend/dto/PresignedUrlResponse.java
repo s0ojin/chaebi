@@ -8,5 +8,4 @@ import lombok.Data;
 public class PresignedUrlResponse {
     private String presignedUrl;
     private Long galleryId;
-    private String fileUrl;
 }
