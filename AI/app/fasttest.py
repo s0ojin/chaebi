@@ -16,8 +16,7 @@ def suggest_from_url(image_data: bytes) -> str:
     if img is None:
         raise ValueError("Failed to load image from provided data")
 
-    # MobileNet SSD 모델 로드 (기존 경로 유지)
-    # prototxt_path와 model_path는 기존 코드와 동일
+    # MobileNet SSD 모델 로드 
     base_path = os.path.dirname(__file__)
     prototxt_path = os.path.join(base_path, "..", "data", "MobileNetSSD_deploy.prototxt.txt")
     model_path = os.path.join(base_path, "..", "data", "MobileNetSSD_deploy.caffemodel")
