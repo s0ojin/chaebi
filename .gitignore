@@ -1,0 +1,80 @@
+# Java 관련 파일들 (Spring Boot)
+*.class
+*.jar
+*.war
+*.ear
+
+# 로그 파일
+*.log
+**/logs/
+logs/
+spring.log
+
+# 빌드 디렉토리 (Gradle)
+build/
+out/
+
+# Gradle 캐시
+.gradle/
+
+# 환경 설정 파일들
+.env
+*.env
+*.properties
+*.yml
+
+# IDE 설정 파일들 (IntelliJ, Eclipse 등)
+*.iml
+*.ipr
+*.iws
+.idea/
+.project
+.classpath
+.settings/
+*.vscode/
+*.swp
+
+# MacOS 관련 파일
+.DS_Store
+
+# Windows 관련 파일
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux 관련 파일
+*~
+
+# MySQL 관련 파일 (로컬 DB 설정)
+mysql/
+*.sql
+
+# Next.js 관련 파일
+.next/
+node_modules/
+dist/
+
+# Yarn 또는 npm 관련 파일들
+yarn.lock
+package-lock.json
+
+# 테스트 결과물
+test-output/
+coverage/
+junit-reports/
+
+
+# IntelliJ IDEA Plugin 설정
+.idea/
+
+# Temporary files
+*.tmp
+*.bak
+
+# OS 관련 파일들 (예: 윈도우, 맥)
+*.swp
+*.swo
+
+# 기타 백업 파일들
+*.bak
+*.tmp
