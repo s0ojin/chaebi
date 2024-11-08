@@ -38,8 +38,6 @@ public class UserServiceImpl implements UserService {
                 .status(true)
                 .name(signDTO.getName())
                 .loginAttemptPeriod(0)
-                .secretQuestion(signDTO.getSecretQuestion())
-                .secretAnswer(signDTO.getSecretAnswer())
                 .build();
 
         userRepository.save(user);

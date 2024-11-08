@@ -11,8 +11,4 @@ public class SignDTO {
     private String password;
     @NotBlank(message = "Name is required")
     private String name;
-    @NotBlank(message = "Question is required")
-    private String secretQuestion;
-    @NotBlank(message = "Answer is required")
-    private String secretAnswer;
 }

@@ -16,5 +16,5 @@ public class LetterResDTO {
     private long userId;
     private RecipientResDTO recipient;
     private LocalDateTime lastModifiedDate;
-    private boolean sort;
+    private String sort;
 }
