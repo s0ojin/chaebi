@@ -21,12 +21,13 @@ public class SmsController {
     private final IdConverterService idConverterService;
 
     @PostMapping("/analyze")
-    public ResponseEntity<String> analyzeMessage(@RequestBody MessageDTO message) {
+    public void analyzeMessage(@RequestBody MessageDTO message) {
         if (smsService.isObituaryMessage(message.getBody())) {
             String deceasedName = smsService.extractDeceasedName(message.getBody());
-            return ResponseEntity.ok("부고 문자 확인. 돌아가신 분: " + deceasedName);
+            System.out.println("문자 받음");
+
         } else {
-            return ResponseEntity.ok("일반 문자입니다.");
+            System.out.println("부고문자 아님");
         }
     }
 
