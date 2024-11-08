@@ -5,7 +5,7 @@ import ArrowRight from '../../assets/icon/arrow-right.svg';
 import Footer from '../../components/Footer';
 import LightPlus from '../../assets/icon/light-plus.svg';
 import RemainListView from '../../components/RecipientCard';
-import {Message} from '../remain_temp';
+import {Message} from '../Remain';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
 

@@ -2,7 +2,7 @@ import {View, TouchableOpacity, Image, Pressable} from 'react-native';
 import React from 'react';
 import Setting from '../assets/icon/settings-alt.svg';
 import Text from './CustomText';
-import {Message} from '../screens/remain_temp/index';
+import {Message} from '../screens/Remain/index';
 
 /*
   export interface Message {
