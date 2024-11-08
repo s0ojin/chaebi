@@ -35,7 +35,7 @@ public class Letter {
     private LocalDateTime lastModifiedDate; //마지막 수정날짜
 
     @Column(name = "sort")
-    private boolean sort;
+    private String sort;
 
     @PrePersist
     @PreUpdate
