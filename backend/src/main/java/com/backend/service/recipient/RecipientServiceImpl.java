@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     private final RecipientRepository repository;
 
     @Override
-    public Recipient createRecipient(RecipientDTO recipientDTO, User user) {
+    public String createRecipient(RecipientDTO recipientDTO, User user) {
         if(repository.findByUserAndPhone(user, recipientDTO.getPhone()) != null){
             throw new AlreadyExistsException(recipientDTO.getName() +  "님은 이미 등록되었습니다.");
         }
@@ -30,23 +31,45 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
                 .securityAnswer(recipientDTO.getSecretAnswer())
                 .user(user)
                 .build();
+        repository.save(recipient); //열람자 저장
 
-        return repository.save(recipient); //열람자 저장
+        return "success";
     }
 
     @Override
-    public Recipient getRecipient(long id) {
-        return repository.findById(id)  //열람자 검색
-                .orElseThrow(() -> new NoSuchElementException("No entity found with id: " + id));
+    public RecipientDTO getRecipient(long id) {
+        Recipient recipient = repository.findById(id).orElseThrow(NoSuchElementException::new);
+        RecipientDTO recipientDTO = RecipientDTO.builder()
+                .name(recipient.getName())
+                .imgUrl(recipient.getImgurl())
+                .secretQuestion(recipient.getSecurityQuestion())
+                .secretAnswer(recipient.getSecurityAnswer())
+                .build();
+        return recipientDTO;
     }
 
     @Override
-    public Optional<List<Recipient>> getRecipients(Optional<User> user) {  //사용자의 열람자 리스트 반환 
-        List<Recipient> recipients = repository.findByUser(user.get());
+    public Optional<List<RecipientDTO>> getRecipients(Optional<User> user) {
+        // 사용자 열람자 리스트 조회
+        List<Recipient> recipients = repository.findByUser(user.orElseThrow(() -> new IllegalArgumentException("User not found")));
+
+        // 결과가 없을 경우 빈 Optional 반환
         if (recipients.isEmpty()) {
-            return Optional.empty(); // 결과가 없을 경우 빈 Optional 반환
+            return Optional.empty();
         }
-        return Optional.of(recipients);
+
+        // Recipient 엔티티 리스트를 RecipientDTO 리스트로 변환
+        List<RecipientDTO> recipientDTOs = recipients.stream()
+                .map(recipient -> RecipientDTO.builder()
+                        .phone(recipient.getPhone())  // 전화번호
+                        .name(recipient.getName())    // 이름
+                        .secretQuestion(recipient.getSecurityQuestion()) // 비밀 질문
+                        .secretAnswer(recipient.getSecurityAnswer())     // 비밀 답변
+                        .imgUrl(recipient.getImgurl())  // 이미지 URL
+                        .build())
+                .collect(Collectors.toList());
+
+        return Optional.of(recipientDTOs); // DTO 리스트 반환
     }
 
     @Override
