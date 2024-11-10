@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class RecipientInfoDTO {
+public class RecipientInfoDTO { //Gallery 용
     private Long recipientId;
     private String recipientName;
     private String phoneNumber;

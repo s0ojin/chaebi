@@ -10,6 +10,6 @@ import java.util.Set;
 @Data
 @RequiredArgsConstructor
 public class UploadDTO {
-    private String fileName;
+    //private String fileName;
     private Set<Long> recipientIds;
 }

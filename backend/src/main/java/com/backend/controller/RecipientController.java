@@ -13,9 +13,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,8 +34,10 @@ public class RecipientController {
     private final UserService userService;
 
     @Operation(summary = "열람자 등록")
-    @PostMapping("/create")
-    public ResponseEntity<String> createRecipient(@RequestBody RecipientDTO recipientDTO, HttpServletRequest request) {
+    @PostMapping(value = "/create",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> createRecipient(@RequestParam("file") MultipartFile file, @RequestBody RecipientDTO recipientDTO, HttpServletRequest request) {
         Optional<User> user = userService.getUserByToken(request);
         if (user.isPresent()) {
             recipientService.createRecipient(recipientDTO, user.get());
@@ -69,8 +73,10 @@ public class RecipientController {
     }
 
     @Operation(summary = "열람자 정보 수정")
-    @PostMapping("/update")
-    public ResponseEntity<String> updateRecipient(@RequestBody RecipientDTO recipientDTO, HttpServletRequest request) {
+    @PostMapping(value = "/update",
+    consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+    produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateRecipient(@RequestParam("file") MultipartFile file,@RequestBody RecipientDTO recipientDTO, HttpServletRequest request) {
         Optional<User> user = userService.getUserByToken(request);
         if (user.isPresent()) {
             recipientService.updateRecipient(recipientDTO, user.get());
