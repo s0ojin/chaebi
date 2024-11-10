@@ -6,4 +6,5 @@ import lombok.Data;
 public class LoginDTO {
     private String phone;
     private String password;
+    private boolean cert;
 }

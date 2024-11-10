@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestDTO {
+public class RequestDTO { //FCM
     private String targetToken;
     private String title;
     private String body;

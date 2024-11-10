@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface UserService {
     void signup(SignDTO signDTO);
-    User login(LoginDTO loginDTO, HttpServletResponse response);
-    void logout(String id);
+    void login(LoginDTO loginDTO, HttpServletResponse response);
+    void logout(HttpServletRequest request);
 
     Optional<User> getUser(String id);
     Optional<User> getUserByToken(HttpServletRequest request);

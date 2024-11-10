@@ -41,15 +41,15 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     }
 
     @Override
-    public RecipientDTO getRecipient(long id) {
+    public RecipientResDTO getRecipient(long id) {
         Recipient recipient = repository.findById(id).orElseThrow(NoSuchElementException::new);
-        RecipientDTO recipientDTO = RecipientDTO.builder()
+        RecipientResDTO recipientResDTO = RecipientResDTO.builder()
                 .name(recipient.getName())
                 .imgUrl(recipient.getImgurl())
                 .secretQuestion(recipient.getSecurityQuestion())
                 .secretAnswer(recipient.getSecurityAnswer())
                 .build();
-        return recipientDTO;
+        return recipientResDTO;
     }
 
     @Override
