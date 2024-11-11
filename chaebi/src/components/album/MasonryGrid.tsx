@@ -7,7 +7,7 @@ type MasonryItem = {
   height: number;
 };
 
-export default function MasonryGrid() {
+function MasonryGrid() {
   const data: MasonryItem[] = Array.from({length: 30}).map((_, index) => ({
     uri: `https://picsum.photos/id/${index + 30}/300`,
     id: index.toString(),
@@ -38,3 +38,5 @@ export default function MasonryGrid() {
     </ScrollView>
   );
 }
+
+export default React.memo(MasonryGrid);
