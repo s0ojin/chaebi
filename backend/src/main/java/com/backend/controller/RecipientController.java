@@ -34,17 +34,25 @@ public class RecipientController {
     private final UserService userService;
 
     @Operation(summary = "열람자 등록")
-    @PostMapping(value = "/create",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+    @PostMapping(value = "create",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> createRecipient(@RequestParam("file") MultipartFile file, @RequestBody RecipientDTO recipientDTO, HttpServletRequest request) {
+    public ResponseEntity<String> createRecipient(
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @RequestPart(value = "data") RecipientDTO recipientDTO,
+            HttpServletRequest request) {
+
         Optional<User> user = userService.getUserByToken(request);
-        if (user.isPresent()) {
-            recipientService.createRecipient(recipientDTO, user.get());
-            return ResponseEntity.ok("create successful");
+
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
         }
-        else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 유효하지 않은 토큰
+
+        try {
+            recipientService.createRecipient(recipientDTO, user.get());
+            return ResponseEntity.ok("Profile created successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Failed to create profile: " + e.getMessage());
         }
     }
 
@@ -76,7 +84,7 @@ public class RecipientController {
     @PostMapping(value = "/update",
     consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateRecipient(@RequestParam("file") MultipartFile file,@RequestBody RecipientDTO recipientDTO, HttpServletRequest request) {
+    public ResponseEntity<String> updateRecipient(@RequestParam(value = "file", required = false) MultipartFile file,@ModelAttribute RecipientDTO recipientDTO, HttpServletRequest request) {
         Optional<User> user = userService.getUserByToken(request);
         if (user.isPresent()) {
             recipientService.updateRecipient(recipientDTO, user.get());
