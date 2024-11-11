@@ -6,9 +6,11 @@ import com.backend.dto.RecipientDTO;
 import com.backend.dto.RecipientResDTO;
 import com.backend.exception.AlreadyExistsException;
 import com.backend.repository.RecipientRepository;
+import com.backend.service.gallery.GalleryService;
 import com.backend.service.letter.LetterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -21,19 +23,27 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
 
     private final RecipientRepository repository;
     private final LetterService letterService;
+    private final GalleryService galleryService;
 
     @Override
-    public String createRecipient(RecipientDTO recipientDTO, User user) {
+    public String createRecipient(RecipientDTO recipientDTO, User user, MultipartFile file) {
         if(repository.findByUserAndPhone(user, recipientDTO.getPhone()) != null){
             throw new AlreadyExistsException(recipientDTO.getName() +  "님은 이미 등록되었습니다.");
         }
+        String imgUrl = "";
+//        if (file != null){
+//            imgUrl = galleryService.uploadProfile(recipientDTO)
+//        }
         Recipient recipient = Recipient.builder()
                 .phone(recipientDTO.getPhone())
                 .name(recipientDTO.getName())
                 .securityQuestion(recipientDTO.getSecretQuestion())
                 .securityAnswer(recipientDTO.getSecretAnswer())
                 .user(user)
+                .imgurl(imgUrl)
                 .build();
+
+
         repository.save(recipient); //열람자 저장
         //편지 생성
         letterService.createLetter(user, recipient);
@@ -79,7 +89,7 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     }
 
     @Override
-    public void updateRecipient(RecipientDTO recipientDTO, User user) { // 열람자 업데이트
+    public void updateRecipient(RecipientDTO recipientDTO, User user, MultipartFile file) { // 열람자 업데이트
         Recipient recipient = Recipient.builder()
                 .phone(recipientDTO.getPhone())
                 .name(recipientDTO.getName())
