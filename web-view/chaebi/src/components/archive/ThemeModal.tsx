@@ -2,6 +2,8 @@
 
 import Image from 'next/image'
 import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 import { Theme } from '@/types/archive'
 import LeftArrow from 'public/svg/left-arrow.svg'
 
@@ -19,9 +21,10 @@ export default function ThemeModal({ theme, onClose }: ThemeModalProps) {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 5000,
+    autoplaySpeed: 4000,
     fade: true,
     cssEase: 'linear',
+    pauseOnHover: false,
   }
 
   return (
