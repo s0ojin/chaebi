@@ -36,7 +36,7 @@ export default function AlbumScreen() {
         />
       </Pressable>
       <CenterModal visible={isVisible} onClose={closeModal}>
-        <AlbumAccessModal />
+        <AlbumAccessModal closeModal={closeModal} />
       </CenterModal>
     </>
   );
