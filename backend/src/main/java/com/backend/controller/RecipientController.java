@@ -44,15 +44,15 @@ public class RecipientController {
         Optional<User> user = userService.getUserByToken(request);
 
         if (user.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("존재하지 않는 사용자입니다.");
         }
 
         try {
-            recipientService.createRecipient(recipientDTO, user.get());
-            return ResponseEntity.ok("Profile created successfully");
+            recipientService.createRecipient(recipientDTO, user.get(), file);
+            return ResponseEntity.ok("열람자가 생성되었습니다.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Failed to create profile: " + e.getMessage());
+                    .body("열람자 생성 실패: " + e.getMessage());
         }
     }
 
@@ -87,8 +87,8 @@ public class RecipientController {
     public ResponseEntity<String> updateRecipient(@RequestParam(value = "file", required = false) MultipartFile file,@ModelAttribute RecipientDTO recipientDTO, HttpServletRequest request) {
         Optional<User> user = userService.getUserByToken(request);
         if (user.isPresent()) {
-            recipientService.updateRecipient(recipientDTO, user.get());
-            return ResponseEntity.ok("Update successful");
+            recipientService.updateRecipient(recipientDTO, user.get(), file);
+            return ResponseEntity.ok("열람자의 정보가 업데이트되었습니다.");
         }
         else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 유효하지 않은 토큰
@@ -99,7 +99,7 @@ public class RecipientController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteRecipient(@PathVariable long id) {
         recipientService.deleteRecipient(id);
-        return ResponseEntity.ok("Delete successful");
+        return ResponseEntity.ok("열람자가 삭제되었습니다.");
     }
 
 
