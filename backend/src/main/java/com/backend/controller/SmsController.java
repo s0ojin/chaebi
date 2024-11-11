@@ -20,12 +20,14 @@ public class SmsController {
 
     private final SmsService smsService;
     private final IdConverterService idConverterService;
+
     @Operation(summary = "문자 분석", description = "부고 문자인지 확인")
     @PostMapping("/analyze")
     public void analyzeMessage(@RequestBody MessageDTO message) {
         System.out.println(message.getBody());
         if (smsService.isObituaryMessage(message.getBody())) {
             String deceasedName = smsService.extractDeceasedName(message.getBody());
+
             System.out.println("문자 받음");
 
         } else {
