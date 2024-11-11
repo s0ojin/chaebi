@@ -100,6 +100,46 @@ public class GalleryServiceImpl implements GalleryService {
         }
     }
 
+    @Override //열람인의 프로필 업로드
+    public String uploadProfile(MultipartFile file, Long id, User user) {
+       
+        try {
+            Recipient recipient = recipientRepository.findById(id).get();
+            if (recipient.getImgurl() != null) { // 열람인의 프로필이 이미 있을 때
+                String key = extractFileKeyFromUrl(recipient.getImgurl());
+                deleteFileFromS3(key); // S3의 프로필 삭제
+            }
+            // 유니크 키(파일명) 생성
+            String fileName = file.getOriginalFilename();
+            String uniqueKey = generateUniqueKey(fileName);
+            // 1. 먼저 파일을 S3에 업로드
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
+
+            try (var inputStream = file.getInputStream()) {
+                PutObjectRequest putObjectRequest = new PutObjectRequest(
+                        bucket,
+                        uniqueKey,
+                        inputStream,
+                        metadata
+                );
+                s3Client.putObject(putObjectRequest); //프로필 S3에 업로드
+                GeneratePresignedUrlRequest presignedUrlRequest = new GeneratePresignedUrlRequest(bucket, uniqueKey)
+                        .withMethod(HttpMethod.GET)
+                        .withExpiration(getPresignedUrlExpiration());
+                //preSignedURL 반환
+                return s3Client.generatePresignedUrl(presignedUrlRequest).toString();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload file to S3: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error during file upload: " + e.getMessage(), e);
+        }
+        
+    }
+
+
     //Presigned URL 반환
     @Transactional
     public PresignedUrlResponse generatePresignedUrl(PresignedUrlRequest request, User user, String key) {
@@ -275,7 +315,7 @@ public class GalleryServiceImpl implements GalleryService {
 
             return path.substring(path.indexOf("/", 1) + 1);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to extract file key from URL: " + e.getMessage(), e);
+            throw new RuntimeException("키값 추출에 실패했습니다.: " + e.getMessage(), e);
         }
     }
 
