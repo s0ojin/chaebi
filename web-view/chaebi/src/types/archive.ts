@@ -9,3 +9,9 @@ export type Theme = {
   name: string
   images: string[]
 }
+
+export type MasonryItem = {
+  uri: string
+  id: string
+  height: number
+}
