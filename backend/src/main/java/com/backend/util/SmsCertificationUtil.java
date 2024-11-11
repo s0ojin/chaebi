@@ -43,7 +43,7 @@ public class SmsCertificationUtil {
         message.setFrom(fromNumber); // 발신자 번호 설정
         message.setTo(to); // 수신자 번호 설정
         message.setText(name + "님" + "입장 코드는 " + code + "입니다."); // 메시지 내용 설정
-
+        System.out.println("유족 문자발송");
         this.messageService.sendOne(new SingleMessageSendingRequest(message)); // 메시지 발송 요청
     }
 }
