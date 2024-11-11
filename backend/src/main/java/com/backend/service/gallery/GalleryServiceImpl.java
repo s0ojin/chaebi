@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,7 @@ public class GalleryServiceImpl implements GalleryService {
     private String bucket;
 
     @Transactional
-    public GalleryResDTO uploadFile(MultipartFile file, UploadDTO uploadDTO, User user) {
+    public GalleryResDTO uploadFile(MultipartFile file, Set<Long> recipientIds, User user) {
         try {
             System.out.println("1. Starting file upload process");
             System.out.println("File name: " + file.getOriginalFilename());
@@ -54,99 +55,69 @@ public class GalleryServiceImpl implements GalleryService {
 
             // 유니크 키(파일명) 생성
             String fileName = file.getOriginalFilename();
-            String key = generateUniqueKey(uploadDTO.getFileName());
-            System.out.println("3. Generated key: " + key);
-//            PresignedUrlResponse presignedUrlResponse = this.generatePresignedUrl();
-            // Gallery 생성
-            Gallery gallery = new Gallery();
-            gallery.setUser(user);
-            gallery.setFileUrl("https://" + bucket + ".s3.amazonaws.com/" + key);
-            gallery.setFileType(determineFileType(file.getContentType()));
-            gallery.setFileName(fileName);
-            System.out.println("4. Created Gallery entity");
+            String key = generateUniqueKey(fileName);
 
-            // 수신자 설정
-            if (uploadDTO.getRecipientIds() != null && !uploadDTO.getRecipientIds().isEmpty()) {
-                List<Recipient> recipients = recipientRepository.findAllById(uploadDTO.getRecipientIds());
-                System.out.println("5. Found " + recipients.size() + " recipients");
-                for (Recipient recipient : recipients) {
-                    gallery.addRecipient(recipient);
-                }
-            }
-
-            // Gallery 먼저 저장
-            gallery = galleryRepository.save(gallery);
-            System.out.println("6. Saved Gallery entity");
-
-            // ObjectMetadata 설정
+            // 1. 먼저 파일을 S3에 업로드
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
             metadata.setContentLength(file.getSize());
-            System.out.println("7. Set up S3 metadata");
 
             try (var inputStream = file.getInputStream()) {
-                // S3에 파일 업로드
                 PutObjectRequest putObjectRequest = new PutObjectRequest(
                         bucket,
                         key,
                         inputStream,
                         metadata
                 );
-                System.out.println("8. Starting S3 upload to bucket: " + bucket);
                 s3Client.putObject(putObjectRequest);
-                System.out.println("9. Successfully uploaded to S3");
             }
 
+            // 2. 파일 업로드 완료 후 조회용 Presigned URL 생성
+            GeneratePresignedUrlRequest presignedUrlRequest = new GeneratePresignedUrlRequest(bucket, key)
+                    .withMethod(HttpMethod.GET)
+                    .withExpiration(getPresignedUrlExpiration());
+
+            URL presignedUrl = s3Client.generatePresignedUrl(presignedUrlRequest);
+
+            // 3. Gallery 엔티티 생성 및 저장
+            Gallery gallery = new Gallery();
+            gallery.setUser(user);
+            gallery.setFileUrl(presignedUrl.toString());
+            gallery.setFileType(determineFileType(file.getContentType()));
+            gallery.setFileName(fileName);
+
+            if (recipientIds != null && !recipientIds.isEmpty()) {
+                List<Recipient> recipients = recipientRepository.findAllById(recipientIds);
+                for (Recipient recipient : recipients) {
+                    gallery.addRecipient(recipient);
+                }
+            }
+
+            gallery = galleryRepository.save(gallery);
             return new GalleryResDTO(gallery);
 
         } catch (IOException e) {
-            System.err.println("IOException during upload: " + e.getMessage());
-            e.printStackTrace();
             throw new RuntimeException("Failed to upload file to S3: " + e.getMessage(), e);
         } catch (Exception e) {
-            System.err.println("Unexpected error during upload: " + e.getMessage());
-            e.printStackTrace();
             throw new RuntimeException("Error during file upload: " + e.getMessage(), e);
         }
     }
 
     //Presigned URL 반환
     @Transactional
-    public PresignedUrlResponse generatePresignedUrl(PresignedUrlRequest request, User user) {
+    public PresignedUrlResponse generatePresignedUrl(PresignedUrlRequest request, User user, String key) {
 
         // unique key 생성
-        String key = generateUniqueKey(request.getFileName());
-
+        System.out.println("generate : " + key);
         // presigned URL 요청(aws)
         GeneratePresignedUrlRequest presignedUrlRequest = new GeneratePresignedUrlRequest(bucket, key)
-                .withMethod(HttpMethod.PUT)
+                .withMethod(HttpMethod.GET)
                 .withExpiration(getPresignedUrlExpiration())
                 .withContentType(request.getContentType());
 
         // Generate the presigned URL
         URL presignedUrl = s3Client.generatePresignedUrl(presignedUrlRequest);
-
-        // Gallery 생성
-        Gallery gallery = new Gallery();
-        gallery.setUser(user);
-        gallery.setFileUrl("https://" + bucket + ".s3.amazonaws.com/" + key);
-        gallery.setFileType(determineFileType(request.getContentType()));
-        gallery.setFileName(request.getFileName());
-
-        // Set initial recipients
-        if (request.getRecipientIds() != null) {
-            List<Recipient> recipients = recipientRepository.findAllById(request.getRecipientIds());
-            for (Recipient recipient : recipients) {
-                gallery.addRecipient(recipient);
-            }
-        }
-
-        galleryRepository.save(gallery); // DB에 저장
-
-        return new PresignedUrlResponse(
-                presignedUrl.toString(),
-                gallery.getId()
-        );
+        return new PresignedUrlResponse(presignedUrl.toString());
     }
 
     //열람자 업데이트
@@ -220,7 +191,7 @@ public class GalleryServiceImpl implements GalleryService {
     private Date getPresignedUrlExpiration() {
         Date expiration = new Date();
         long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000 * 60 * 60 * 24 * 15; // 15일
+        expTimeMillis += 1000 * 60 * 60 * 24 * 6; // 6일
         expiration.setTime(expTimeMillis);
         return expiration;
     }

@@ -1,5 +1,7 @@
 package com.backend.service.user;
 
+import com.backend.dto.CertReqDTO;
+import com.backend.service.sms.SmsService;
 import jakarta.servlet.http.Cookie;
 import com.backend.domain.User;
 import com.backend.dto.LoginDTO;
@@ -24,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
     private final JwtUtil jwtUtil;
 
     @Transactional
@@ -44,39 +47,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public User login(LoginDTO loginDTO, HttpServletResponse response) {
+    public void login(LoginDTO loginDTO, HttpServletResponse response) {
         User user = userRepository.findByPhone(loginDTO.getPhone())
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
+        if (loginDTO.getPassword() != null) { //비밀번호로 로그인했을 시
+            if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
+                user.setLoginAttemptPeriod(user.getLoginAttemptPeriod() + 1);
+                userRepository.save(user);
+                throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            }
 
-        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
-            user.setLoginAttemptPeriod(user.getLoginAttemptPeriod() + 1);
+            user.setLastLogin(LocalDateTime.now());
+            user.setLoginAttemptPeriod(0);
+
+            Cookie accessCookie = new Cookie("accessToken", jwtUtil.generateAccessToken(user.getPhone()));
+            //accessCookie.setHttpOnly(true);
+            //accessCookie.setSecure(true);
+            accessCookie.setPath("/");
+            accessCookie.setMaxAge(60 * 60 * 12);
+            Cookie refreshCookie = new Cookie("refreshToken", jwtUtil.generateRefreshToken(user.getPhone()));
+            //refreshCookie.setHttpOnly(true);
+            //refreshCookie.setSecure(true);
+            refreshCookie.setPath("/");
+            refreshCookie.setMaxAge(60 * 60 * 24 * 3);
+            response.addCookie(accessCookie);
+            response.addCookie(refreshCookie);
+            System.out.println(" token " + " " + accessCookie.getValue());
             userRepository.save(user);
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
-        user.setLastLogin(LocalDateTime.now());
-        user.setLoginAttemptPeriod(0);
-
-        Cookie accessCookie = new Cookie("accessToken", jwtUtil.generateAccessToken(user.getPhone()));
-        //accessCookie.setHttpOnly(true);
-        //accessCookie.setSecure(true);
-        accessCookie.setPath("/");
-        accessCookie.setMaxAge(60*60*12);
-        Cookie refreshCookie = new Cookie("refreshToken", jwtUtil.generateRefreshToken(user.getPhone()));
-        //refreshCookie.setHttpOnly(true);
-        //refreshCookie.setSecure(true);
-        refreshCookie.setPath("/");
-        refreshCookie.setMaxAge(60*60*24*3);
-        response.addCookie(accessCookie);
-        response.addCookie(refreshCookie);
-        System.out.println(" token " + " " + accessCookie.getValue());
-        return userRepository.save(user);
     }
 
     @Transactional
-    public void logout(String phone) { //로그아웃 로직 고민
-        User user = userRepository.findByPhone(phone)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
-
+    public void logout(HttpServletRequest request) { //로그아웃 로직 고민
+        User user = this.getUserByToken(request).get();
     }
 
     @Override

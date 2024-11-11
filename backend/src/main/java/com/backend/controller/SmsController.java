@@ -6,6 +6,7 @@ import com.backend.dto.PairDTO;
 import com.backend.dto.VerifyDTO;
 import com.backend.service.idconvert.IdConverterService;
 import com.backend.service.sms.SmsService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class SmsController {
 
     private final SmsService smsService;
     private final IdConverterService idConverterService;
-
+    @Operation(summary = "문자 분석", description = "부고 문자인지 확인")
     @PostMapping("/analyze")
     public void analyzeMessage(@RequestBody MessageDTO message) {
         System.out.println(message.getBody());
@@ -33,13 +34,15 @@ public class SmsController {
     }
 
     // SMS 인증번호 발송
-    @PostMapping("/send")
+    @Operation(summary = "인증 메시지 발송", description = "인증 메시지 발송")
+    @PostMapping("/cert")
     public ResponseEntity<?> sendSms(@RequestBody CertReqDTO request) {
         smsService.SendSms(request);
         return ResponseEntity.ok().build();
     }
 
     // SMS 인증번호 검증
+    @Operation(summary = "문자 인증 확인", description = "문자 인증 확인 ")
     @PostMapping("/verify")
     public ResponseEntity<Boolean> verifySms(@RequestBody VerifyDTO request) {
         boolean isValid = smsService.verifyCode(
@@ -49,19 +52,7 @@ public class SmsController {
         return ResponseEntity.ok(isValid);
     }
 
-    // ID 변환 테스트
-    @GetMapping("/combine")
-    public ResponseEntity<String> combineIds(
-            @RequestParam String userId,
-            @RequestParam String recipientId
-    ) {
-        String combined = idConverterService.combineIds(userId, recipientId);
-        return ResponseEntity.ok(combined);
-    }
 
-    @GetMapping("/extract/{combinedId}")
-    public ResponseEntity<PairDTO> extractIds(@PathVariable String combinedId) {
-        PairDTO ids = idConverterService.extractIds(combinedId);
-        return ResponseEntity.ok(ids);
-    }
+    // ID 변환 테스트
+
 }
