@@ -49,5 +49,19 @@ public class GalleryRecipient {
             this.firstViewedDate = LocalDateTime.now();
         }
     }
+
+    public void setRecipient(Recipient recipient) {
+        // 기존 관계 제거
+        if (this.recipient != null && this.recipient != recipient) {
+            this.recipient.getGalleryRecipients().remove(this);
+        }
+
+        this.recipient = recipient;
+
+        // 새로운 관계 설정
+        if (recipient != null && !recipient.getGalleryRecipients().contains(this)) {
+            recipient.getGalleryRecipients().add(this);
+        }
+    }
 }
 

@@ -84,7 +84,9 @@ public class RecipientController {
     @PostMapping(value = "/update",
     consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateRecipient(@RequestParam(value = "file", required = false) MultipartFile file,@ModelAttribute RecipientDTO recipientDTO, HttpServletRequest request) {
+    public ResponseEntity<String> updateRecipient(@RequestPart(value = "file", required = false) MultipartFile file,
+                                                  @RequestPart(value = "data") RecipientDTO recipientDTO,
+                                                  HttpServletRequest request) {
         Optional<User> user = userService.getUserByToken(request);
         if (user.isPresent()) {
             recipientService.updateRecipient(recipientDTO, user.get(), file);

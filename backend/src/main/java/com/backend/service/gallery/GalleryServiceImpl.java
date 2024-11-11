@@ -104,10 +104,12 @@ public class GalleryServiceImpl implements GalleryService {
     public String uploadProfile(MultipartFile file, Long id, User user) {
        
         try {
-            Recipient recipient = recipientRepository.findById(id).get();
-            if (recipient.getImgurl() != null) { // 열람인의 프로필이 이미 있을 때
-                String key = extractFileKeyFromUrl(recipient.getImgurl());
-                deleteFileFromS3(key); // S3의 프로필 삭제
+            if(id != null) {
+                Recipient recipient = recipientRepository.findById(id).get();
+                if (recipient.getImgurl() != null) { // 열람인의 프로필이 이미 있을 때
+                    String key = extractFileKeyFromUrl(recipient.getImgurl());
+                    deleteFileFromS3(key); // S3의 프로필 삭제
+                }
             }
             // 유니크 키(파일명) 생성
             String fileName = file.getOriginalFilename();
