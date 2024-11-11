@@ -78,9 +78,9 @@ const App: React.FC = () => {
               />
               <Stack.Screen name="Album" component={AlbumScreen} />
               <Stack.Screen name="Setting" component={MypageScreen} />
-            <Stack.Screen name="SetAlert" component={SetAlertScreen} />
-            <Stack.Screen name="SetLock" component={SetLockScreen} />
-            <Stack.Screen name="CheckPw" component={CheckPasswordScreen} />
+              <Stack.Screen name="SetAlert" component={SetAlertScreen} />
+              <Stack.Screen name="SetLock" component={SetLockScreen} />
+              <Stack.Screen name="CheckPw" component={CheckPasswordScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </GestureHandlerRootView>

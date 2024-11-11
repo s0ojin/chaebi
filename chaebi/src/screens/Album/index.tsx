@@ -5,8 +5,12 @@ import Header from '../../components/Header';
 import SettingAdjustIcon from '../../assets/icon/settings-adjust.svg';
 import MasonryGrid from '../../components/album/MasonryGrid';
 import CrossIcon from '../../assets/icon/cross.svg';
+import CenterModal from '../../components/modal/CustomCenterModal';
+import {useModal} from '../../hooks/useModal';
+import AlbumAccessModal from '../../components/modal/AlbumAccessModal';
 
-export default function Album() {
+export default function AlbumScreen() {
+  const {isVisible, openModal, closeModal} = useModal();
   return (
     <>
       <View className="relative">
@@ -22,13 +26,18 @@ export default function Album() {
         </Pressable>
         <MasonryGrid />
       </View>
-      <Pressable className="bg-_white w-16 h-16 rounded-full absolute bottom-5 right-5 justify-center items-center">
+      <Pressable
+        onPress={openModal}
+        className="bg-_white w-16 h-16 rounded-full absolute bottom-5 right-5 justify-center items-center">
         <CrossIcon
           style={{transform: [{rotate: '45deg'}]}}
           width={60}
           height={60}
         />
       </Pressable>
+      <CenterModal visible={isVisible} onClose={closeModal}>
+        <AlbumAccessModal />
+      </CenterModal>
     </>
   );
 }
