@@ -39,11 +39,37 @@ public class Recipient {
     @JoinColumn(name = "user_id")
     private User user; //작성자
 
+    @Column(columnDefinition = "TEXT")
     private String imgurl;
 
     @PrePersist
     @PreUpdate
     protected void onCreate() {
         lastModifiedDate = LocalDateTime.now();
+    }
+
+    public void addGalleryRecipient(GalleryRecipient galleryRecipient) {
+        galleryRecipients.add(galleryRecipient);
+        galleryRecipient.setRecipient(this);
+    }
+
+    public void removeGalleryRecipient(GalleryRecipient galleryRecipient) {
+        galleryRecipients.remove(galleryRecipient);
+        galleryRecipient.setRecipient(null);
+    }
+
+    // GalleryRecipients setter 수정
+    public void setGalleryRecipients(Set<GalleryRecipient> galleryRecipients) {
+        // 기존 관계 모두 제거
+        this.galleryRecipients.forEach(gr -> gr.setRecipient(null));
+        this.galleryRecipients.clear();
+
+        // 새로운 관계 설정
+        if (galleryRecipients != null) {
+            galleryRecipients.forEach(gr -> {
+                gr.setRecipient(this);
+                this.galleryRecipients.add(gr);
+            });
+        }
     }
 }
