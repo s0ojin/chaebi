@@ -1,6 +1,12 @@
 package com.backend.service.sms;
 
+import com.backend.domain.Recipient;
+import com.backend.domain.User;
 import com.backend.dto.CertReqDTO;
+import com.backend.dto.RecipientResDTO;
+import com.backend.repository.UserRepository;
+import com.backend.service.idconvert.IdConverterService;
+import com.backend.service.recipient.RecipientService;
 import com.backend.util.SmsCertificationUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +25,10 @@ import java.util.regex.Pattern;
 public class SmsServiceImpl implements SmsService {
 
     private final SmsCertificationUtil smsCertificationUtil;
+    private final IdConverterService idConverterService;
     private final RedisTemplate<String, String> redisTemplate;
+    private final UserRepository userRepository;
+    private final RecipientService recipientService;
     private static final long VERIFICATION_TIME = 3L; // 인증번호 유효시간 3분
 
 
@@ -80,9 +89,16 @@ public class SmsServiceImpl implements SmsService {
     }
 
     @Override // 유족들 메시지 발송
-    public void sendCode(String phoneNumber, String code) {
-        // SMS 메시지 생성
-        smsCertificationUtil.sendSMS(phoneNumber, code);
+    public void sendCode(String phoneNumber, String name) {
+        User user = userRepository.findByPhone(phoneNumber).get();
+        if(user != null && user.getName().equals(name)) { // 전화번호와 이름이 일치할 경우
+            String code = idConverterService.combineIds(phoneNumber, name);
+            System.out.println("code 생성");
+            for(RecipientResDTO r : recipientService.getRecipients(user).get()){
+                smsCertificationUtil.sendCode(r.getName(),r.getPhone(), code); // 유저의 열람인 모두에게 문자 발송
+            }
+        }
+        System.out.println("이용자 확인 불가");
     }
 }
 
