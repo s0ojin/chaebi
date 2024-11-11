@@ -8,17 +8,22 @@ import {
   request,
   RESULTS,
   PERMISSIONS,
+  check,
 } from 'react-native-permissions';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
-export default function AlbumAccessModal() {
+export default function AlbumAccessModal({
+  closeModal,
+}: {
+  closeModal: () => void;
+}) {
   const handleOptionPress = (option: AlbumAccessOptions) => {
     switch (option) {
       case 'ALBUM':
         requestAlbumPermissions();
         break;
       case 'CAMERA':
-        // TODO 카메라 권한 요청 로직 추가
+        requestCameraPermissions();
         break;
       case 'FILE':
         // TODO 파일 접근 권한 요청 로직 추가
@@ -57,7 +62,7 @@ export default function AlbumAccessModal() {
   const showSettingsAlert = () => {
     Alert.alert(
       '권한 필요',
-      '사진과 비디오에 접근하려면 권한이 필요합니다. 설정에서 권한을 허용해 주세요.',
+      '권한이 필요합니다. 설정에서 권한을 허용해 주세요.',
       [
         {
           text: '취소',
@@ -89,11 +94,48 @@ export default function AlbumAccessModal() {
     );
   };
 
+  const requestCameraPermissions = async () => {
+    const status = await check(PERMISSIONS.ANDROID.CAMERA);
+
+    if (status === RESULTS.GRANTED) {
+      openCamera();
+    } else {
+      const requestStatus = await request(PERMISSIONS.ANDROID.CAMERA);
+      if (requestStatus === RESULTS.GRANTED) {
+        openCamera();
+      } else {
+        showSettingsAlert();
+      }
+    }
+  };
+
+  const openCamera = () => {
+    launchCamera(
+      {
+        mediaType: 'mixed',
+        saveToPhotos: true,
+      },
+      response => {
+        if (response.didCancel) {
+          console.log('카메라 사용 취소');
+        } else if (response.errorMessage) {
+          console.error('카메라 에러', response.errorMessage);
+        } else if (response.assets) {
+          console.log('촬영한 미디어:', response.assets);
+        }
+      },
+    );
+  };
+
   return (
     <View className="items-center px-5 py-2">
       {ALBUM_ACCESS.map((option, idx) => (
         <View key={option.key}>
-          <Pressable onPress={() => handleOptionPress(option.key)}>
+          <Pressable
+            onPress={() => {
+              closeModal();
+              handleOptionPress(option.key);
+            }}>
             <Text className="text-xl p-4 text-_black">{option.label}</Text>
           </Pressable>
           {idx !== ALBUM_ACCESS.length - 1 && (
