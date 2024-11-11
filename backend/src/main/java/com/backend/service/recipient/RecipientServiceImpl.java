@@ -41,15 +41,15 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     }
 
     @Override
-    public RecipientDTO getRecipient(long id) {
+    public RecipientResDTO getRecipient(long id) {
         Recipient recipient = repository.findById(id).orElseThrow(NoSuchElementException::new);
-        RecipientDTO recipientDTO = RecipientDTO.builder()
+        RecipientResDTO recipientResDTO = RecipientResDTO.builder()
                 .name(recipient.getName())
                 .imgUrl(recipient.getImgurl())
                 .secretQuestion(recipient.getSecurityQuestion())
                 .secretAnswer(recipient.getSecurityAnswer())
                 .build();
-        return recipientDTO;
+        return recipientResDTO;
     }
 
     @Override
@@ -70,7 +70,8 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
                         .name(recipient.getName())    // 이름
                         .secretQuestion(recipient.getSecurityQuestion()) // 비밀 질문
                         .secretAnswer(recipient.getSecurityAnswer())     // 비밀 답변
-                        .imgUrl(recipient.getImgurl())  // 이미지 URL
+                        .imgUrl(recipient.getImgurl())// 이미지 URL
+                        .lastModified(letterService.getLetter(recipient.getId()).getLastModifiedDate())
                         .build())
                 .collect(Collectors.toList());
 

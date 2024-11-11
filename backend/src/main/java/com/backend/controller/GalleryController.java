@@ -24,16 +24,16 @@ public class GalleryController {
     private final GalleryServiceImpl galleryService;
     private final UserService userService;
 
-    @Operation(summary = "PresignedURL 생성")
-    @PostMapping("/presigned")
-    public ResponseEntity<PresignedUrlResponse> generatePresignedUrl(
-            @RequestBody PresignedUrlRequest request,
-            HttpServletRequest httpServletRequest
-    ) {
-        User user = userService.getUserByToken(httpServletRequest).get();
-        PresignedUrlResponse response = galleryService.generatePresignedUrl(request, user);
-        return ResponseEntity.ok(response);
-    }
+//    @Operation(summary = "PresignedURL 생성")
+//    @PostMapping("/presigned")
+//    public ResponseEntity<PresignedUrlResponse> generatePresignedUrl(
+//            @RequestBody PresignedUrlRequest request,
+//            HttpServletRequest httpServletRequest
+//    ) {
+//        User user = userService.getUserByToken(httpServletRequest).get();
+//        PresignedUrlResponse response = galleryService.generatePresignedUrl(request, user);
+//        return ResponseEntity.ok(response);
+//    }
 
     @Operation(summary = "앨범 열람자 수정")
     @PutMapping("/{id}/recipients")
@@ -70,7 +70,7 @@ public class GalleryController {
     public ResponseEntity<GalleryResDTO> uploadFile(@RequestParam("file") MultipartFile file, UploadDTO uploadDTO, HttpServletRequest request) {
         User user = userService.getUserByToken(request).get();
         try {
-            GalleryResDTO response = galleryService.uploadFile(file,uploadDTO, user);
+            GalleryResDTO response = galleryService.uploadFile(file,uploadDTO.getRecipientIds(), user);
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();

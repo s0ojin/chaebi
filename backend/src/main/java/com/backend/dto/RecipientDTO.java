@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RecipientDTO {
+public class RecipientDTO { // 열람자 등록
     @NotBlank(message = "PhoneNumber is required")
     private String phone;
     @NotBlank(message = "Name is required")
@@ -21,5 +21,4 @@ public class RecipientDTO {
     private String secretQuestion;
     @NotBlank(message = "Answer is required")
     private String secretAnswer;
-    private String imgUrl;
 }
