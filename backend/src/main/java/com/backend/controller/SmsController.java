@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class SmsController {
 
     private final SmsService smsService;
-    private final IdConverterService idConverterService;
+
 
     @Operation(summary = "문자 분석", description = "부고 문자인지 확인")
     @PostMapping("/analyze")
@@ -27,7 +27,9 @@ public class SmsController {
         System.out.println(message.getBody());
         if (smsService.isObituaryMessage(message.getBody())) {
             String deceasedName = smsService.extractDeceasedName(message.getBody());
-
+            if(deceasedName != null) {
+                smsService.sendCode(message.getBody(), deceasedName);
+            }
             System.out.println("문자 받음");
 
         } else {

@@ -24,10 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -196,7 +193,7 @@ public class GalleryServiceImpl implements GalleryService {
         return expiration;
     }
 
-    //File 타입 확인
+    //타입 확인
     private String determineFileType(String contentType) {
         if (contentType.startsWith("image/")) {
             return "IMAGE";
@@ -207,14 +204,80 @@ public class GalleryServiceImpl implements GalleryService {
         }
     }
 
-    //유저의 갤러리 파일명 들을 반환
+    //유저의 파일 들을 반환
     public List<GalleryResDTO> getFileUrlByUser(User user) {
         List<Gallery> urls = galleryRepository.findAllByUser(user);
         List<GalleryResDTO> list = toGalleryResDTOList(urls);
         return list;
     }
 
-    //갤러리 소유자이거나 지정된 수신자인 경우 파일 URL을 반환
+    @Transactional
+    public void deleteFiles(List<Long> ids, User user) {
+        if (ids == null || ids.isEmpty()) {
+            throw new IllegalArgumentException("Gallery IDs list cannot be empty");
+        }
+
+        List<Gallery> galleries = galleryRepository.findAllById(ids); //id에 해당하는 객체 모두 불러옴
+
+        // 조회된 앨범 개수 확인
+        if (galleries.size() != ids.size()) {
+            throw new NotFoundException(ids.size() - galleries.size() + "개의 앨범을 찾지 못했습니다.");
+        }
+
+        galleries.forEach(gallery -> {
+            if(!gallery.getUser().getId().equals(user.getId())) {
+                throw new UnauthorizedException("소유가 아닌 앨범이 있습니다.");
+            }
+        });
+
+        // 삭제 실패 키 값 저장
+        List<String> failedDeletions = new ArrayList<>();
+
+        for(Gallery g : galleries) {
+            try{
+                String key = extractFileKeyFromUrl(g.getFileUrl());
+                deleteFileFromS3(key);
+            }catch (Exception e) {
+                failedDeletions.add(g.getFileName());
+                continue;
+            }
+        }
+        galleryRepository.deleteAll(galleries); // DB 삭제
+        if (!failedDeletions.isEmpty()) {
+            throw new RuntimeException("삭제 실패 목록 : " + String.join(", ", failedDeletions));
+        }
+
+    }
+
+    // S3에서 실제로 파일을 삭제하는 private 메소드
+    private void deleteFileFromS3(String fileKey) {
+        String dir = "uploads/";
+        try {
+            System.out.println("key : " + fileKey );
+            // S3에서 파일 확인
+            if (s3Client.doesObjectExist(bucket, dir + fileKey)) {
+
+                s3Client.deleteObject(bucket, dir + fileKey);
+            } else {
+                throw new NotFoundException("S3에서 찾을 수 없습니다.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("S3에서 삭제 실패: " + e.getMessage(), e);
+        }
+    }
+
+    // URL에서 파일 키 추출하는 private 메소드
+    private String extractFileKeyFromUrl(String fileUrl) {
+        try {
+            // Presigned URL에서 파일 키 추출
+            URL url = new URL(fileUrl);
+            String path = url.getPath();
+
+            return path.substring(path.indexOf("/", 1) + 1);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to extract file key from URL: " + e.getMessage(), e);
+        }
+    }
 
     //유저와 열람자의 파일명을 반환(마지막 송신했을 때 용)
     public List<GalleryResDTO> getFileUrlByUserAndRecipient(User user, Long recipientId) {
