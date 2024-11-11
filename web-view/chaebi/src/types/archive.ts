@@ -3,6 +3,9 @@ export type ImageCardProps = {
   alt: string
   index: number
 }
-export type InfiniteScrollTriggerProps = {
-  onIntersect: () => void
+
+export type Theme = {
+  id: number
+  name: string
+  images: string[]
 }

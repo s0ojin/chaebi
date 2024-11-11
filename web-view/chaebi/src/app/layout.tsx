@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import ChosunNm from '@/utils/fonts'
-import { Logo } from 'public/svg'
+import Logo from 'public/svg/logo.svg'
 import './globals.css'
 
 export const metadata: Metadata = {
