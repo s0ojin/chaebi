@@ -4,6 +4,7 @@ import Text from '../../components/CustomText';
 import Header from '../../components/Header';
 import InputField from '../../components/InputField';
 import RoundButton from '../../components/RoundButton';
+import {sendSmsCertRequest, sendSmsVerifyRequest} from '../../api/signup';
 
 export default function SignUpScreen() {
   const [showAuth, setShowAuth] = useState<boolean>(false);
@@ -34,6 +35,14 @@ export default function SignUpScreen() {
   const handleSendAuthCode = () => {
     setShowAuth(true);
     setIsCounting(true);
+    sendSmsCertRequest({phoneNumber});
+  };
+
+  const handleDoneAuth = async () => {
+    const response = await sendSmsVerifyRequest({phoneNumber, authCode});
+    if (response && response.success) {
+      setDoneAuth(true);
+    }
   };
 
   return (
@@ -75,11 +84,10 @@ export default function SignUpScreen() {
                 value={authCode}
                 onChangeText={setAuthCode}
               />
-              <RoundButton
-                content="인증하기"
-                onPress={() => setDoneAuth(true)}
-              />
-              <Text className="text-2xl text-center mt-7">
+              <RoundButton content="인증하기" onPress={() => handleDoneAuth} />
+              <Text
+                className="text-2xl text-center mt-7"
+                onPress={() => sendSmsCertRequest({phoneNumber})}>
                 인증번호 재전송
               </Text>
             </View>
@@ -88,9 +96,7 @@ export default function SignUpScreen() {
       ) : (
         <View className="mt-8 gap-9">
           <View className="px-6 gap-5">
-            <Text className="text-2xl">
-              성함을 알려주세요.
-            </Text>
+            <Text className="text-2xl">성함을 알려주세요.</Text>
             <InputField
               placeholder="이름"
               keyboardType="default"
