@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import {Alert, Pressable, View, Platform, Linking} from 'react-native';
 import Text from '../CustomText';
 import {ALBUM_ACCESS} from '../../constants/album';
@@ -11,6 +11,7 @@ import {
   check,
 } from 'react-native-permissions';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import DocumentPicker from 'react-native-document-picker';
 
 export default function AlbumAccessModal({
   closeModal,
@@ -26,7 +27,7 @@ export default function AlbumAccessModal({
         requestCameraPermissions();
         break;
       case 'FILE':
-        // TODO 파일 접근 권한 요청 로직 추가
+        requestFilePermissions();
         break;
     }
   };
@@ -53,6 +54,50 @@ export default function AlbumAccessModal({
       const status = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
       if (status === RESULTS.GRANTED) {
         openAlbum();
+      } else if (status === RESULTS.BLOCKED) {
+        showSettingsAlert();
+      }
+    }
+  };
+
+  const requestCameraPermissions = async () => {
+    const status = await check(PERMISSIONS.ANDROID.CAMERA);
+
+    if (status === RESULTS.GRANTED) {
+      openCamera();
+    } else {
+      const requestStatus = await request(PERMISSIONS.ANDROID.CAMERA);
+      if (requestStatus === RESULTS.GRANTED) {
+        openCamera();
+      } else if (status === RESULTS.BLOCKED) {
+        showSettingsAlert();
+      }
+    }
+  };
+
+  const requestFilePermissions = async () => {
+    if (Platform.OS === 'android' && Platform.Version >= 33) {
+      const statuses = await requestMultiple([
+        PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
+        PERMISSIONS.ANDROID.READ_MEDIA_VIDEO,
+        PERMISSIONS.ANDROID.READ_MEDIA_AUDIO,
+      ]);
+
+      if (
+        statuses[PERMISSIONS.ANDROID.READ_MEDIA_IMAGES] === RESULTS.GRANTED &&
+        statuses[PERMISSIONS.ANDROID.READ_MEDIA_VIDEO] === RESULTS.GRANTED
+      ) {
+        openFilePicker();
+      } else if (
+        statuses[PERMISSIONS.ANDROID.READ_MEDIA_IMAGES] === RESULTS.BLOCKED ||
+        statuses[PERMISSIONS.ANDROID.READ_MEDIA_VIDEO] === RESULTS.BLOCKED
+      ) {
+        showSettingsAlert();
+      }
+    } else {
+      const status = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
+      if (status === RESULTS.GRANTED) {
+        openFilePicker();
       } else if (status === RESULTS.BLOCKED) {
         showSettingsAlert();
       }
@@ -94,21 +139,6 @@ export default function AlbumAccessModal({
     );
   };
 
-  const requestCameraPermissions = async () => {
-    const status = await check(PERMISSIONS.ANDROID.CAMERA);
-
-    if (status === RESULTS.GRANTED) {
-      openCamera();
-    } else {
-      const requestStatus = await request(PERMISSIONS.ANDROID.CAMERA);
-      if (requestStatus === RESULTS.GRANTED) {
-        openCamera();
-      } else {
-        showSettingsAlert();
-      }
-    }
-  };
-
   const openCamera = () => {
     launchCamera(
       {
@@ -127,10 +157,25 @@ export default function AlbumAccessModal({
     );
   };
 
+  const openFilePicker = async () => {
+    try {
+      const result = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images, DocumentPicker.types.video],
+      });
+      console.log('선택한 파일:', result);
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        console.log('파일 선택 취소');
+      } else {
+        console.error('파일 선택 에러:', err);
+      }
+    }
+  };
+
   return (
     <View className="items-center px-5 py-2">
       {ALBUM_ACCESS.map((option, idx) => (
-        <View key={option.key}>
+        <Fragment key={option.key}>
           <Pressable
             onPress={() => {
               closeModal();
@@ -141,7 +186,7 @@ export default function AlbumAccessModal({
           {idx !== ALBUM_ACCESS.length - 1 && (
             <View className="h-[0.5px] w-full bg-primary-200" />
           )}
-        </View>
+        </Fragment>
       ))}
     </View>
   );
