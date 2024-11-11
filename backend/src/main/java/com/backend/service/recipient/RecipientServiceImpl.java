@@ -1,10 +1,12 @@
 package com.backend.service.recipient;
 
+import com.backend.domain.GalleryRecipient;
 import com.backend.domain.Recipient;
 import com.backend.domain.User;
 import com.backend.dto.RecipientDTO;
 import com.backend.dto.RecipientResDTO;
 import com.backend.exception.AlreadyExistsException;
+import com.backend.exception.NotFoundException;
 import com.backend.repository.RecipientRepository;
 import com.backend.service.gallery.GalleryService;
 import com.backend.service.letter.LetterService;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,9 +34,10 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
             throw new AlreadyExistsException(recipientDTO.getName() +  "님은 이미 등록되었습니다.");
         }
         String imgUrl = "";
-//        if (file != null){
-//            imgUrl = galleryService.uploadProfile(recipientDTO)
-//        }
+        Long id = null; // trigger 용
+        if (file != null){
+            imgUrl = galleryService.uploadProfile(file, id, user);
+        }
         Recipient recipient = Recipient.builder()
                 .phone(recipientDTO.getPhone())
                 .name(recipientDTO.getName())
@@ -90,13 +94,26 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
 
     @Override
     public void updateRecipient(RecipientDTO recipientDTO, User user, MultipartFile file) { // 열람자 업데이트
-        Recipient recipient = Recipient.builder()
-                .phone(recipientDTO.getPhone())
-                .name(recipientDTO.getName())
-                .securityQuestion(recipientDTO.getSecretQuestion())
-                .securityAnswer(recipientDTO.getSecretAnswer())
-                .user(user)
-                .build();
+        Recipient recipient = repository.findByUserAndPhone(user, recipientDTO.getPhone());
+        if (recipient == null) {
+            throw new NotFoundException("Recipient not found");
+        }
+        Set<GalleryRecipient> existingGalleryRecipients = recipient.getGalleryRecipients();
+
+        // 이미지 처리
+        String imgUrl = recipient.getImgurl(); // 기존 이미지 URL 유지
+        if (file != null && !file.isEmpty()) {
+            imgUrl = galleryService.uploadProfile(file, recipient.getId(), user);
+        }
+
+        recipient.setName(recipientDTO.getName());
+        recipient.setPhone(recipientDTO.getPhone());
+        recipient.setSecurityQuestion(recipientDTO.getSecretQuestion());
+        recipient.setSecurityAnswer(recipientDTO.getSecretAnswer());
+        recipient.setImgurl(imgUrl);
+        recipient.setGalleryRecipients(existingGalleryRecipients);
+
+        // 변경된 엔티티 저장
         repository.save(recipient);
     }
 
