@@ -1,4 +1,4 @@
-import {View, TouchableOpacity, Image, Pressable} from 'react-native';
+import {View, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 import Setting from '../assets/icon/settings-alt.svg';
 import Text from './CustomText';
@@ -61,7 +61,7 @@ export default function RemainListView({
 }: RemainListViewProp) {
   return (
     <TouchableOpacity
-      className="flex-row w-full h-24 px-8 bg-[#F4F4F4] rounded-2xl justify-between items-center"
+      className="flex-row w-full h-24 px-4 bg-[#F4F4F4] rounded-2xl justify-between items-center"
       onPress={setOnPress}>
       <View className="flex-row justify-left items-center">
         {/* 사용자 이미지 */}
