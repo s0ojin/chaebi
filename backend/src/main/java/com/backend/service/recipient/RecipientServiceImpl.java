@@ -53,9 +53,9 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     }
 
     @Override
-    public Optional<List<RecipientResDTO>> getRecipients(Optional<User> user) {
+    public Optional<List<RecipientResDTO>> getRecipients(User user) {
         // 사용자 열람자 리스트 조회
-        List<Recipient> recipients = repository.findByUser(user.orElseThrow(() -> new IllegalArgumentException("User not found")));
+        List<Recipient> recipients = repository.findByUser(user);
 
         // 결과가 없을 경우 빈 Optional 반환
         if (recipients.isEmpty()) {
