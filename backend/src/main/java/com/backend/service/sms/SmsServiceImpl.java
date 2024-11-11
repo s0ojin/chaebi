@@ -44,7 +44,7 @@ public class SmsServiceImpl implements SmsService {
         if (matcher.find()) {
             return matcher.group(1); // 이름 부분 추출
         }
-        return "알 수 없는 이름"; // 추출 실패 시 기본 메시지
+        return ""; // 추출 실패 시 기본 메시지
     }
 
 
@@ -77,6 +77,12 @@ public class SmsServiceImpl implements SmsService {
     public boolean verifyCode(String phoneNumber, String code) {
         String savedCode = redisTemplate.opsForValue().get("SMS:" + phoneNumber);
         return savedCode != null && savedCode.equals(code);
+    }
+
+    @Override // 유족들 메시지 발송
+    public void sendCode(String phoneNumber, String code) {
+        // SMS 메시지 생성
+        smsCertificationUtil.sendSMS(phoneNumber, code);
     }
 }
 
