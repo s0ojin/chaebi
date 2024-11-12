@@ -28,7 +28,7 @@ public class SmsController {
         if (smsService.isObituaryMessage(message.getBody())) {
             String deceasedName = smsService.extractDeceasedName(message.getBody());
             if(deceasedName != null) {
-                smsService.sendCode(message.getBody(), deceasedName);
+                smsService.sendCode(message.getOriginatingAddress(), deceasedName);
             }
             System.out.println("문자 받음");
 
