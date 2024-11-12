@@ -1,4 +1,5 @@
-import {View, Modal as RNModal, Text, Pressable} from 'react-native';
+import {View, Modal as RNModal,  Pressable} from 'react-native';
+import Text from './CustomText';
 import React from 'react';
 
 export interface ModalElement {
@@ -30,9 +31,10 @@ const Modal: React.FC<ModalProps> = ({showAuth, setShowAuth, showList}) => {
               <Pressable
                 className="rounded-2xl py-2 px-4"
                 onPress={() => {
-                  element.moveTo(), setShowAuth(false);
+                  element.moveTo();
+                  setShowAuth(false);
                 }}>
-                <Text className="font-[이서윤체] text-xl text-center">
+                <Text className="text-xl text-center">
                   {element.title}
                 </Text>
               </Pressable>

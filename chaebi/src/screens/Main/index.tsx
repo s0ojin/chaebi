@@ -20,7 +20,7 @@ export default function MainScreen({navigation}: MainScreenProps) {
   useEffect(() => {
     setLeaveData({
       id: 1,
-      title: '잘가시게',
+      content: '잘가시게',
       userId: 1,
       recipient: {
         id: 1,
@@ -29,7 +29,7 @@ export default function MainScreen({navigation}: MainScreenProps) {
         imgUrl: '',
       },
       lastModifiedDate: '2024-11-05T18:03:01.519939',
-      sort: true,
+      sort: "center",
     });
 
     const images = [
@@ -76,7 +76,7 @@ export default function MainScreen({navigation}: MainScreenProps) {
             <ArrowRight width={20} height={20} />
           </View>
           {leaveData ? (
-            <RemainListView message={leaveData} isSetting={false} />
+            <RemainListView recipient={leaveData.recipient} isSetting={false} />
           ) : (
             <View className="flex-row w-full h-24 bg-[#F4F4F4] rounded-xl items-center justify-center">
               <LightPlus width={40} height={40} />
