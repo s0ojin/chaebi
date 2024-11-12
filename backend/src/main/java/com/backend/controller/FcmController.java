@@ -35,12 +35,12 @@ public class FcmController {
     }
 
 
-    @Operation(summary = "유저의 fcm 토큰을 저장")
-    @PostMapping("/api/token")
-    public ResponseEntity pushToken(@RequestBody RequestDTO requestDTO, HttpServletRequest request) throws IOException {
-        User user = userService.getUserByToken(request).get(); //  유저 정보 받아옴
-        user.setFcmToken(requestDTO.getTargetToken());
-        userRepository.save(user);
-        return ResponseEntity.ok().build();
-    }
+//    @Operation(summary = "유저의 fcm 토큰을 저장")
+//    @PostMapping("/api/token")
+//    public ResponseEntity pushToken(@RequestBody RequestDTO requestDTO, HttpServletRequest request) throws IOException {
+//        User user = userService.getUserByToken(request).get(); //  유저 정보 받아옴
+//        user.setFcmToken(requestDTO.getTargetToken());
+//        userRepository.save(user);
+//        return ResponseEntity.ok().build();
+//    }
 }

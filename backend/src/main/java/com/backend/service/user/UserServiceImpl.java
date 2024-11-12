@@ -1,6 +1,7 @@
 package com.backend.service.user;
 
 import com.backend.dto.CertReqDTO;
+import com.backend.dto.SettingDTO;
 import com.backend.service.sms.SmsService;
 import jakarta.servlet.http.Cookie;
 import com.backend.domain.User;
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
                 .status(true)
                 .name(signDTO.getName())
                 .loginAttemptPeriod(0)
+                .fcmToken(signDTO.getFcmToken()) // fcm 토큰 저장
                 .push(true) // 푸쉬알림 디폴트로 true
                 .build();
 
@@ -71,6 +73,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void setting(SettingDTO settingDTO, HttpServletRequest request) {
+        User user = this.getUserByToken(request).get();
+        user.setPush(settingDTO.isPush());
+        userRepository.save(user);
+    }
+
+    @Override
     public Optional<User> getUser(String phone) { //아이디로 유저를 반환
         return userRepository.findByPhone(phone);
     }
@@ -85,6 +94,8 @@ public class UserServiceImpl implements UserService {
 //        return userRepository.findByPhone(userPhone);
         return userRepository.findByPhone("010-1111-1111"); //테스트
     }
+
+
 
 
 }
