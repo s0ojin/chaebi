@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 
 public class AddressAPIExample {
     public static void main(String[] args) {
-        String apikey = "YOUR_API_KEY";  // 발급받은 API 키 입력
+        String apikey = "D22BF037-70CE-3B49-801E-7886827E6AEF";  // 발급받은 API 키 입력
         String searchType = "road";
         String searchPoint = "127.101313354,37.402352535";
         String epsg = "epsg:4326";
