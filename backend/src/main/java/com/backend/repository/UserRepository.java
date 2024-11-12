@@ -25,6 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.status = true")
     List<User> findAll();
 
-    @Query("SELECT u FROM User u WHERE u.lastLogin <= :date AND u.status = true")
-    List<User> findByLastLogin(LocalDateTime lastLogin);
+    @Query("SELECT u FROM User u WHERE u.lastLogin <= :lastLogin AND u.status = true")
+    List<User> findByLastLogin(@Param("lastLogin") LocalDateTime lastLogin);
 }
