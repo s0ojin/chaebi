@@ -10,7 +10,7 @@ import {RootStackParamList} from '../../../App';
 import RecipientCard from '../../components/RecipientCard';
 import Footer from '../../components/Footer';
 import {NO_ONE_HEADLINE, NO_ONE_INFO} from '../../constants/remain';
-import {getRecipient} from '../../api/recipient';
+import {deleteRecipient, getRecipient} from '../../api/recipient';
 
 export interface Recipient {
   id?: number;
@@ -44,81 +44,79 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
     getRecipient()
       .then(data => {
         setRecipientList(data);
-        console.log(data);
       })
-      .catch(error => console.log(error));
-  });
-  // API 호출해 오면, remainList를 채워 오겠지요?
-  // useEffect(() => {
-  //   setRecipientList(
-  //     JSON.parse(`[
-  //   {
-  //     "id": 1,
-  //     "name": "조조",
-  //     "phone": "010-1111-1111",
-  //     "imgUrl": null,
-  //     "secretQuestion": "담임선생님 성함",
-  //     "secretAnswer": "이유이"
-  //   },
-  //   {
-  //     "id": 2,
-  //     "name": "관우",
-  //     "phone": "010-1111-1112",
-  //     "imgUrl": null,
-  //     "secretQuestion": "컨설님 성함",
-  //     "secretAnswer": "박세영"
-  //   },
-  //   {
-  //     "id": 3,
-  //     "name": "유비",
-  //     "phone": "010-1111-1112",
-  //     "imgUrl": null,
-  //     "secretQuestion": "컨설턴트님 성함",
-  //     "secretAnswer": "박세영"
-  //   },
-  //   {
-  //     "id": 4,
-  //     "name": "장비",
-  //     "phone": "010-1111-1112",
-  //     "imgUrl": null,
-  //     "secretQuestion": "실습 코치님 성함",
-  //     "secretAnswer": "이종재"
-  //   },
-  //   {
-  //     "id": 5,
-  //     "name": "제갈량",
-  //     "phone": "010-1111-1112",
-  //     "imgUrl": null,
-  //     "secretQuestion": "코치님 성함",
-  //     "secretAnswer": "이종재"
-  //   },
-  //   {
-  //     "id": 6,
-  //     "name": "주유",
-  //     "phone": "010-1111-1112",
-  //     "imgUrl": null,
-  //     "secretQuestion": "실습 코치님 성함",
-  //     "secretAnswer": "김윤지"
-  //   },
-  //   {
-  //     "id": 7,
-  //     "name": "원소",
-  //     "phone": "010-1111-1112",
-  //     "imgUrl": null,
-  //     "secretQuestion": "코치님 성함",
-  //     "secretAnswer": "김윤지"
-  //   },
-  //   {
-  //     "id": 8,
-  //     "name": "원술",
-  //     "phone": "010-1111-1112",
-  //     "imgUrl": null,
-  //     "secretQuestion": "프로님 성함",
-  //     "secretAnswer": "이유이"
-  //   }
-  // ]`),
-  //   );
-  // }, []);
+      .catch(error => {
+        console.log(error);
+        setRecipientList(
+          JSON.parse(`[
+        {
+          "id": 1,
+          "name": "조조",
+          "phone": "010-1111-1111",
+          "imgUrl": null,
+          "secretQuestion": "담임선생님 성함",
+          "secretAnswer": "이유이"
+        },
+        {
+          "id": 2,
+          "name": "관우",
+          "phone": "010-1111-1112",
+          "imgUrl": null,
+          "secretQuestion": "컨설님 성함",
+          "secretAnswer": "박세영"
+        },
+        {
+          "id": 3,
+          "name": "유비",
+          "phone": "010-1111-1112",
+          "imgUrl": null,
+          "secretQuestion": "컨설턴트님 성함",
+          "secretAnswer": "박세영"
+        },
+        {
+          "id": 4,
+          "name": "장비",
+          "phone": "010-1111-1112",
+          "imgUrl": null,
+          "secretQuestion": "실습 코치님 성함",
+          "secretAnswer": "이종재"
+        },
+        {
+          "id": 5,
+          "name": "제갈량",
+          "phone": "010-1111-1112",
+          "imgUrl": null,
+          "secretQuestion": "코치님 성함",
+          "secretAnswer": "이종재"
+        },
+        {
+          "id": 6,
+          "name": "주유",
+          "phone": "010-1111-1112",
+          "imgUrl": null,
+          "secretQuestion": "실습 코치님 성함",
+          "secretAnswer": "김윤지"
+        },
+        {
+          "id": 7,
+          "name": "원소",
+          "phone": "010-1111-1112",
+          "imgUrl": null,
+          "secretQuestion": "코치님 성함",
+          "secretAnswer": "김윤지"
+        },
+        {
+          "id": 8,
+          "name": "원술",
+          "phone": "010-1111-1112",
+          "imgUrl": null,
+          "secretQuestion": "프로님 성함",
+          "secretAnswer": "이유이"
+        }
+      ]`),
+        );
+      });
+  }, []);
 
   return (
     <View className="bg-white flex-1 p-4">
@@ -162,6 +160,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
                           title: '편지 삭제하기',
                           moveTo: () => {
                             // 편지삭제 API
+                            if(item.id) deleteRecipient(item.id);
                           },
                         },
                       ]);
@@ -179,7 +178,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
                         {
                           title: '수신인 삭제하기',
                           moveTo: () => {
-                            navigation.navigate('RemainWrite');
+                            if(item.id) deleteRecipient(item.id);
                           },
                         },
                       ]);

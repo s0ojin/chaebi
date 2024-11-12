@@ -10,6 +10,14 @@ export const publicApi = axios.create({
   },
 });
 
+export const publicFormApi = axios.create({
+  baseURL: API_URL,
+  timeout: 5000,
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+});
+
 export const privateApi = axios.create({
   baseURL: API_URL,
   timeout: 5000,

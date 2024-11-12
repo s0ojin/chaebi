@@ -10,6 +10,7 @@ import Info from '../../assets/icon/information.svg';
 import Modal from '../../components/CustomModal';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
+import { postRecipient } from '../../api/recipient';
 
 type QuestionScreenProps = {
   route: Route<string, Recipient>;
@@ -142,7 +143,7 @@ export default function QuestionScreen({
             onPress={() => {
               recipient.secretQuestion = question;
               recipient.secretAnswer = answer;
-              console.log(recipient);
+              postRecipient(recipient)
               navigation.navigate('RemainComplete', recipient);
             }}
             disabled={!showNext}
