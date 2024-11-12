@@ -33,9 +33,9 @@ public class UserController {
     @Operation(summary = "유저 회원가입", description = "Register a new user.")
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody SignDTO signDTO, HttpServletResponse response){
-        if(signDTO.getFcmToken() == null)
+        if(signDTO.getFcmToken().isEmpty())
             return ResponseEntity.status(415).body("token : " + signDTO.getFcmToken());
-
+        System.out.println("token : " + signDTO.getFcmToken());
         userServiceImpl.signup(signDTO, response);
         return ResponseEntity.ok().body("Sign up successful"); //회원가입 성공
     }

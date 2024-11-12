@@ -1,12 +1,9 @@
 package com.backend.service.user;
 
-import com.backend.dto.CertReqDTO;
-import com.backend.dto.SettingDTO;
+import com.backend.dto.*;
 import com.backend.service.sms.SmsService;
 import jakarta.servlet.http.Cookie;
 import com.backend.domain.User;
-import com.backend.dto.LoginDTO;
-import com.backend.dto.SignDTO;
 import com.backend.repository.UserRepository;
 import com.backend.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -65,6 +62,7 @@ public class UserServiceImpl implements UserService {
             response.addCookie(refreshCookie);
             System.out.println(" token " + " " + accessCookie.getValue());
             userRepository.save(user);
+
     }
 
     @Transactional
