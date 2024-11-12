@@ -44,7 +44,7 @@ public class UserController {
             return ResponseEntity.status(215).body("회원가입 해야합니다.");
         }
         else {
-            userServiceImpl.login(loginDTO, response);
+            userServiceImpl.login(loginDTO.getPhone(), response);
             //로그인 되었을 때 토큰 발급
             return ResponseEntity.ok().body("로그인 되었습니다."); // 로그인 성공
         }

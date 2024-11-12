@@ -42,12 +42,12 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         userRepository.save(user);
-        this.login(new LoginDTO(signDTO.getPhone()), response); // 회원가입 후 로그인 까지 
+        this.login(signDTO.getPhone(), response); // 회원가입 후 로그인 까지
     }
 
     @Transactional
-    public void login(LoginDTO loginDTO, HttpServletResponse response) {
-        User user = userRepository.findByPhone(loginDTO.getPhone())
+    public void login(String phone, HttpServletResponse response) {
+        User user = userRepository.findByPhone(phone)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
             user.setLastLogin(LocalDateTime.now());
 
