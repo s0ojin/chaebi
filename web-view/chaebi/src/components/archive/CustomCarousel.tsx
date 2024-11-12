@@ -45,7 +45,6 @@ export default function CustomCarousel() {
     autoplay: true,
     autoplaySpeed: 3000,
     centerMode: true,
-    centerPadding: '1.5rem',
   }
 
   function openModal(theme: Theme): void {
