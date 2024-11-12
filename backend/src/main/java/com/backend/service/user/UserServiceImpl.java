@@ -30,35 +30,24 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public void signup(SignDTO signDTO) { //회원가입
-        if (userRepository.existsByPhone(signDTO.getPhone())) {
-            throw new RuntimeException("이미 존재하는 아이디입니다.");
-        }
-
+    public void signup(SignDTO signDTO, HttpServletResponse response) { //회원가입
         User user = User.builder()
                 .phone(signDTO.getPhone())
-                .password(passwordEncoder.encode(signDTO.getPassword()))
                 .status(true)
                 .name(signDTO.getName())
                 .loginAttemptPeriod(0)
+                .push(true) // 푸쉬알림 디폴트로 true
                 .build();
 
         userRepository.save(user);
+        this.login(new LoginDTO(signDTO.getPhone()), response); // 회원가입 후 로그인 까지 
     }
 
     @Transactional
     public void login(LoginDTO loginDTO, HttpServletResponse response) {
         User user = userRepository.findByPhone(loginDTO.getPhone())
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
-        if (loginDTO.getPassword() != null) { //비밀번호로 로그인했을 시
-            if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
-                user.setLoginAttemptPeriod(user.getLoginAttemptPeriod() + 1);
-                userRepository.save(user);
-                throw new RuntimeException("비밀번호가 일치하지 않습니다.");
-            }
-
             user.setLastLogin(LocalDateTime.now());
-            user.setLoginAttemptPeriod(0);
 
             Cookie accessCookie = new Cookie("accessToken", jwtUtil.generateAccessToken(user.getPhone()));
             //accessCookie.setHttpOnly(true);
@@ -74,7 +63,6 @@ public class UserServiceImpl implements UserService {
             response.addCookie(refreshCookie);
             System.out.println(" token " + " " + accessCookie.getValue());
             userRepository.save(user);
-        }
     }
 
     @Transactional

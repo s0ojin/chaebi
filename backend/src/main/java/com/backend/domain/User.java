@@ -19,7 +19,6 @@ public class User {
 
     private String phone; //전화번호
 
-    private String password; //비밀번호
     private String name; //이름
 
     private LocalDateTime createdAt; //생성날짜
@@ -28,6 +27,7 @@ public class User {
     private int loginAttemptPeriod; //로그인 시도주기
     private boolean admin; //관리자 인지 아닌지
     private String fcmToken;
+    private boolean push; // 푸쉬알림
 
     @PrePersist
     protected void onCreate() {
