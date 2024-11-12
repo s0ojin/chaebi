@@ -17,18 +17,17 @@ export default function MasonryGrid({ items }: MasonryGridProps) {
       {columns.map((column, colIndex) => (
         <div key={colIndex} className="flex-1">
           {column.map((item) => {
-            const randomHeight = 150 + Math.floor(Math.random() * 150)
             return (
               <div
                 key={item.id}
                 className="mb-2 rounded-lg overflow-hidden"
-                style={{ height: `${randomHeight}px`, width: '100%' }}
+                style={{ height: `${item.height}px`, width: '100%' }}
               >
                 <Image
                   src={item.uri}
                   alt={`Image ${item.id}`}
                   width={300}
-                  height={randomHeight}
+                  height={item.height}
                   className="object-cover w-full h-full"
                 />
               </div>
