@@ -16,5 +16,5 @@ public interface UserService {
     void setting(SettingDTO settingDTO, HttpServletRequest request);
     Optional<User> getUser(String id);
     Optional<User> getUserByToken(HttpServletRequest request);
-
+    void quit(HttpServletRequest request);
 }

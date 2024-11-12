@@ -1,12 +1,20 @@
 package com.backend.service.idconvert;
 
+import com.backend.domain.Recipient;
 import com.backend.dto.PairDTO;
+import com.backend.repository.RecipientRepository;
+import jakarta.transaction.Transactional;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class IdConverterServiceImpl implements IdConverterService {
     private static final int COMBINED_LENGTH = 6;
     private static final int MAX_ID_LENGTH = 3; // 각 ID는 최대 3자리
+    private final RecipientRepository recipientRepository;
 
     public String combineIds(Long userId, Long recipientId) {
         // 각 ID를 3자리로 패딩
@@ -26,8 +34,11 @@ public class IdConverterServiceImpl implements IdConverterService {
                 result.append((char) ('A' + num));
             }
         }
-
-        return result.toString();
+        String resultCode = result.toString();
+        Recipient recipient = recipientRepository.findById(recipientId).orElse(null);
+        recipient.setEnterCode(resultCode);
+        recipientRepository.save(recipient); // 입장 코드 생성 후 저장
+        return resultCode;
     }
 
     // 변환된 코드에서 원래 ID들을 추출
@@ -50,8 +61,8 @@ public class IdConverterServiceImpl implements IdConverterService {
         }
 
         String combinedId = originalNumber.toString();
-        String userId = String.valueOf(Integer.parseInt(combinedId.substring(0, 3)));
-        String recipientId = String.valueOf(Integer.parseInt(combinedId.substring(3)));
+        Long userId = Long.parseLong(String.valueOf(Integer.parseInt(combinedId.substring(0, 3))));
+        Long recipientId = Long.parseLong(String.valueOf(Integer.parseInt(combinedId.substring(3))));
 
         return new PairDTO(userId, recipientId);
     }
