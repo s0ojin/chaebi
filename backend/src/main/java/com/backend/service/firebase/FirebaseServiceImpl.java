@@ -78,6 +78,7 @@ public class FirebaseServiceImpl implements FirebaseService {
         //각 유저에게 푸쉬
         for(User u : user){
             String token = u.getFcmToken();
+            System.out.println("발송");
             if(token != null){
                 String body = u.getName() + "님 입장하세요!";
                 this.sendMessageTo(token, "채비", body);
