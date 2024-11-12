@@ -8,14 +8,19 @@ import CrossIcon from '../../assets/icon/cross.svg';
 import CenterModal from '../../components/modal/CustomCenterModal';
 import {useModal} from '../../hooks/useModal';
 import AlbumAccessModal from '../../components/modal/AlbumAccessModal';
+import MediaUploadModal from '../../components/modal/MediaUploadModal';
 
 export default function AlbumScreen() {
-  const {isVisible, openModal, closeModal} = useModal();
+  const albumAccessModal = useModal();
+  const mediaUploadModal = useModal();
+
   return (
     <>
       <View className="relative">
         <Header pageName="채우기" />
-        <Pressable className="bg-primary-400 self-start px-3 rounded-full absolute right-4 top-1/4">
+        <Pressable
+          onPress={mediaUploadModal.openModal}
+          className="bg-primary-400 self-start px-3 rounded-full absolute right-4 top-1/4">
           <Text className="text-_white py-2 px-1">선택</Text>
         </Pressable>
       </View>
@@ -27,7 +32,7 @@ export default function AlbumScreen() {
         <MasonryGrid />
       </View>
       <Pressable
-        onPress={openModal}
+        onPress={albumAccessModal.openModal}
         className="bg-_white w-16 h-16 rounded-full absolute bottom-5 right-5 justify-center items-center">
         <CrossIcon
           style={{transform: [{rotate: '45deg'}]}}
@@ -35,8 +40,15 @@ export default function AlbumScreen() {
           height={60}
         />
       </Pressable>
-      <CenterModal visible={isVisible} onClose={closeModal}>
-        <AlbumAccessModal closeModal={closeModal} />
+      <CenterModal
+        visible={albumAccessModal.isVisible}
+        onClose={albumAccessModal.closeModal}>
+        <AlbumAccessModal closeModal={albumAccessModal.closeModal} />
+      </CenterModal>
+      <CenterModal
+        visible={mediaUploadModal.isVisible}
+        onClose={mediaUploadModal.closeModal}>
+        <MediaUploadModal closeModal={mediaUploadModal.closeModal} />
       </CenterModal>
     </>
   );
