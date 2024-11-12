@@ -43,26 +43,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public void login(String phone, HttpServletResponse response) {
+    public TokenRes login(String phone, HttpServletResponse response) {
         User user = userRepository.findByPhone(phone)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
             user.setLastLogin(LocalDateTime.now());
-
-            Cookie accessCookie = new Cookie("accessToken", jwtUtil.generateAccessToken(user.getPhone()));
-            //accessCookie.setHttpOnly(true);
-            //accessCookie.setSecure(true);
-            accessCookie.setPath("/");
-            accessCookie.setMaxAge(60 * 60 * 12);
-            Cookie refreshCookie = new Cookie("refreshToken", jwtUtil.generateRefreshToken(user.getPhone()));
-            //refreshCookie.setHttpOnly(true);
-            //refreshCookie.setSecure(true);
-            refreshCookie.setPath("/");
-            refreshCookie.setMaxAge(60 * 60 * 24 * 3);
-            response.addCookie(accessCookie);
-            response.addCookie(refreshCookie);
-            System.out.println(" token " + " " + accessCookie.getValue());
+            TokenRes token = new TokenRes(jwtUtil.generateAccessToken(user.getPhone()),jwtUtil.generateRefreshToken(user.getPhone()));
+            System.out.println(" token " + " " + token.getAccessToken());
             userRepository.save(user);
-
+            return token;
     }
 
     @Transactional
