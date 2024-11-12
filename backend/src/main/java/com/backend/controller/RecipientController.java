@@ -1,13 +1,13 @@
 package com.backend.controller;
 
-import com.backend.domain.Recipient;
 import com.backend.domain.User;
+import com.backend.dto.EnterReq;
+import com.backend.dto.PairDTO;
 import com.backend.dto.RecipientDTO;
 import com.backend.dto.RecipientResDTO;
 import com.backend.service.letter.LetterService;
 import com.backend.service.recipient.RecipientService;
 import com.backend.service.user.UserService;
-import com.backend.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -102,6 +102,13 @@ public class RecipientController {
     public ResponseEntity<String> deleteRecipient(@PathVariable long id) {
         recipientService.deleteRecipient(id);
         return ResponseEntity.ok("열람자가 삭제되었습니다.");
+    }
+
+    @Operation(summary = "열람자 입장")
+    @PostMapping("/enter")
+    public ResponseEntity<?> enterRecipient(@RequestBody EnterReq enterDTO) {
+        PairDTO pair = recipientService.enterRecipient(enterDTO);
+        return ResponseEntity.ok(pair);
     }
 
 

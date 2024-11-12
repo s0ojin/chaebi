@@ -1,8 +1,7 @@
 package com.backend.service.recipient;
 
 import com.backend.domain.User;
-import com.backend.dto.RecipientDTO;
-import com.backend.dto.RecipientResDTO;
+import com.backend.dto.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -14,4 +13,5 @@ public interface RecipientService {
     Optional<List<RecipientResDTO>> getRecipients(User user); // 그 유저의 열람인들 불러오기
     void updateRecipient(RecipientDTO recipientDTO, User user, MultipartFile file);
     void deleteRecipient(long id);
+    PairDTO enterRecipient(EnterReq req);
 }
