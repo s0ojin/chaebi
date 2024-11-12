@@ -84,7 +84,7 @@ export default function SignUpScreen() {
                 value={authCode}
                 onChangeText={setAuthCode}
               />
-              <RoundButton content="인증하기" onPress={() => handleDoneAuth} />
+              <RoundButton content="인증하기" onPress={handleDoneAuth} />
               <Text
                 className="text-2xl text-center mt-7"
                 onPress={() => sendSmsCertRequest({phoneNumber})}>
