@@ -18,6 +18,7 @@ import MainScreen from './src/screens/Main';
 import RemainEditorScreen from './src/screens/RemainEditor';
 import CompleteScreen from './src/screens/Remain/complete';
 import AlbumScreen from './src/screens/Album';
+import MypageScreen from './src/screens/Mypage';
 
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
@@ -37,6 +38,7 @@ export type RootStackParamList = {
   SetPw: undefined;
   RemainEditor: undefined;
   Album: undefined;
+  Setting: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -64,6 +66,7 @@ const App: React.FC = () => {
             <Stack.Screen name="SetPw" component={SetPasswordScreen} />
             <Stack.Screen name="RemainEditor" component={RemainEditorScreen} />
             <Stack.Screen name="Album" component={AlbumScreen} />
+            <Stack.Screen name="Setting" component={MypageScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </ToastProvider>
