@@ -17,7 +17,7 @@ def categorize_image(presigned_url: str = Query(..., description="S3 Presigned U
         
         categories = categorize_from_url(image_data)
         
-        print(categories[1])
+        # print(categories[1])
 
         return {"Categories": categories}
     
