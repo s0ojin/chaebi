@@ -28,7 +28,7 @@ public class LetterServiceImpl implements LetterService {
     private final RecipientRepository recipientRepository;
 
     @Override
-    public Letter createLetter(User user, Recipient recipient) {
+    public void createLetter(User user, Recipient recipient) {
         //열람자 등록시 빈 편지 생성
         Letter letter = new Letter();
         letter.setUser(user);
@@ -36,7 +36,6 @@ public class LetterServiceImpl implements LetterService {
         letter.setSort("");
         letter.setRecipient(recipient);//수정중
         repository.save(letter);
-        return letter;
     }
 
     @Override

@@ -26,8 +26,9 @@ public class User {
     private LocalDateTime lastLogin; //마지막 로그인
     private boolean status; //살아있는가 아닌가
     private int loginAttemptPeriod; //로그인 시도주기
+    private String secretQuestion; //질문
+    private String secretAnswer; // 답
     private boolean admin; //관리자 인지 아닌지
-    private String fcmToken;
 
     @PrePersist
     protected void onCreate() {
