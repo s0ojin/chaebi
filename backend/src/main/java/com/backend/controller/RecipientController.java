@@ -81,7 +81,7 @@ public class RecipientController {
     }
 
     @Operation(summary = "열람자 정보 수정")
-    @PostMapping(value = "/update",
+    @PutMapping(value = "/update",
     consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateRecipient(@RequestPart(value = "file", required = false) MultipartFile file,
