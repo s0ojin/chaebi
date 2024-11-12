@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface UserService {
     void signup(SignDTO signDTO, HttpServletResponse response);
-    void login(LoginDTO loginDTO, HttpServletResponse response);
+    void login(String phone, HttpServletResponse response);
     void logout(HttpServletRequest request);
     void setting(SettingDTO settingDTO, HttpServletRequest request);
     Optional<User> getUser(String id);
