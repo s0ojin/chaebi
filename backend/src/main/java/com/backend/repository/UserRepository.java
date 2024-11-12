@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,4 +24,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 전체 조회시에도 활성 사용자만 조회
     @Query("SELECT u FROM User u WHERE u.status = true")
     List<User> findAll();
+
+    @Query("SELECT u FROM User u WHERE u.lastLogin <= :date AND u.status = true")
+    List<User> findByLastLogin(LocalDateTime lastLogin);
 }
