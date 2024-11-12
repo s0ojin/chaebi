@@ -1,24 +1,18 @@
 package com.backend.service.recipient;
 
-import com.backend.domain.GalleryRecipient;
-import com.backend.domain.Letter;
 import com.backend.domain.Recipient;
 import com.backend.domain.User;
 import com.backend.dto.RecipientDTO;
 import com.backend.dto.RecipientResDTO;
 import com.backend.exception.AlreadyExistsException;
-import com.backend.exception.NotFoundException;
 import com.backend.repository.RecipientRepository;
-import com.backend.service.gallery.GalleryService;
 import com.backend.service.letter.LetterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,17 +21,11 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
 
     private final RecipientRepository repository;
     private final LetterService letterService;
-    private final GalleryService galleryService;
 
     @Override
-    public String createRecipient(RecipientDTO recipientDTO, User user, MultipartFile file) {
+    public String createRecipient(RecipientDTO recipientDTO, User user) {
         if(repository.findByUserAndPhone(user, recipientDTO.getPhone()) != null){
             throw new AlreadyExistsException(recipientDTO.getName() +  "님은 이미 등록되었습니다.");
-        }
-        String imgUrl = "";
-        Long id = null; // trigger 용
-        if (file != null){
-            imgUrl = galleryService.uploadProfile(file, id, user);
         }
         Recipient recipient = Recipient.builder()
                 .phone(recipientDTO.getPhone())
@@ -45,14 +33,10 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
                 .securityQuestion(recipientDTO.getSecretQuestion())
                 .securityAnswer(recipientDTO.getSecretAnswer())
                 .user(user)
-                .imgurl(imgUrl)
                 .build();
-
-
         repository.save(recipient); //열람자 저장
         //편지 생성
-        Letter letter = letterService.createLetter(user, recipient);
-        recipient.setLetter(letter);
+        letterService.createLetter(user, recipient);
         return "success";
     }
 
@@ -69,9 +53,9 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     }
 
     @Override
-    public Optional<List<RecipientResDTO>> getRecipients(User user) {
+    public Optional<List<RecipientResDTO>> getRecipients(Optional<User> user) {
         // 사용자 열람자 리스트 조회
-        List<Recipient> recipients = repository.findByUser(user);
+        List<Recipient> recipients = repository.findByUser(user.orElseThrow(() -> new IllegalArgumentException("User not found")));
 
         // 결과가 없을 경우 빈 Optional 반환
         if (recipients.isEmpty()) {
@@ -95,27 +79,14 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     }
 
     @Override
-    public void updateRecipient(RecipientDTO recipientDTO, User user, MultipartFile file) { // 열람자 업데이트
-        Recipient recipient = repository.findByUserAndPhone(user, recipientDTO.getPhone());
-        if (recipient == null) {
-            throw new NotFoundException("Recipient not found");
-        }
-        Set<GalleryRecipient> existingGalleryRecipients = recipient.getGalleryRecipients();
-
-        // 이미지 처리
-        String imgUrl = recipient.getImgurl(); // 기존 이미지 URL 유지
-        if (file != null && !file.isEmpty()) {
-            imgUrl = galleryService.uploadProfile(file, recipient.getId(), user);
-        }
-
-        recipient.setName(recipientDTO.getName());
-        recipient.setPhone(recipientDTO.getPhone());
-        recipient.setSecurityQuestion(recipientDTO.getSecretQuestion());
-        recipient.setSecurityAnswer(recipientDTO.getSecretAnswer());
-        recipient.setImgurl(imgUrl);
-        recipient.setGalleryRecipients(existingGalleryRecipients);
-
-        // 변경된 엔티티 저장
+    public void updateRecipient(RecipientDTO recipientDTO, User user) { // 열람자 업데이트
+        Recipient recipient = Recipient.builder()
+                .phone(recipientDTO.getPhone())
+                .name(recipientDTO.getName())
+                .securityQuestion(recipientDTO.getSecretQuestion())
+                .securityAnswer(recipientDTO.getSecretAnswer())
+                .user(user)
+                .build();
         repository.save(recipient);
     }
 
