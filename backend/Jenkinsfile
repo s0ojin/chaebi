@@ -86,21 +86,20 @@ pipeline {
                 stage('Java Docker Run') {
                     steps {
                         dir('./backend') {
-                            sh 'docker run --name backend-app -d -v data:/data -p 8080:8080 -e TZ=Asia/Seoul backend'
+                            sh 'docker run --name backend-app -d -v data:/data -p 8080:8080 backend'
                         }
                     }
                 }
                 stage('Python Docker Run') {
                     steps {
                           dir('./AI') {
-                                    sh '''
-                                        docker run --name ai-app -d \
-                                        -v /home/ubuntu/code/data:/code/data \
-                                        -p 8000:8000 \
-                                        -e TZ=Asia/Seoul \
-                                        ai
-                                    '''
-                            }
+                             sh '''
+                                                 docker run --name ai-app -d \
+                                                 -v /home/ubuntu/code/data:/code/data \
+                                                 -p 8000:8000 \
+                                                 ai
+                                                 '''
+                         }
                     }
                 }
             }

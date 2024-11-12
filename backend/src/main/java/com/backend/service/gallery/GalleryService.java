@@ -14,5 +14,4 @@ public interface GalleryService {
     List<GalleryResDTO> getFileUrlByUser(User user);
     List<GalleryResDTO> getFileUrlByUserAndRecipient(User user, Long recipientId);
     GalleryResDTO uploadFile(MultipartFile file, Set<Long> recipientIds, User user);
-    String uploadProfile(MultipartFile file, Long id, User user);
 }
