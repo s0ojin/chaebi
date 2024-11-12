@@ -34,17 +34,25 @@ public class RecipientController {
     private final UserService userService;
 
     @Operation(summary = "열람자 등록")
-    @PostMapping(value = "/create",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+    @PostMapping(value = "create",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> createRecipient(@RequestParam("file") MultipartFile file, @RequestBody RecipientDTO recipientDTO, HttpServletRequest request) {
+    public ResponseEntity<String> createRecipient(
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @RequestPart(value = "data") RecipientDTO recipientDTO,
+            HttpServletRequest request) {
+
         Optional<User> user = userService.getUserByToken(request);
-        if (user.isPresent()) {
-            recipientService.createRecipient(recipientDTO, user.get());
-            return ResponseEntity.ok("create successful");
+
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("존재하지 않는 사용자입니다.");
         }
-        else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 유효하지 않은 토큰
+
+        try {
+            recipientService.createRecipient(recipientDTO, user.get(), file);
+            return ResponseEntity.ok("열람자가 생성되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("열람자 생성 실패: " + e.getMessage());
         }
     }
 
@@ -60,7 +68,7 @@ public class RecipientController {
         // JWT를 통해 사용자 정보를 가져옴
         Optional<User> user = userService.getUserByToken(request);
         if (user.isPresent()) {
-            Optional<List<RecipientResDTO>> recipients = recipientService.getRecipients(user);
+            Optional<List<RecipientResDTO>> recipients = recipientService.getRecipients(user.get());
             if (recipients.isPresent()) {
                 return ResponseEntity.ok(recipients.get());
             } else {
@@ -73,14 +81,16 @@ public class RecipientController {
     }
 
     @Operation(summary = "열람자 정보 수정")
-    @PostMapping(value = "/update",
+    @PutMapping(value = "/update",
     consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateRecipient(@RequestParam("file") MultipartFile file,@RequestBody RecipientDTO recipientDTO, HttpServletRequest request) {
+    public ResponseEntity<String> updateRecipient(@RequestPart(value = "file", required = false) MultipartFile file,
+                                                  @RequestPart(value = "data") RecipientDTO recipientDTO,
+                                                  HttpServletRequest request) {
         Optional<User> user = userService.getUserByToken(request);
         if (user.isPresent()) {
-            recipientService.updateRecipient(recipientDTO, user.get());
-            return ResponseEntity.ok("Update successful");
+            recipientService.updateRecipient(recipientDTO, user.get(), file);
+            return ResponseEntity.ok("열람자의 정보가 업데이트되었습니다.");
         }
         else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 유효하지 않은 토큰
@@ -91,7 +101,7 @@ public class RecipientController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteRecipient(@PathVariable long id) {
         recipientService.deleteRecipient(id);
-        return ResponseEntity.ok("Delete successful");
+        return ResponseEntity.ok("열람자가 삭제되었습니다.");
     }
 
 
