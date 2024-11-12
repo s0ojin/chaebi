@@ -1,53 +1,100 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Tab } from '@/types/tab'
 
-const initialTabs: Tab[] = [
+interface TabButtonProps {
+  name: string
+  isActive: boolean
+  onClick: (name: string) => void
+}
+
+interface TabIndicatorProps {
+  activeTabName: string
+}
+
+interface TabsProps {
+  onTabChange: (tabName: string) => void
+}
+
+const TABS: Tab[] = [
   { name: '편지', current: true },
   { name: '앨범', current: false },
 ]
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+function TabButton({ name, isActive, onClick }: TabButtonProps) {
+  return (
+    <button
+      onClick={() => onClick(name)}
+      className={`
+        text-xl font-medium transition-colors z-10
+        ${isActive ? 'text-primary' : 'text-gray-500'}
+      `}
+    >
+      {name}
+    </button>
+  )
 }
 
-function handleTabClick(tabs: Tab[], clickedTabName: string) {
-  return tabs.map((tab) => {
-    return {
-      ...tab,
-      current: tab.name === clickedTabName,
-    }
-  })
+function TabIndicator({ activeTabName }: TabIndicatorProps) {
+  return (
+    <div
+      className={`
+        absolute bg-white rounded-3xl h-[2.125rem] mt-[.1875rem]
+        transition-transform duration-300 ease-in-out
+        ${activeTabName === '편지' ? 'translate-x-[3px]' : 'translate-x-[calc(6.25rem+3px)]'}
+      `}
+      style={{ width: 'calc(6.25rem - 6px)' }}
+    />
+  )
 }
 
-export default function CustomTab({
-  onTabChange,
+function TabNavigation({
+  tabs,
+  activeTab,
+  onTabClick,
 }: {
-  onTabChange: (tabName: string) => void
+  tabs: Tab[]
+  activeTab: string
+  onTabClick: (name: string) => void
 }) {
-  const [tabs, setTabs] = useState(initialTabs)
+  return (
+    <nav className="relative grid h-full grid-cols-2">
+      {tabs.map((tab) => (
+        <TabButton
+          key={tab.name}
+          name={tab.name}
+          isActive={activeTab === tab.name}
+          onClick={onTabClick}
+        />
+      ))}
+    </nav>
+  )
+}
 
-  function onTabClick(clickedTabName: string) {
-    setTabs((prevTabs) => handleTabClick(prevTabs, clickedTabName))
-    onTabChange(clickedTabName)
+export default function CustomTab({ onTabChange }: TabsProps) {
+  const [activeTab, setActiveTab] = useState(TABS[0].name)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  function handleTabClick(tabName: string) {
+    setActiveTab(tabName)
+    onTabChange(tabName)
+  }
+
+  if (!mounted) {
+    return null
   }
 
   return (
-    <div>
-      <nav aria-label="Tabs" className="flex space-x-2">
-        {tabs.map((tab) => (
-          <button
-            key={tab.name}
-            onClick={() => onTabClick(tab.name)}
-            aria-current={tab.current ? 'page' : undefined}
-            className={classNames(
-              tab.current ? 'bg-_gray-300 text-_white' : 'text-_white',
-              'rounded-md px-3 py-2 text-sm font-medium',
-            )}
-          >
-            {tab.name}
-          </button>
-        ))}
-      </nav>
+    <div className="relative w-[12.5rem] h-10 bg-gray-300 rounded-3xl">
+      <TabIndicator activeTabName={activeTab} />
+      <TabNavigation
+        tabs={TABS}
+        activeTab={activeTab}
+        onTabClick={handleTabClick}
+      />
     </div>
   )
 }
