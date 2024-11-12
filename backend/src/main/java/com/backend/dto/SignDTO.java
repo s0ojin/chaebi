@@ -9,4 +9,6 @@ public class SignDTO {
     private String phone;
     @NotBlank(message = "Name is required")
     private String name;
+    @NotBlank(message = "fcmToken is required")
+    private String fcmToken;
 }
