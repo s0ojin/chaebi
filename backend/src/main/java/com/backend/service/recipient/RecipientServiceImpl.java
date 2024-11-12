@@ -1,6 +1,7 @@
 package com.backend.service.recipient;
 
 import com.backend.domain.GalleryRecipient;
+import com.backend.domain.Letter;
 import com.backend.domain.Recipient;
 import com.backend.domain.User;
 import com.backend.dto.RecipientDTO;
@@ -50,7 +51,8 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
 
         repository.save(recipient); //열람자 저장
         //편지 생성
-        letterService.createLetter(user, recipient);
+        Letter letter = letterService.createLetter(user, recipient);
+        recipient.setLetter(letter);
         return "success";
     }
 

@@ -29,7 +29,8 @@ public class Recipient {
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate; //마지막 수정날짜
 
-
+    @OneToOne(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Letter letter;  // 편지와의 관계를 @OneToOne으로 설정
 
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -70,6 +71,14 @@ public class Recipient {
                 gr.setRecipient(this);
                 this.galleryRecipients.add(gr);
             });
+        }
+    }
+
+    // 편지 추가 및 삭제 메서드
+    public void setLetter(Letter letter) {
+        this.letter = letter;
+        if (letter != null) {
+            letter.setRecipient(this);
         }
     }
 }
