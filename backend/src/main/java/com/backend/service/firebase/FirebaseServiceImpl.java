@@ -10,13 +10,15 @@ import lombok.RequiredArgsConstructor;
 import okhttp3.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
 
+@Service
 @Component
 @RequiredArgsConstructor
-public class FirebaseServiceImpl {
+public class FirebaseServiceImpl implements FirebaseService {
 
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/my-firebase-project-a309/messages:send";
     private final ObjectMapper objectMapper;
