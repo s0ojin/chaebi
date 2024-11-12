@@ -1,0 +1,6 @@
+package com.backend.domain;
+
+public enum Keyword {
+    KEYWORD1, KEYWORD2, KEYWORD3, KEYWORD4, KEYWORD5, KEYWORD6, KEYWORD7,
+    KEYWORD8, KEYWORD9, KEYWORD10
+}
