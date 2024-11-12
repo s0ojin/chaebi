@@ -1,10 +1,7 @@
 package com.backend.controller;
 
 import com.backend.domain.User;
-import com.backend.dto.CertReqDTO;
-import com.backend.dto.LoginDTO;
-import com.backend.dto.SettingDTO;
-import com.backend.dto.SignDTO;
+import com.backend.dto.*;
 import com.backend.repository.UserRepository;
 import com.backend.service.firebase.FirebaseService;
 import com.backend.service.sms.SmsService;
@@ -47,9 +44,10 @@ public class UserController {
             return ResponseEntity.status(215).body("회원가입 해야합니다.");
         }
         else {
-            userServiceImpl.login(loginDTO.getPhone(), response);
+           TokenRes token =  userServiceImpl.login(loginDTO.getPhone(), response);
             //로그인 되었을 때 토큰 발급
-            return ResponseEntity.ok().body("로그인 되었습니다."); // 로그인 성공
+            System.out.println("로그인 성공  token : " + token.getAccessToken());
+            return ResponseEntity.ok().body(token); // 로그인 성공
         }
     }
 
