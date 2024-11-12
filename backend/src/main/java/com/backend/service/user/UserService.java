@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 public interface UserService {
-    void signup(SignDTO signDTO);
+    void signup(SignDTO signDTO, HttpServletResponse response);
     void login(LoginDTO loginDTO, HttpServletResponse response);
     void logout(HttpServletRequest request);
 
