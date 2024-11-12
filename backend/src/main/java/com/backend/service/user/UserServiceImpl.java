@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 //        System.out.println("user : " + user.get().getPhone());
 //        System.out.println("user OP : " + user);
 //        return userRepository.findByPhone(userPhone);
-        return userRepository.findByPhone("010-1111-1111"); //테스트
+        return userRepository.findByPhone("01011111111"); //테스트
     }
 
     @Override
