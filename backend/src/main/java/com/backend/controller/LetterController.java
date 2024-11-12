@@ -53,6 +53,12 @@ public class LetterController {
         return ResponseEntity.ok(letterService.getLetters(user));
     }
 
+    @Operation(summary = "편지 삭제")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteLetter(@PathVariable Long id) {
+        letterService.deleteLetter(id);
+        return ResponseEntity.ok("삭제되었습니다.");
+    }
 
 
 }

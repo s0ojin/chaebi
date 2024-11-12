@@ -24,7 +24,7 @@ public class Letter {
     @JoinColumn(name = "user_id")
     private User user; //작성자
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "recipient_id")
     private Recipient recipient;
 
