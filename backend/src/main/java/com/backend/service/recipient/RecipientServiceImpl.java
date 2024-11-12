@@ -4,12 +4,15 @@ import com.backend.domain.GalleryRecipient;
 import com.backend.domain.Letter;
 import com.backend.domain.Recipient;
 import com.backend.domain.User;
+import com.backend.dto.EnterReq;
+import com.backend.dto.PairDTO;
 import com.backend.dto.RecipientDTO;
 import com.backend.dto.RecipientResDTO;
 import com.backend.exception.AlreadyExistsException;
 import com.backend.exception.NotFoundException;
 import com.backend.repository.RecipientRepository;
 import com.backend.service.gallery.GalleryService;
+import com.backend.service.idconvert.IdConverterServiceImpl;
 import com.backend.service.letter.LetterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,7 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     private final RecipientRepository repository;
     private final LetterService letterService;
     private final GalleryService galleryService;
+    private final IdConverterServiceImpl idConverterService;
 
     @Override
     public String createRecipient(RecipientDTO recipientDTO, User user, MultipartFile file) {
@@ -122,5 +126,14 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     @Override
     public void deleteRecipient(long id) {  //열람자 삭제
         repository.deleteById(id);
+    }
+
+    @Override
+    public PairDTO enterRecipient(EnterReq req) {  //열람자 삭제
+        PairDTO pair = idConverterService.extractIds(req.getEnterCode());
+        System.out.println("user : " + pair.getUserId() + "recipientId :" + pair.getRecipientId());
+        if(!repository.findById(pair.getRecipientId()).isPresent())
+            throw new NotFoundException("Recipient not found");
+        return pair;
     }
 }

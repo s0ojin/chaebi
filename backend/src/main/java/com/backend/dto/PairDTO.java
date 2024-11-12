@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class PairDTO {
-    private String userId;
-    private String recipientId;
+    private Long userId;
+    private Long recipientId;
 }
