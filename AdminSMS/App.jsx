@@ -149,7 +149,7 @@ export default function App() {
         const postSms = async message => {
           try {
             const response = await fetch(
-              'https://k11a309.p.ssafy.io/api/sms/analyze',
+              'http://k11a309.p.ssafy.io/api/sms/analyze',
               {
                 method: 'POST',
                 headers: {
