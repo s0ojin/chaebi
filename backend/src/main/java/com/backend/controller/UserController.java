@@ -8,6 +8,7 @@ import com.backend.dto.SignDTO;
 import com.backend.repository.UserRepository;
 import com.backend.service.firebase.FirebaseService;
 import com.backend.service.sms.SmsService;
+import com.backend.service.user.UserService;
 import com.backend.service.user.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated // DTO 유효성 검사 활성화
 @Tag(name = "사용자 회원관리", description = "회원정보 관련 서비스")
 public class UserController {
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userServiceImpl;
     private final UserRepository userRepository;
     private final FirebaseService firebaseService;
 
@@ -61,5 +62,12 @@ public class UserController {
     public ResponseEntity<String> setting(SettingDTO settingDTO, HttpServletRequest request) {
         userServiceImpl.logout(request);
         return ResponseEntity.ok("로그아웃이 완료되었습니다."); //로그아웃(?)
+    }
+
+    @Operation(summary = "유저 탈퇴", description = "탈퇴")
+    @DeleteMapping("/quit")
+    public ResponseEntity<String> quit(HttpServletRequest request) {
+        userServiceImpl.quit(request);
+        return ResponseEntity.ok("탈퇴되었습니다.");
     }
 }

@@ -95,7 +95,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByPhone("010-1111-1111"); //테스트
     }
 
-
+    @Override
+    public void quit(HttpServletRequest request) {
+        User user = this.getUserByToken(request).get();
+        user.setStatus(false);
+        userRepository.save(user); // soft Delete
+    }
 
 
 }
