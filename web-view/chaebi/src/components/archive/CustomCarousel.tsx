@@ -43,7 +43,9 @@ export default function CustomCarousel() {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 4000,
+    autoplaySpeed: 3000,
+    centerMode: true,
+    centerPadding: '1.5rem',
   }
 
   function openModal(theme: Theme): void {
@@ -60,7 +62,12 @@ export default function CustomCarousel() {
 
   return (
     <>
-      <div className="w-full">
+      <div className="-mx-5 w-screen">
+        <style>{`
+          .slick-slide {
+            padding: 0 .375rem;
+          }
+        `}</style>
         <Slider {...sliderSettings}>
           {themes.map((theme) => (
             <div
@@ -75,6 +82,9 @@ export default function CustomCarousel() {
                 style={{ objectFit: 'cover' }}
                 className="rounded-xl transition-opacity duration-300"
               />
+              <div className="absolute bottom-3 right-4 text-_white text-4xl">
+                2019년 {/* 원하는 텍스트로 변경 */}
+              </div>
             </div>
           ))}
         </Slider>
