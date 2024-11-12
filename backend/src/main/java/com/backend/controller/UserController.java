@@ -1,9 +1,12 @@
 package com.backend.controller;
 
+import com.backend.domain.User;
 import com.backend.dto.CertReqDTO;
 import com.backend.dto.LoginDTO;
+import com.backend.dto.SettingDTO;
 import com.backend.dto.SignDTO;
 import com.backend.repository.UserRepository;
+import com.backend.service.firebase.FirebaseService;
 import com.backend.service.sms.SmsService;
 import com.backend.service.user.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,14 +26,13 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserServiceImpl userServiceImpl;
     private final UserRepository userRepository;
-    private final SmsService smsService;
+    private final FirebaseService firebaseService;
 
 
     @Operation(summary = "유저 회원가입", description = "Register a new user.")
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody SignDTO signDTO, HttpServletResponse response){
         userServiceImpl.signup(signDTO, response);
-
         return ResponseEntity.ok().body("Sign up successful"); //회원가입 성공
     }
 
@@ -50,6 +52,13 @@ public class UserController {
     @Operation(summary = "유저 로그아웃", description = "LOG OUT")
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
+        userServiceImpl.logout(request);
+        return ResponseEntity.ok("로그아웃이 완료되었습니다."); //로그아웃(?)
+    }
+
+    @Operation(summary = "유저 설정", description = "설정 기능")
+    @PostMapping("/setting")
+    public ResponseEntity<String> setting(SettingDTO settingDTO, HttpServletRequest request) {
         userServiceImpl.logout(request);
         return ResponseEntity.ok("로그아웃이 완료되었습니다."); //로그아웃(?)
     }
