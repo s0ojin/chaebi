@@ -6,11 +6,11 @@ import {Route} from '@react-navigation/native';
 import InputField from '../../components/InputField';
 import Header from '../../components/Header';
 import RoundButton from '../../components/RoundButton';
-import Info from '../../assets/icon/information.svg';
+import InfoIcon from '../../assets/icon/information.svg';
 import Modal from '../../components/CustomModal';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
-import { postRecipient } from '../../api/recipient';
+import { postRecipient, updateRecipient } from '../../api/recipient';
 
 type QuestionScreenProps = {
   route: Route<string, Recipient>;
@@ -99,13 +99,13 @@ export default function QuestionScreen({
           <View className="gap-2">
             <Text className="text-2xl px-1 my-2">열람용 인증 질문</Text>
             <Text className="text-md">
-              <Info /> 열람인이 반드시 알만한 답변으로 구성해주세요
+              <InfoIcon /> 열람인이 반드시 알만한 답변으로 구성해주세요
             </Text>
             <Text className="text-md">
-              <Info /> 명확하게 정답이 있는 질문으로 만들어주세요
+              <InfoIcon /> 명확하게 정답이 있는 질문으로 만들어주세요
             </Text>
             <Text className="text-md">
-              <Info /> 10자 이내로 답변할 수 있는 질문으로 만들어주세요
+              <InfoIcon /> 10자 이내로 답변할 수 있는 질문으로 만들어주세요
             </Text>
             <TouchableOpacity
               className="bg-gray-200 rounded-lg my-2 py-4"
@@ -141,6 +141,13 @@ export default function QuestionScreen({
           <RoundButton
             content="등록"
             onPress={() => {
+              if(recipient.secretAnswer) {
+                recipient.secretQuestion = question;
+                recipient.secretAnswer = answer;
+                updateRecipient(recipient)
+                navigation.navigate('RemainComplete', recipient);
+                return;
+              }
               recipient.secretQuestion = question;
               recipient.secretAnswer = answer;
               postRecipient(recipient)
