@@ -98,3 +98,28 @@ export const sendSignupRequest = async (
     return null;
   }
 };
+
+export interface NoticeRequest {
+  push: boolean;
+}
+
+export interface NoticeResponse {
+  status: number;
+}
+
+export const sendNoticeRequest = async (
+  data: NoticeRequest,
+): Promise<NoticeResponse | null> => {
+  try {
+    console.log('Sending Notice request with data:', data);
+    const response = await publicApi.post<NoticeResponse>(
+      '/users/setting',
+      data,
+    );
+    console.log('Notice response:', response);
+    return response;
+  } catch (error) {
+    console.log('Error sending Notice request:', error);
+    return null;
+  }
+};
