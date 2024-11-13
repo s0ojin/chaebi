@@ -19,7 +19,7 @@ def categorize_image(presigned_url: str = Query(..., description="S3 Presigned U
         
         # print(categories[1])
 
-        return {"Categories": categories}
+        return categories
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
