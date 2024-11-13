@@ -130,7 +130,13 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
 
     @Override
     public PairDTO enterRecipient(EnterReq req) {  //열람자 삭제
-        PairDTO pair = idConverterService.extractIds(req.getEnterCode());
+        //PairDTO pair = idConverterService.extractIds(req.getEnterCode());
+        Recipient recipient = repository.findByEnterCode(req.getEnterCode());
+        PairDTO pair = PairDTO.builder()
+                        .userId(recipient.getUser().getId())
+                                .recipientId(recipient.getId())
+                                        .build();
+
         System.out.println("user : " + pair.getUserId() + "recipientId :" + pair.getRecipientId());
         if(!repository.findById(pair.getRecipientId()).isPresent())
             throw new NotFoundException("Recipient not found");
