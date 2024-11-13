@@ -17,7 +17,7 @@ def categorize_from_url(image_data: bytes) -> list:
     model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
     processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
-    texts = ["family", "friends", "sky", "abstract", "robots", "travel", "fantasy", "pets", "celebrations", "architecture"]
+    texts = ["family", "friends", "sky", "sea", "robots", "travel", "fantasy", "pets", "celebrations", "architecture"]
     inputs = processor(text=texts, images=img, return_tensors="pt", padding=True)
 
     outputs = model(**inputs)
