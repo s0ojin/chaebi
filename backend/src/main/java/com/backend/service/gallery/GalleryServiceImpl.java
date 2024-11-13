@@ -13,21 +13,27 @@ import com.backend.repository.GalleryRepository;
 import com.backend.repository.RecipientRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GalleryServiceImpl implements GalleryService {
@@ -352,27 +358,34 @@ public class GalleryServiceImpl implements GalleryService {
     
     //Fast API 통신
     private void sendToFastApi(URL presignedUrl) {
-        System.out.println("진입");
-        String uri = fastApiUrl + "categorize";
-
+        log.info("FastAPI 통신 시작");
+        StringBuilder sb = new StringBuilder();
         try {
-            String response = webClient.get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path(uri)
-                            .queryParam("presigned_url", presignedUrl.toString())
-                            .build())
+            log.info(presignedUrl.toString());
+            sb.append(fastApiUrl).append("categorize?presigned_url=").append(presignedUrl.toString());
+            log.info(sb.toString());
+            String response = webClient
+                    .get()
+                    .uri(sb.toString())
+                    .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
-                    .onStatus(status -> status.is4xxClientError(),
-                            error -> Mono.error(new RuntimeException("Client Error")))
-                    .onStatus(status -> status.is5xxServerError(),
-                            error -> Mono.error(new RuntimeException("Server Error")))
                     .bodyToMono(String.class)
-                    .block(Duration.ofSeconds(10));
+                    .doOnError(error -> log.error("FastAPI 통신 중 에러 발생: {}", error.getMessage()))
+                    .doOnSuccess(result -> log.info("FastAPI 응답 성공: {}", result))
+                    .block(Duration.ofSeconds(30)); // timeout 시간을 30초로 증가
 
-            System.out.println("Response: " + response);
+            if (response != null) {
+                log.info("FastAPI 응답: {}", response);
+            } else {
+                throw new RuntimeException("FastAPI로부터 응답이 없습니다.");
+            }
 
+        } catch (WebClientResponseException e) {
+            log.error("FastAPI 응답 에러: {} - {}", e.getRawStatusCode(), e.getResponseBodyAsString());
+            throw new RuntimeException("FastAPI 통신 실패: " + e.getMessage());
         } catch (Exception e) {
-            throw new RuntimeException("FastAPI 호출 중 에러 발생: " + e.getMessage());
+            log.error("예상치 못한 에러 발생: {}", e.getMessage());
+            throw new RuntimeException("FastAPI 통신 중 에러 발생: " + e.getMessage());
         }
     }
 }
