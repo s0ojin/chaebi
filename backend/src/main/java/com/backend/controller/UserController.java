@@ -1,13 +1,11 @@
 package com.backend.controller;
 
 import com.backend.domain.User;
-import com.backend.dto.CertReqDTO;
-import com.backend.dto.LoginDTO;
-import com.backend.dto.SettingDTO;
-import com.backend.dto.SignDTO;
+import com.backend.dto.*;
 import com.backend.repository.UserRepository;
 import com.backend.service.firebase.FirebaseService;
 import com.backend.service.sms.SmsService;
+import com.backend.service.user.UserService;
 import com.backend.service.user.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated // DTO 유효성 검사 활성화
 @Tag(name = "사용자 회원관리", description = "회원정보 관련 서비스")
 public class UserController {
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userServiceImpl;
     private final UserRepository userRepository;
     private final FirebaseService firebaseService;
 
@@ -32,6 +30,9 @@ public class UserController {
     @Operation(summary = "유저 회원가입", description = "Register a new user.")
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody SignDTO signDTO, HttpServletResponse response){
+        if(signDTO.getFcmToken().isEmpty())
+            return ResponseEntity.status(415).body("token : " + signDTO.getFcmToken());
+        System.out.println("token : " + signDTO.getFcmToken());
         userServiceImpl.signup(signDTO, response);
         return ResponseEntity.ok().body("Sign up successful"); //회원가입 성공
     }
@@ -43,9 +44,10 @@ public class UserController {
             return ResponseEntity.status(215).body("회원가입 해야합니다.");
         }
         else {
-            userServiceImpl.login(loginDTO, response);
+           TokenRes token =  userServiceImpl.login(loginDTO.getPhone(), response);
             //로그인 되었을 때 토큰 발급
-            return ResponseEntity.ok().body("로그인 되었습니다."); // 로그인 성공
+            System.out.println("로그인 성공  token : " + token.getAccessToken());
+            return ResponseEntity.ok().body(token); // 로그인 성공
         }
     }
 
@@ -61,5 +63,12 @@ public class UserController {
     public ResponseEntity<String> setting(SettingDTO settingDTO, HttpServletRequest request) {
         userServiceImpl.logout(request);
         return ResponseEntity.ok("로그아웃이 완료되었습니다."); //로그아웃(?)
+    }
+
+    @Operation(summary = "유저 탈퇴", description = "탈퇴")
+    @DeleteMapping("/quit")
+    public ResponseEntity<String> quit(HttpServletRequest request) {
+        userServiceImpl.quit(request);
+        return ResponseEntity.ok("탈퇴되었습니다.");
     }
 }
