@@ -1,12 +1,9 @@
 package com.backend.service.user;
 
-import com.backend.dto.CertReqDTO;
-import com.backend.dto.SettingDTO;
+import com.backend.dto.*;
 import com.backend.service.sms.SmsService;
 import jakarta.servlet.http.Cookie;
 import com.backend.domain.User;
-import com.backend.dto.LoginDTO;
-import com.backend.dto.SignDTO;
 import com.backend.repository.UserRepository;
 import com.backend.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,29 +39,18 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         userRepository.save(user);
-        this.login(new LoginDTO(signDTO.getPhone()), response); // 회원가입 후 로그인 까지 
+        this.login(signDTO.getPhone(), response); // 회원가입 후 로그인 까지
     }
 
     @Transactional
-    public void login(LoginDTO loginDTO, HttpServletResponse response) {
-        User user = userRepository.findByPhone(loginDTO.getPhone())
+    public TokenRes login(String phone, HttpServletResponse response) {
+        User user = userRepository.findByPhone(phone)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
             user.setLastLogin(LocalDateTime.now());
-
-            Cookie accessCookie = new Cookie("accessToken", jwtUtil.generateAccessToken(user.getPhone()));
-            //accessCookie.setHttpOnly(true);
-            //accessCookie.setSecure(true);
-            accessCookie.setPath("/");
-            accessCookie.setMaxAge(60 * 60 * 12);
-            Cookie refreshCookie = new Cookie("refreshToken", jwtUtil.generateRefreshToken(user.getPhone()));
-            //refreshCookie.setHttpOnly(true);
-            //refreshCookie.setSecure(true);
-            refreshCookie.setPath("/");
-            refreshCookie.setMaxAge(60 * 60 * 24 * 3);
-            response.addCookie(accessCookie);
-            response.addCookie(refreshCookie);
-            System.out.println(" token " + " " + accessCookie.getValue());
+            TokenRes token = new TokenRes(jwtUtil.generateAccessToken(user.getPhone()),jwtUtil.generateRefreshToken(user.getPhone()));
+            System.out.println(" token " + " " + token.getAccessToken());
             userRepository.save(user);
+            return token;
     }
 
     @Transactional
@@ -92,10 +78,15 @@ public class UserServiceImpl implements UserService {
 //        System.out.println("user : " + user.get().getPhone());
 //        System.out.println("user OP : " + user);
 //        return userRepository.findByPhone(userPhone);
-        return userRepository.findByPhone("010-1111-1111"); //테스트
+        return userRepository.findByPhone("01011111111"); //테스트
     }
 
-
+    @Override
+    public void quit(HttpServletRequest request) {
+        User user = this.getUserByToken(request).get();
+        user.setStatus(false);
+        userRepository.save(user); // soft Delete
+    }
 
 
 }
