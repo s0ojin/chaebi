@@ -75,7 +75,7 @@ export default function Footer({currentPage, navigation}: FooterProps) {
         <Pressable
           onPress={() => {
             // 마이페이지로 이동
-            navigation.navigate;
+            navigation.navigate('Setting');
           }}
           className="items-center w-20">
           <PersonIcon width={32} height={32} color="#D2D2D2" />
