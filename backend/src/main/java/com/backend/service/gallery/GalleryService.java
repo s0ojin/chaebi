@@ -13,6 +13,6 @@ public interface GalleryService {
     void markAsRead(Long galleryId, Long recipientId);
     List<GalleryResDTO> getFileUrlByUser(User user);
     List<GalleryResDTO> getFileUrlByUserAndRecipient(User user, Long recipientId);
-    GalleryResDTO uploadFile(MultipartFile file, Set<Long> recipientIds, User user);
+    GalleryResDTO uploadFile(MultipartFile file, UploadDTO uploadDTO, User user);
     String uploadProfile(MultipartFile file, Long id, User user);
 }

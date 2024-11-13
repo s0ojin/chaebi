@@ -88,7 +88,7 @@ public class GalleryController {
             // 각 파일별로 처리
             for (MultipartFile file : files) {
                 if (!file.isEmpty()) {
-                    GalleryResDTO response = galleryService.uploadFile(file, uploadDTO.getRecipientIds(), user);
+                    GalleryResDTO response = galleryService.uploadFile(file, uploadDTO, user);
                     responses.add(response);
                 }
             }
