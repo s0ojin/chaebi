@@ -39,8 +39,10 @@ public class GalleryServiceImpl implements GalleryService {
     private String bucket;
 
     @Transactional
-    public GalleryResDTO uploadFile(MultipartFile file, Set<Long> recipientIds, User user) {
+    public GalleryResDTO uploadFile(MultipartFile file, UploadDTO uploadDTO, User user) {
         try {
+            Set<Long> recipientIds = uploadDTO.getRecipientIds();
+
             System.out.println("1. Starting file upload process");
             System.out.println("File name: " + file.getOriginalFilename());
             System.out.println("File size: " + file.getSize());
@@ -75,6 +77,9 @@ public class GalleryServiceImpl implements GalleryService {
                     .withExpiration(getPresignedUrlExpiration());
 
             URL presignedUrl = s3Client.generatePresignedUrl(presignedUrlRequest);
+
+            //1. presignedUrl을 FastAPI에 전송
+            //2. 메타데이터 토대로 정보 추출
 
             // 3. Gallery 엔티티 생성 및 저장
             Gallery gallery = new Gallery();
