@@ -39,7 +39,6 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
         setCountdown(prev => prev - 1);
       }, 1000);
     }
-
     if (countdown === 0) {
       setIsCounting(false);
       setCountdown(300);
@@ -50,22 +49,15 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
 
   const handleSendAuthCode = async () => {
     try {
-      // sendSmsCertRequest 함수로 API 호출
       const response = await sendSmsCertRequest({phoneNum: phoneNumber});
-
-      // 전체 응답 객체 로그 확인
       console.log('Response:', response);
-
-      // 응답 상태가 200인 경우 인증 코드 요청 후 화면 업데이트
       if (response && response.status === 200) {
         setShowAuth(true);
         setIsCounting(true);
       } else {
-        // 응답 상태가 200이 아닐 경우 처리
         console.error('Failed to send auth code:', response);
       }
     } catch (error) {
-      // API 호출 중 오류가 발생한 경우 에러 로그 출력
       console.error('Error sending auth code:', error);
     }
   };
@@ -128,7 +120,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
 
   return (
     <View className="flex-1 bg-white">
-      {step === 0 || (step === 1 && <Header pageName="시작하기" />)}
+      {(step === 0 || step === 1) && <Header pageName="시작하기" />}
       {step === 0 && (
         //step0
         <View className="mt-8 gap-9">
