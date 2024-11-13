@@ -15,6 +15,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
 import messaging from '@react-native-firebase/messaging';
 import {useToast} from '../../components/ToastContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type SignUpScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'SignUp'>;
@@ -70,8 +71,18 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     console.log('Response:', response);
     if (response && response.status === 200) {
       const signinResponse = await sendSigninRequest({phone: phoneNumber});
-      console.log('Signin Response:', response);
+      console.log('Signin Response:', signinResponse);
       if (signinResponse && signinResponse.status === 200) {
+        await AsyncStorage.setItem(
+          'accessToken',
+          signinResponse.data.accessToken,
+        );
+        console.log('accessToken:', await AsyncStorage.getItem('accessToken'));
+        await AsyncStorage.setItem(
+          'refreshToken',
+          signinResponse.data.refreshToken,
+        );
+        console.log('refreshToken:', await AsyncStorage.getItem('refreshToken'));
         showToast(`${name}님 환영합니다.`);
         navigation.navigate('Main');
       } else if (signinResponse && signinResponse.status === 215) {
