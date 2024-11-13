@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { MasonryItem } from '@/types/archive'
-import IntroMessage from '@/components/archive/IntroMessage'
 import CustomTab from '@/components/ui/CustomTab'
 import CustomCarousel from '@/components/archive/CustomCarousel'
 import MasonryGrid from '@/components/archive/MasonryGrid'
-import AnimatedLetter from '@/components/archive/AnimatedLetter'
+import ArchiveContent from '@/containers/ArchiveContent'
 
 export default function Archive() {
   const [data, setData] = useState<MasonryItem[]>([])
@@ -27,14 +26,11 @@ export default function Archive() {
 
   return (
     <div className="flex flex-col items-center w-full p-5">
-      <div className="mb-4">
-        <IntroMessage senderName="김싸피" receiverName="박수진" />
-      </div>
-      <div className="mb-3">
+      <div className="mt-5 mb-3">
         <CustomTab onTabChange={handleTabChange} />
       </div>
       {currentTab === '편지' ? (
-        <AnimatedLetter />
+        <ArchiveContent />
       ) : (
         <>
           <div className="w-full mb-4">
