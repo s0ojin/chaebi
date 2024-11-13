@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {View} from 'react-native';
+import {Image, View} from 'react-native';
 import Text from '../../components/CustomText';
 import Header from '../../components/Header';
 import InputField from '../../components/InputField';
 import RoundButton from '../../components/RoundButton';
 import {
+  sendNoticeRequest,
   sendSigninRequest,
   sendSignupRequest,
   sendSmsCertRequest,
@@ -27,7 +28,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
   const [name, setName] = useState<string>('');
   const [countdown, setCountdown] = useState<number>(300);
   const [isCounting, setIsCounting] = useState<boolean>(false);
-  const [fcmToken, setFcmToken] = useState<string>('');
+  // const [fcmToken, setFcmToken] = useState<string>('');
   const {showToast} = useToast();
 
   useEffect(() => {
@@ -79,6 +80,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
       const signinResponse = await sendSigninRequest({phone: phoneNumber});
       console.log('Signin Response:', response);
       if (signinResponse && signinResponse.status === 200) {
+        showToast(`${name}님 환영합니다.`);
         navigation.navigate('Main');
       } else if (signinResponse && signinResponse.status === 215) {
         setStep(step + 1);
@@ -91,32 +93,42 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
       try {
         const token = await messaging().getToken();
         console.log('token is : ', token);
-        await setFcmToken(token);
+        return token;
       } catch (error) {
         console.log('Error getting FcmToken : ', error);
+        return '';
       }
     };
-
-    // getFcmToken이 완료될 때까지 대기
-    await getFcmToken();
-
-    // fcmToken이 설정된 후 sendSignupRequest 호출
+    const token = await getFcmToken();
     const response = await sendSignupRequest({
       phone: phoneNumber,
       name: name,
-      fcmToken: fcmToken, // 이 시점에 fcmToken이 설정되었음
+      fcmToken: token,
     });
 
     console.log('Response:', response);
     if (response && response.status === 200) {
-      showToast(`${name}님 환영합니다.`);
       setStep(step + 1);
+    }
+  };
+
+  const handleNotice = () => {
+    navigation.navigate('Main');
+    showToast(`${name}님 환영합니다.`);
+  };
+
+  const handleUnnotice = async () => {
+    const response = await sendNoticeRequest({push: false});
+    console.log('Response:', response);
+    if (response && response.status === 200) {
+      navigation.navigate('Main');
+      showToast(`${name}님 환영합니다.`);
     }
   };
 
   return (
     <View className="flex-1 bg-white">
-      <Header pageName="회원가입" />
+      {step === 0 || (step === 1 && <Header pageName="시작하기" />)}
       {step === 0 && (
         //step0
         <View className="mt-8 gap-9">
@@ -181,8 +193,30 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
       )}
       {step === 2 && (
         //step2
-        <View>
-          <Text>Hi</Text>
+        <View className="flex-1">
+          <View className="flex-1 items-center justify-center">
+            <Image source={require('../../assets/icon/Bell.png')} />
+            <Text className="text-center text-4xl mt-10">푸시 알림 받기</Text>
+            <Text className="text-center text-2xl mt-20">
+              채비는 7일 간격으로 앱에 방문하지 않을 시{'\n'}사용자의 생존여부를
+              묻는 푸시알림을 전송합니다.
+            </Text>
+            <Text className="text-center text-2xl mt-10">
+              장기미방문 알림은 서비스 이용에 중요한 알림이니{'\n'}반드시 활성화
+              후 사용해주세요!
+            </Text>
+          </View>
+          <View className="p-4 w-full justify-end">
+            <Text className="text-center text-xl mb-8 text-primary-300">
+              알림에 동의하지 않아도 서비스를 이용할 수 있습니다.
+            </Text>
+            <RoundButton content="알림 받기" onPress={handleNotice} />
+            <Text
+              className="text-center text-2xl my-9 text-primary-300"
+              onPress={handleUnnotice}>
+              다음에 할게요!
+            </Text>
+          </View>
         </View>
       )}
     </View>
