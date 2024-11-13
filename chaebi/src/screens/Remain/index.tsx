@@ -47,74 +47,6 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
       })
       .catch(error => {
         console.log(error);
-        setRecipientList(
-          JSON.parse(`[
-        {
-          "id": 1,
-          "name": "조조",
-          "phone": "010-1111-1111",
-          "imgUrl": null,
-          "secretQuestion": "담임선생님 성함",
-          "secretAnswer": "이유이"
-        },
-        {
-          "id": 2,
-          "name": "관우",
-          "phone": "010-1111-1112",
-          "imgUrl": null,
-          "secretQuestion": "컨설님 성함",
-          "secretAnswer": "박세영"
-        },
-        {
-          "id": 3,
-          "name": "유비",
-          "phone": "010-1111-1112",
-          "imgUrl": null,
-          "secretQuestion": "컨설턴트님 성함",
-          "secretAnswer": "박세영"
-        },
-        {
-          "id": 4,
-          "name": "장비",
-          "phone": "010-1111-1112",
-          "imgUrl": null,
-          "secretQuestion": "실습 코치님 성함",
-          "secretAnswer": "이종재"
-        },
-        {
-          "id": 5,
-          "name": "제갈량",
-          "phone": "010-1111-1112",
-          "imgUrl": null,
-          "secretQuestion": "코치님 성함",
-          "secretAnswer": "이종재"
-        },
-        {
-          "id": 6,
-          "name": "주유",
-          "phone": "010-1111-1112",
-          "imgUrl": null,
-          "secretQuestion": "실습 코치님 성함",
-          "secretAnswer": "김윤지"
-        },
-        {
-          "id": 7,
-          "name": "원소",
-          "phone": "010-1111-1112",
-          "imgUrl": null,
-          "secretQuestion": "코치님 성함",
-          "secretAnswer": "김윤지"
-        },
-        {
-          "id": 8,
-          "name": "원술",
-          "phone": "010-1111-1112",
-          "imgUrl": null,
-          "secretQuestion": "프로님 성함",
-          "secretAnswer": "이유이"
-        }
-      ]`),
-        );
       });
   }, []);
 
@@ -134,7 +66,23 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
             <Text className="text-center text-lg">{NO_ONE_INFO}</Text>
             <TouchableOpacity
               className="bg-gray-500 rounded-full w-16 h-16 justify-center items-center mt-5"
-              onPress={() => setShowAuth(true)}>
+              onPress={() => {
+                setMoveToList([
+                  {
+                    title: '연락처에서 받아오기',
+                    moveTo: () => {
+                      navigation.navigate('Contacts');
+                    },
+                  },
+                  {
+                    title: '직접 입력하기',
+                    moveTo: () => {
+                      navigation.navigate('RemainWrite');
+                    },
+                  },
+                ]);
+                setShowAuth(true);
+              }}>
               <Plus className="m-auto" />
             </TouchableOpacity>
           </View>
