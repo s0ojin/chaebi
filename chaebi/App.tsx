@@ -23,6 +23,7 @@ import SetAlertScreen from './src/screens/Mypage/SetAlert';
 
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import SetLockScreen from './src/screens/Mypage/SetLock';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -53,28 +54,33 @@ const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ToastProvider>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="Splash" component={SplashScreen} />
-            <Stack.Screen name="AppIntro" component={AppIntroScreen} />
-            <Stack.Screen name="SignUp" component={SignUpScreen} />
-            <Stack.Screen name="SignIn" component={SignInScreen} />
-            <Stack.Screen name="Absence" component={AbsenceScreen} />
-            <Stack.Screen name="SendCode" component={SendCodeScreen} />
-            <Stack.Screen name="Remain" component={RemainScreen} />
-            <Stack.Screen name="Contacts" component={ContactScreen} />
-            <Stack.Screen name="RemainWrite" component={RemainWriteScreen} />
-            <Stack.Screen name="RemainQuestion" component={QuestionScreen} />
-            <Stack.Screen name="RemainComplete" component={CompleteScreen} />
-            <Stack.Screen name="Main" component={MainScreen} />
-            <Stack.Screen name="SetPw" component={SetPasswordScreen} />
-            <Stack.Screen name="RemainEditor" component={RemainEditorScreen} />
-            <Stack.Screen name="Album" component={AlbumScreen} />
-            <Stack.Screen name="Setting" component={MypageScreen} />
+        <GestureHandlerRootView>
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={{headerShown: false}}>
+              <Stack.Screen name="Splash" component={SplashScreen} />
+              <Stack.Screen name="AppIntro" component={AppIntroScreen} />
+              <Stack.Screen name="SignUp" component={SignUpScreen} />
+              <Stack.Screen name="SignIn" component={SignInScreen} />
+              <Stack.Screen name="Absence" component={AbsenceScreen} />
+              <Stack.Screen name="SendCode" component={SendCodeScreen} />
+              <Stack.Screen name="Remain" component={RemainScreen} />
+              <Stack.Screen name="Contacts" component={ContactScreen} />
+              <Stack.Screen name="RemainWrite" component={RemainWriteScreen} />
+              <Stack.Screen name="RemainQuestion" component={QuestionScreen} />
+              <Stack.Screen name="RemainComplete" component={CompleteScreen} />
+              <Stack.Screen name="Main" component={MainScreen} />
+              <Stack.Screen name="SetPw" component={SetPasswordScreen} />
+              <Stack.Screen
+                name="RemainEditor"
+                component={RemainEditorScreen}
+              />
+              <Stack.Screen name="Album" component={AlbumScreen} />
+              <Stack.Screen name="Setting" component={MypageScreen} />
             <Stack.Screen name="SetAlert" component={SetAlertScreen} />
             <Stack.Screen name="SetLock" component={SetLockScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
+            </Stack.Navigator>
+          </NavigationContainer>
+        </GestureHandlerRootView>
       </ToastProvider>
     </QueryClientProvider>
   );

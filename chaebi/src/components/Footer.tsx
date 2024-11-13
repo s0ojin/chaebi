@@ -1,5 +1,5 @@
-import {View, Text, Touchable, Pressable} from 'react-native';
-import React, {useState} from 'react';
+import {View, Text, Pressable} from 'react-native';
+import React from 'react';
 import HomeIcon from '../assets/icon/home.svg';
 import BoxIcon from '../assets/icon/box.svg';
 import LayoutIcon from '../assets/icon/layout.svg';
@@ -16,7 +16,7 @@ interface FooterProps {
 
 export default function Footer({currentPage, navigation}: FooterProps) {
   return (
-    <View className="flex-row justify-between px-2 my-2">
+    <View className="flex-row items-center justify-between bg-white h-20 p-4">
       {currentPage === 'home' ? (
         <View className="items-center w-20">
           <HomeIcon width={32} height={32} color="#444444" />
@@ -58,7 +58,7 @@ export default function Footer({currentPage, navigation}: FooterProps) {
         <Pressable
           onPress={() => {
             // 채우기로 이동
-            navigation.navigate;
+            navigation.navigate('Album');
           }}
           className="items-center w-20">
           <LayoutIcon width={32} height={32} color="#D2D2D2" />
