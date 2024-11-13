@@ -23,7 +23,7 @@ export default function RemainWriteScreen({
 
   useEffect(() => {
     function checkNumber(number: string): boolean {
-      if (number.length === 13 && number.charAt(0) === '0') {
+      if (number.length === 11 && number.charAt(0) === '0') {
         return true;
       }
       return false;

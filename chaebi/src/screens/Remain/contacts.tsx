@@ -17,27 +17,6 @@ import User from '../../assets/icon/User.svg';
 import Header from '../../components/Header';
 import RoundButton from '../../components/RoundButton';
 
-// 공식문서에 작성된 연락처 권한 승인
-// PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
-//         title: 'Contacts',
-//         message: 'This app would like to view your contacts.',
-//         buttonPositive: 'Please accept bare mortal',
-//     })
-//         .then((res) => {
-//             console.log('Permission: ', res);
-//             Contacts.getAll()
-//                 .then((contacts) => {
-//                     // work with contacts
-//                     console.log(contacts);
-//                 })
-//                 .catch((e) => {
-//                     console.log(e);
-//                 });
-//         })
-//         .catch((error) => {
-//             console.error('Permission error: ', error);
-//         });
-
 type ContactScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'RemainWrite'>;
 };
@@ -105,6 +84,7 @@ export default function ContactScreen({navigation}: ContactScreenProps) {
                 navigation.navigate('RemainQuestion', {
                   name: `${item.familyName.trim()}${item.givenName}`,
                   phone: `${item.phoneNumbers[0]?.number}`,
+                  imgUrl: `${item.thumbnailPath}`
                 });
               }}>
               <View className="flex-row justify-left items-center">
