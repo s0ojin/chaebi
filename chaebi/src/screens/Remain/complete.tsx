@@ -36,7 +36,7 @@ export default function CompleteScreen({
             <Text className="text-2xl text-center">{recipient.name}</Text>
             <Text className="text-xl text-center">{recipient.phone}</Text>
             <Text className="text-xl text-center">{`Q: ${recipient.secretQuestion}`}</Text>
-            <Text className="text-xl text-center">{`A: ${recipient.secretAnswer}`}</Text>
+            <Text className="text-xl text-center ">{`A: ${recipient.secretAnswer}`}</Text>
           </View>
           <DecoBotIcon />
         </View>
@@ -52,11 +52,11 @@ export default function CompleteScreen({
           />
           <RoundButton
             content="다음에 남기기"
-            backgroundColor={'bg-[#D9D9D9]'}
-            fontColor={'text-[#444444]'}
+            backgroundColor={'bg-primary-200'}
+            fontColor={'text-primary-400'}
             onPress={() => {
               // 열람인 리스트로 이동하기
-              navigation.navigate('Remain');
+              navigation.push('Remain');
             }}
           />
         </View>

@@ -2,26 +2,8 @@ import {View, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 import Setting from '../assets/icon/settings-alt.svg';
 import Text from './CustomText';
-import {Message} from '../screens/Remain/index';
+import {Recipient} from '../screens/Remain/index';
 
-/*
-  export interface Message {
-    id?: number;
-    title: string;
-    userId?: number;
-    recipient: Recipient;
-    lastModifiedDate: Date;
-    // true가 중간정렬?
-    sort: boolean;
-  }
-
-  export interface Recipient {
-    id?: number;
-    name: string;
-    phone: string;
-    imgUrl: string;
-  }
-*/
 const calculateDate = function (date: string) {
   let update = new Date(date);
   let now = new Date();
@@ -49,15 +31,17 @@ const calculateDate = function (date: string) {
 };
 
 interface RemainListViewProp {
-  message: Message;
+  recipient: Recipient;
   isSetting: boolean;
   setOnPress?: () => void;
+  setOnSet?: () => void;
 }
 
 export default function RemainListView({
-  message,
+  recipient,
   isSetting,
   setOnPress,
+  setOnSet,
 }: RemainListViewProp) {
   return (
     <TouchableOpacity
@@ -65,27 +49,30 @@ export default function RemainListView({
       onPress={setOnPress}>
       <View className="flex-row justify-left items-center">
         {/* 사용자 이미지 */}
-        {message.recipient.imgUrl === null ||
-        message.recipient.imgUrl === '' ? (
-          <View className="bg-[#000] rounded-full w-12 h-12" />
+        {recipient.imgUrl === null || recipient.imgUrl === '' ? (
+          <View className="bg-primary-300 rounded-full w-12 h-12" />
         ) : (
           <Image
-            source={{uri: message.recipient.imgUrl}}
+            source={{uri: recipient.imgUrl}}
             className="rounded-full w-12 h-12"
           />
         )}
         {/* 사용자 정보 */}
         <View className="ml-4 gap-2">
-          <Text className="text-[14px]">{message.recipient.name}</Text>
-          <Text className="text-[14px]">{message.recipient.phone}</Text>
+          <Text className="text-xl">{recipient.name}</Text>
+          <Text className="text-base">{recipient.phone}</Text>
         </View>
       </View>
       {isSetting ? (
-        <Setting />
+        <Pressable onPress={setOnSet}>
+          <Setting />
+        </Pressable>
       ) : (
         <View className="flex-row h-full py-4 items-end">
           <Text className="">
-            마지막 수정 : {calculateDate(message.lastModifiedDate)}
+            {recipient.lastModifiedDate
+              ? `마지막 수정 : ${calculateDate(recipient.lastModifiedDate)}`
+              : ''}
           </Text>
         </View>
       )}
