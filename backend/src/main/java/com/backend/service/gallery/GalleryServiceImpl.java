@@ -17,11 +17,15 @@ import com.backend.repository.RecipientRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -34,9 +38,13 @@ public class GalleryServiceImpl implements GalleryService {
     private final RecipientRepository recipientRepository;
     private final GalleryRecipientRepository galleryRecipientRepository;
     private final AmazonS3 s3Client;
+    private final WebClient webClient;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+
+    @Value("${fastApi.url}")
+    String fastApiUrl;
 
     @Transactional
     public GalleryResDTO uploadFile(MultipartFile file, UploadDTO uploadDTO, User user) {
@@ -339,5 +347,26 @@ public class GalleryServiceImpl implements GalleryService {
         return galleries.stream()
                 .map(gallery -> new GalleryResDTO(gallery))
                 .collect(Collectors.toList());
+    }
+    
+    //Fast API 통신
+    private List<String> sendToFastApi(URL presignedUrl){
+        Map<String, Object> body = new HashMap<>();
+        body.put("presignedUrl", presignedUrl);
+
+        try {
+            return webClient.post()
+                    .uri(fastApiUrl)
+                    .bodyValue(body)
+                    .retrieve()
+                    .onStatus(status -> status.is4xxClientError(),
+                            error -> Mono.error(new RuntimeException("Client Error")))
+                    .onStatus(status -> status.is5xxServerError(),
+                            error -> Mono.error(new RuntimeException("Server Error")))
+                    .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
+                    .block(Duration.ofSeconds(10)); // 10초 timeout 설정
+        } catch (Exception e) {
+            throw new RuntimeException("FastAPI 호출 중 에러 발생: " + e.getMessage());
+        }
     }
 }
