@@ -1,3 +1,4 @@
+import {AxiosResponse} from 'axios';
 import {publicApi} from './instance';
 
 export interface SmsCertRequest {
@@ -14,7 +15,10 @@ export const sendSmsCertRequest = async (
   try {
     console.log('Sending SMS cert request with data:', data); // 요청 전에 데이터 로깅
 
-    const response = await publicApi.post<SmsCertResponse>('/api/sms/cert', data);
+    const response = await publicApi.post<SmsCertResponse>(
+      '/api/sms/cert',
+      data,
+    );
 
     console.log('SMS cert request successful:', response); // 성공적으로 응답을 받은 경우
     return response;
@@ -54,18 +58,25 @@ export interface SigninRequest {
   phone: string;
 }
 
-export interface SigninResponse {
-  status: number;
+export interface SigninResponseData {
+  accessToken: string;
+  refreshToken: string;
 }
+
+// AxiosResponse의 제네릭을 활용하여 전체 응답 객체 타입 지정
+export type SigninResponse = AxiosResponse<SigninResponseData>;
 
 export const sendSigninRequest = async (
   data: SigninRequest,
 ): Promise<SigninResponse | null> => {
   try {
     console.log('Sending Signin request with data:', data);
-    const response = await publicApi.post<SigninResponse>('/api/users/login', data);
+    const response = await publicApi.post<SigninResponseData>(
+      '/api/users/login',
+      data,
+    );
     console.log('Signin response:', response);
-    return response;
+    return response; // 전체 response 반환
   } catch (error) {
     console.log('Error sending Signin request:', error);
     return null;
