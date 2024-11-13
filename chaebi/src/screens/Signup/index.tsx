@@ -21,7 +21,7 @@ type SignUpScreenProps = {
 
 export default function SignUpScreen({navigation}: SignUpScreenProps) {
   const [showAuth, setShowAuth] = useState<boolean>(false);
-  const [doneAuth, setDoneAuth] = useState<boolean>(false);
+  const [step, setStep] = useState<number>(0);
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [authCode, setAuthCode] = useState<string>('');
   const [name, setName] = useState<string>('');
@@ -81,7 +81,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
       if (signinResponse && signinResponse.status === 200) {
         navigation.navigate('Main');
       } else if (signinResponse && signinResponse.status === 215) {
-        setDoneAuth(true);
+        setStep(step + 1);
       }
     }
   };
@@ -110,14 +110,15 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     console.log('Response:', response);
     if (response && response.status === 200) {
       showToast(`${name}님 환영합니다.`);
-      navigation.navigate('Main');
+      setStep(step + 1);
     }
   };
 
   return (
     <View className="flex-1 bg-white">
       <Header pageName="회원가입" />
-      {!doneAuth ? (
+      {step === 0 && (
+        //step0
         <View className="mt-8 gap-9">
           <View className="px-6 gap-5">
             <Text className="text-2xl">
@@ -162,7 +163,9 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
             </View>
           ) : null}
         </View>
-      ) : (
+      )}
+      {step === 1 && (
+        //step1
         <View className="mt-8 gap-9">
           <View className="px-6 gap-5">
             <Text className="text-2xl">성함을 알려주세요.</Text>
@@ -176,8 +179,12 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
           </View>
         </View>
       )}
+      {step === 2 && (
+        //step2
+        <View>
+          <Text>Hi</Text>
+        </View>
+      )}
     </View>
   );
 }
-
-cin >> a >> b >> c;
