@@ -29,8 +29,8 @@ export const updateRecipient: (
 ) => Promise<string> = async (payload: Recipient) => {
   const formData = new FormData();
   formData.append('data', JSON.stringify(payload));
-  const response = await publicFormApi.post(
-    `/api/recipient/create`,
+  const response = await publicFormApi.put(
+    `/api/recipient/update`,
     formData,
   );
   return response.data;

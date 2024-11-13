@@ -1,4 +1,5 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
+import Text from './CustomText';
 import React from 'react';
 
 interface RoundButtonProps {
@@ -25,7 +26,7 @@ export default function RoundButton({
           disabled ? 'bg-primary-200' : backgroundColor
         } ${border ? border : ''}`}>
         <Text
-          className={`font-leeseoyoon text-2xl text-center ${
+          className={`text-2xl text-center ${
             disabled ? 'text-primary-300' : fontColor
           }`}>
           {content}
