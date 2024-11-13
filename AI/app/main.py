@@ -1,9 +1,22 @@
 # main.py
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 from app.fasttest import categorize_from_url
 import requests
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:8080",     # Spring Boot 서버
+        "http://localhost:3000",     # React 서버
+        "http://k11a309.p.ssafy.io:8080"     # 프로덕션 도메인
+    ],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization", "Accept"],
+)
 
 @app.get("/categorize")
 def categorize_image(presigned_url: str = Query(..., description="S3 Presigned URL for the image")):

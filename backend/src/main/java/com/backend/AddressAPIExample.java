@@ -32,14 +32,21 @@ public class AddressAPIExample {
             JSONObject jsob = (JSONObject) jspa.parse(new BufferedReader(new InputStreamReader(new URL(sb.toString()).openStream(), StandardCharsets.UTF_8)));
             JSONObject jsrs = (JSONObject) jsob.get("response");
             JSONArray jsonArray = (JSONArray) jsrs.get("result");
-            JSONObject jsonfor;
-            for (int i = 0; i < jsonArray.size(); i++) {
-                jsonfor = (JSONObject) jsonArray.get(i);
-                System.out.println(jsonfor.get("text"));
+
+            for (Object obj : jsonArray) {
+                JSONObject jsonfor = (JSONObject) obj;
+                JSONObject structure = (JSONObject) jsonfor.get("structure");
+
+                // level0 to level3
+                StringBuilder address = new StringBuilder();
+                address.append(structure.get("level0")).append(" ");
+                address.append(structure.get("level1")).append(" ");
+                address.append(structure.get("level2"));
+
+                System.out.println(address.toString());
             }
         } catch (IOException | ParseException e) {
             throw new RuntimeException(e);
         }
     }
 }
-
