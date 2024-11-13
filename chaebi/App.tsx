@@ -19,8 +19,10 @@ import RemainEditorScreen from './src/screens/RemainEditor';
 import CompleteScreen from './src/screens/Remain/complete';
 import AlbumScreen from './src/screens/Album';
 import MypageScreen from './src/screens/Mypage';
+import SetAlertScreen from './src/screens/Mypage/SetAlert';
 
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import SetLockScreen from './src/screens/Mypage/SetLock';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -39,6 +41,8 @@ export type RootStackParamList = {
   RemainEditor: undefined;
   Album: undefined;
   Setting: undefined;
+  SetAlert: undefined;
+  SetLock: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -67,6 +71,8 @@ const App: React.FC = () => {
             <Stack.Screen name="RemainEditor" component={RemainEditorScreen} />
             <Stack.Screen name="Album" component={AlbumScreen} />
             <Stack.Screen name="Setting" component={MypageScreen} />
+            <Stack.Screen name="SetAlert" component={SetAlertScreen} />
+            <Stack.Screen name="SetLock" component={SetLockScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </ToastProvider>

@@ -4,20 +4,20 @@ import React from 'react';
 
 interface SettingItemProps {
   icon: React.ReactNode;
-  label: string;
+  title: string;
   destination?: string;
   onPress?: () => void;
-  text?: string;
+  content?: React.ReactNode;
   disabled?: boolean;
   navigation?: any;
 }
 
 export default function SettingItem({
   icon,
-  label,
+  title,
   destination,
   onPress,
-  text,
+  content,
   disabled,
   navigation,
 }: SettingItemProps) {
@@ -31,12 +31,12 @@ export default function SettingItem({
       <View className="flex-row py-4 items-center">
         <View className="w-6 h-6 mx-4 mr-8">{icon}</View>
         {disabled ? (
-          <Text className="text-2xl color-primary-300">{label}</Text>
+          <Text className="text-2xl color-primary-300">{title}</Text>
         ) : (
-          <Text className="text-2xl">{label}</Text>
+          <Text className="text-2xl">{title}</Text>
         )}
       </View>
-      <Text className="p-4">{text}</Text>
+      <View className="p-4">{content}</View>
     </Pressable>
   );
 }

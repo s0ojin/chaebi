@@ -20,6 +20,7 @@
     "nativewind": "^4.1.23",
     "react": "18.3.1",
     "react-native": "0.76.1",
+    "react-native-biometrics": "^3.0.1",
     "react-native-contacts": "^8.0.4",
     "react-native-dotenv": "^3.4.11",
     "react-native-picker-select": "^9.3.1",
