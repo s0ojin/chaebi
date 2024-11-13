@@ -18,4 +18,5 @@ public interface UserService {
     Optional<User> getUser(String id);
     Optional<User> getUserByToken(HttpServletRequest request);
     void quit(HttpServletRequest request);
+    boolean ispush(HttpServletRequest request);
 }

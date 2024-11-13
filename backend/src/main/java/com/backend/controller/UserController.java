@@ -71,4 +71,10 @@ public class UserController {
         userServiceImpl.quit(request);
         return ResponseEntity.ok("탈퇴되었습니다.");
     }
+
+    @Operation(summary = "유저 알람 확인", description = "푸쉬 설정의 상태 확인")
+    @GetMapping("/ispush")
+    public ResponseEntity<Boolean> setting(HttpServletRequest request) {
+        return ResponseEntity.ok(userServiceImpl.ispush(request)); //로그아웃(?)
+    }
 }

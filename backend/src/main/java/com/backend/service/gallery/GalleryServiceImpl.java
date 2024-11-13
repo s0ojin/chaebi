@@ -4,10 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.backend.domain.Gallery;
-import com.backend.domain.GalleryRecipient;
-import com.backend.domain.Recipient;
-import com.backend.domain.User;
+import com.backend.domain.*;
 import com.backend.dto.*;
 import com.backend.exception.NotFoundException;
 import com.backend.exception.UnauthorizedException;
@@ -88,13 +85,17 @@ public class GalleryServiceImpl implements GalleryService {
 
             //1. presignedUrl을 FastAPI에 전송
             //2. 메타데이터 토대로 정보 추출
-
+            //List<Keyword> keywords = this.sendToFastApi(presignedUrl);
             // 3. Gallery 엔티티 생성 및 저장
+            this.sendToFastApi(presignedUrl);
             Gallery gallery = new Gallery();
             gallery.setUser(user);
             gallery.setFileUrl(presignedUrl.toString());
             gallery.setFileType(determineFileType(file.getContentType()));
             gallery.setFileName(fileName);
+//            for(Keyword keyword : keywords){
+//                gallery.addKeyword(keyword);
+//            }
 
             if (recipientIds != null && !recipientIds.isEmpty()) {
                 List<Recipient> recipients = recipientRepository.findAllById(recipientIds);
@@ -350,21 +351,26 @@ public class GalleryServiceImpl implements GalleryService {
     }
     
     //Fast API 통신
-    private List<String> sendToFastApi(URL presignedUrl){
-        Map<String, Object> body = new HashMap<>();
-        body.put("presignedUrl", presignedUrl);
+    private void sendToFastApi(URL presignedUrl) {
+        System.out.println("진입");
+        String uri = fastApiUrl + "categorize";
 
         try {
-            return webClient.post()
-                    .uri(fastApiUrl)
-                    .bodyValue(body)
+            String response = webClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path(uri)
+                            .queryParam("presigned_url", presignedUrl.toString())
+                            .build())
                     .retrieve()
                     .onStatus(status -> status.is4xxClientError(),
                             error -> Mono.error(new RuntimeException("Client Error")))
                     .onStatus(status -> status.is5xxServerError(),
                             error -> Mono.error(new RuntimeException("Server Error")))
-                    .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
-                    .block(Duration.ofSeconds(10)); // 10초 timeout 설정
+                    .bodyToMono(String.class)
+                    .block(Duration.ofSeconds(10));
+
+            System.out.println("Response: " + response);
+
         } catch (Exception e) {
             throw new RuntimeException("FastAPI 호출 중 에러 발생: " + e.getMessage());
         }

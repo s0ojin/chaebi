@@ -88,6 +88,12 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user); // soft Delete
     }
 
+    @Override
+    public boolean ispush(HttpServletRequest request) {
+        User user = this.getUserByToken(request).get();
+        return user.isPush();
+    }
+
 
 }
 
