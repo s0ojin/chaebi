@@ -12,6 +12,7 @@ import com.backend.repository.GalleryRecipientRepository;
 import com.backend.repository.GalleryRepository;
 import com.backend.repository.RecipientRepository;
 import com.backend.repository.UserRepository;
+import com.backend.service.address.AddressService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,7 @@ public class GalleryServiceImpl implements GalleryService {
     private final AmazonS3 s3Client;
     private final WebClient webClient;
     private final UserRepository userRepository;
+    private final AddressService addressService;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -116,7 +118,12 @@ public class GalleryServiceImpl implements GalleryService {
                     gallery.addRecipient(recipient);
                 }
             }
+            Location location = Location.builder()
+                            .longitude("127.101313354")
+                            .latitude("37.402352535")
+                            .build();
 
+            gallery.setLocate(addressService.addAddress(location));
             gallery = galleryRepository.save(gallery);
             return new GalleryResDTO(gallery);
 
