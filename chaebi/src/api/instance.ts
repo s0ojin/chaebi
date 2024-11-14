@@ -34,6 +34,23 @@ privateApi.interceptors.request.use(async config => {
   return config;
 });
 
+export const privateFormApi = axios.create({
+  baseURL: API_URL,
+  timeout: 5000,
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+});
+
+privateFormApi.interceptors.request.use(async config => {
+  const token = await AsyncStorage.getItem('accessToken');
+  console.log(token)
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 // for debugging
 publicApi.interceptors.request.use(request => {
   console.log('Starting Request', request);

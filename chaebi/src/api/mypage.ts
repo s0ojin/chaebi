@@ -13,3 +13,20 @@ export const deleteResignUser: () => Promise<string> = async () => {
     );
     return response.data;
   };
+
+  export const getUsersAlert: () => Promise<boolean> = async () => {
+    const response = await privateApi.get(
+      `/api/users/ispush`,
+    );
+    return response.data;
+  };
+
+  export const postUsersAlert: (
+    value: boolean
+  )=> Promise<string> = async (value:boolean) => {
+    const response = await privateApi.post(
+      `api/users/setting?push=${value}`
+    )
+    console.log(response)
+    return response.data;
+  }
