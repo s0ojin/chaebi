@@ -12,7 +12,8 @@ public interface GalleryService {
     GalleryResDTO updateRecipients(Long galleryId, UpdateRecipientsReqDTO request);
     void markAsRead(Long galleryId, Long recipientId);
     List<GalleryResDTO> getFileUrlByUser(User user);
-    List<GalleryResDTO> getFileUrlByUserAndRecipient(User user, Long recipientId);
+    List<GalleryRecipientRes> getFileUrlByUserAndRecipient(User user, Long recipientId);
     GalleryResDTO uploadFile(MultipartFile file, UploadDTO uploadDTO, User user);
     String uploadProfile(MultipartFile file, Long id, User user);
+    void deleteFiles(List<Long> ids, User user);
 }
