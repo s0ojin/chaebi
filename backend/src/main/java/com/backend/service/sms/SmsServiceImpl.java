@@ -96,9 +96,7 @@ public class SmsServiceImpl implements SmsService {
 
     @Override // 유족들 메시지 발송
     public void sendCode(String phoneNumber, String name) {
-        String phone = "01011111111"; // 잘 넘어오는지 확인
-        name = "홍길동";
-        User user = userRepository.findByPhone(phone).get();
+        User user = userRepository.findByPhone(phoneNumber).get();
         System.out.println(phoneNumber);
         if(user != null && user.getName().equals(name)) { // 전화번호와 이름이 일치할 경우
             for(RecipientResDTO r : recipientService.getRecipients(user)){
