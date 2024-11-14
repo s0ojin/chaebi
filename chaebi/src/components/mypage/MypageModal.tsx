@@ -36,7 +36,7 @@ const MypageModal: React.FC<WarningModalProps> = ({
             <View className="h-px bg-[#E0E0E0] my-3" />
             <View className="flex-row w-full gap-2">
               <TouchableOpacity
-                onPress={() => {
+                onPress={async () => {
                   toDo();
                   onClose();
                 }}

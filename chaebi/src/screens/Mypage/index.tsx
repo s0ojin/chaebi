@@ -17,7 +17,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal from '../../components/mypage/MypageModal';
 import {LOGOUT_WARNING, RESIGN_WARNING} from '../../constants/mypage';
 import {deleteResignUser, postLogoutUser} from '../../api/mypage';
-import SetAlert from '../../components/mypage/SetAlert';
 
 interface SettingScreenProps {
   navigation: StackNavigationProp<RootStackParamList>;
@@ -59,17 +58,19 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
               icon={<LogoutIcon />}
               title="로그아웃"
               onPress={() => {
-                // 모달
                 setIsWarn(false);
                 setContent(LOGOUT_WARNING);
-                setMessage('로그아웃')
-                // 로그아웃
-                setAction(() => {
-                  postLogoutUser();
+                setMessage('로그아웃');
+                setAction(() => () => {
                   AsyncStorage.setItem('token', '');
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'AppIntro' }],
+                  });
                 });
                 setModalVisible(true);
               }}
+              
             />
             <SettingItem
               icon={<QuitIcon />}
@@ -79,9 +80,13 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
                 setIsWarn(true);
                 setContent(RESIGN_WARNING);
                 setMessage('탈퇴하기')
-                setAction(() => {
+                setAction(() => () => {
                   deleteResignUser();
                   AsyncStorage.setItem('token', '');
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'AppIntro' }],
+                  });
                 });
                 setModalVisible(true);
               }}
@@ -97,7 +102,7 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
           </View>
         </View>
       </View>
-      <View className="p-4">
+      <View className="p-4 bg-white">
         <Footer navigation={navigation} currentPage="mypage"></Footer>
       </View>
     </View>
