@@ -2,12 +2,15 @@ import React from 'react';
 import {Image, Pressable, View} from 'react-native';
 import Text from '../CustomText';
 import RecipientTagList from '../album/RecipientTagList';
+import useAlbumStore from '../../stores/albumStore';
 
 export default function MediaUploadModal({
   closeModal,
 }: {
   closeModal: () => void;
 }) {
+  const {selectedMediaList} = useAlbumStore();
+
   return (
     <View className="p-5 min-w-80 items-center max-w-[80%] overflow-hidden">
       <Text className="text-2xl text-primary-400 ml-1 mb-3 self-start">
@@ -27,7 +30,7 @@ export default function MediaUploadModal({
         />
         <Image
           source={{
-            uri: 'https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U',
+            uri: selectedMediaList[0]?.uri,
           }}
           className="w-full h-full rounded-lg"
         />

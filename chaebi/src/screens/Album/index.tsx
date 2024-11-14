@@ -18,9 +18,7 @@ export default function AlbumScreen() {
     <>
       <View className="relative">
         <Header pageName="채우기" />
-        <Pressable
-          onPress={mediaUploadModal.openModal}
-          className="bg-primary-400 self-start px-3 rounded-full absolute right-4 top-1/4">
+        <Pressable className="bg-primary-400 self-start px-3 rounded-full absolute right-4 top-1/4">
           <Text className="text-_white py-2 px-1">선택</Text>
         </Pressable>
       </View>
@@ -43,7 +41,10 @@ export default function AlbumScreen() {
       <CenterModal
         visible={albumAccessModal.isVisible}
         onClose={albumAccessModal.closeModal}>
-        <AlbumAccessModal closeModal={albumAccessModal.closeModal} />
+        <AlbumAccessModal
+          closeModal={albumAccessModal.closeModal}
+          mediaUploadModalOpenModal={mediaUploadModal.openModal}
+        />
       </CenterModal>
       <CenterModal
         visible={mediaUploadModal.isVisible}

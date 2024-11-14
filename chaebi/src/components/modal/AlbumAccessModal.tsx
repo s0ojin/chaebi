@@ -12,12 +12,18 @@ import {
 } from 'react-native-permissions';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import DocumentPicker from 'react-native-document-picker';
+import useAlbumStore from '../../stores/albumStore';
+
+interface AlbumAccessModalProps {
+  closeModal: () => void;
+  mediaUploadModalOpenModal: () => void;
+}
 
 export default function AlbumAccessModal({
   closeModal,
-}: {
-  closeModal: () => void;
-}) {
+  mediaUploadModalOpenModal,
+}: AlbumAccessModalProps) {
+  const {setSelectedMediaList} = useAlbumStore();
   const handleOptionPress = (option: AlbumAccessOptions) => {
     switch (option) {
       case 'ALBUM':
@@ -133,7 +139,8 @@ export default function AlbumAccessModal({
         } else if (response.errorMessage) {
           console.error('앨범 접근 에러', response.errorMessage);
         } else if (response.assets) {
-          console.log('선택한 미디어:', response.assets);
+          setSelectedMediaList(response.assets);
+          mediaUploadModalOpenModal();
         }
       },
     );
@@ -151,7 +158,8 @@ export default function AlbumAccessModal({
         } else if (response.errorMessage) {
           console.error('카메라 에러', response.errorMessage);
         } else if (response.assets) {
-          console.log('촬영한 미디어:', response.assets);
+          setSelectedMediaList(response.assets);
+          mediaUploadModalOpenModal();
         }
       },
     );
@@ -162,7 +170,8 @@ export default function AlbumAccessModal({
       const result = await DocumentPicker.pick({
         type: [DocumentPicker.types.images, DocumentPicker.types.video],
       });
-      console.log('선택한 파일:', result);
+      setSelectedMediaList(result);
+      mediaUploadModalOpenModal();
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         console.log('파일 선택 취소');
