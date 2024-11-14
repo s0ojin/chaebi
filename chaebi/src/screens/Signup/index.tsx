@@ -79,6 +79,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     console.log('Signin Response:', signinResponse);
     if (signinResponse && signinResponse.status === 200) {
       await AsyncStorage.setItem('name', signinResponse.data.name);
+      await AsyncStorage.setItem('phoneNumber', signinResponse.data.phoneNumber);
       await AsyncStorage.setItem(
         'accessToken',
         signinResponse.data.accessToken,
@@ -88,6 +89,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
         signinResponse.data.refreshToken,
       );
       console.log('name', await AsyncStorage.getItem('name'));
+      console.log('phoneNumber', await AsyncStorage.getItem('phoneNumber'));
       console.log('accessToken:', await AsyncStorage.getItem('accessToken'));
       console.log('refreshToken:', await AsyncStorage.getItem('refreshToken'));
       showToast(`${signinResponse.data.name}님 환영합니다.`);
@@ -142,7 +144,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
           <View className="px-6 gap-5">
             <Text className="text-2xl">
               {!showAuth
-                ? '휴대폰 번호로 회원가입해주세요!'
+                ? '휴대폰 번호를 입력해주세요!'
                 : '인증번호를 입력해주세요.'}
             </Text>
             <InputField

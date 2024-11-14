@@ -31,7 +31,7 @@ export default function MainScreen({navigation}: MainScreenProps) {
         imgUrl: '',
       },
       lastModifiedDate: '2024-11-05T18:03:01.519939',
-      sort: "center",
+      sort: 'center',
     });
 
     const images: ImageSourcePropType[] = [

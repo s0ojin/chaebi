@@ -6,6 +6,7 @@ import RoundButton from '../../components/RoundButton';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../App';
 import WarningModal from '../../components/WarningModal'; // 모달 컴포넌트 import
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type AbsenceScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Absence'>;
@@ -14,10 +15,14 @@ type AbsenceScreenProps = {
 export default function AbsenceScreen({navigation}: AbsenceScreenProps) {
   // 모달 가시성 상태
   const [modalVisible, setModalVisible] = useState(false);
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState<string | null>('');
 
   useEffect(() => {
-    setUsername('박수진');
+    const getName = async () => {
+      const name = await AsyncStorage.getItem('name');
+      setUsername(name);
+    };
+    getName();
   }, []);
 
   return (
@@ -31,7 +36,7 @@ export default function AbsenceScreen({navigation}: AbsenceScreenProps) {
         <RoundButton
           content={`${username}님이신가요?`}
           onPress={() => {
-            navigation.navigate('SignIn');
+            navigation.navigate('SignUp');
           }}
         />
         <RoundButton

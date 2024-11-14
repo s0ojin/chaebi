@@ -60,6 +60,7 @@ export interface SigninRequest {
 
 export interface SigninResponseData {
   name: string;
+  phoneNumber: string;
   accessToken: string;
   refreshToken: string;
 }
