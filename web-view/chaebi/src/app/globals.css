@@ -4,10 +4,15 @@
 
 :root {
   --font-ChosunNm: 'ChosunNm', sans-serif;
+  --font-SoBangGwan: 'SoBangGwan', sans-serif;
   --background: #444444;
 }
 
 body {
   font-family: var(--font-ChosunNm);
   background: var(--background);
+}
+
+.font-SoBangGwan {
+  font-family: var(--font-SoBangGwan);
 }
