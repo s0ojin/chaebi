@@ -4,12 +4,24 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import Mum from '../../public/dummy/MUM.png'
 import GuideContent from '@/containers/GuideContent'
+import axios from 'axios'
+import { useState } from 'react'
 
 export default function Guide() {
   const router = useRouter()
+  const [enterCode, setEnterCode] = useState('')
 
-  function handleNextClick() {
-    router.push('/security')
+  async function handleNextClick() {
+    try {
+      const response = await axios.post('/api/recipient/enter', { enterCode })
+      if (response.status === 200) {
+        router.push('/security')
+      } else {
+        console.error('Failed to verify enter code')
+      }
+    } catch (error) {
+      console.error('Error occurred while verifying enter code', error)
+    }
   }
 
   return (
@@ -26,7 +38,7 @@ export default function Guide() {
             />
           </div>
         </div>
-        <GuideContent onNextClick={handleNextClick} />
+        <GuideContent onNextClick={handleNextClick} enterCode={enterCode} setEnterCode={setEnterCode} />
       </div>
     </div>
   )
