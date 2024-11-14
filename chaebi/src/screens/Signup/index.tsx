@@ -70,24 +70,28 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     });
     console.log('Response:', response);
     if (response && response.status === 200) {
-      const signinResponse = await sendSigninRequest({phone: phoneNumber});
-      console.log('Signin Response:', signinResponse);
-      if (signinResponse && signinResponse.status === 200) {
-        await AsyncStorage.setItem(
-          'accessToken',
-          signinResponse.data.accessToken,
-        );
-        console.log('accessToken:', await AsyncStorage.getItem('accessToken'));
-        await AsyncStorage.setItem(
-          'refreshToken',
-          signinResponse.data.refreshToken,
-        );
-        console.log('refreshToken:', await AsyncStorage.getItem('refreshToken'));
-        showToast(`${name}님 환영합니다.`);
-        navigation.navigate('Main');
-      } else if (signinResponse && signinResponse.status === 215) {
-        setStep(step + 1);
-      }
+      handleSignin();
+    }
+  };
+
+  const handleSignin = async () => {
+    const signinResponse = await sendSigninRequest({phone: phoneNumber});
+    console.log('Signin Response:', signinResponse);
+    if (signinResponse && signinResponse.status === 200) {
+      await AsyncStorage.setItem(
+        'accessToken',
+        signinResponse.data.accessToken,
+      );
+      await AsyncStorage.setItem(
+        'refreshToken',
+        signinResponse.data.refreshToken,
+      );
+      console.log('accessToken:', await AsyncStorage.getItem('accessToken'));
+      console.log('refreshToken:', await AsyncStorage.getItem('refreshToken'));
+      showToast(`${name}님 환영합니다.`);
+      navigation.navigate('Main');
+    } else if (signinResponse && signinResponse.status === 215) {
+      setStep(step + 1);
     }
   };
 
@@ -116,16 +120,14 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
   };
 
   const handleNotice = () => {
-    navigation.navigate('Main');
-    showToast(`${name}님 환영합니다.`);
+    handleSignin();
   };
 
   const handleUnnotice = async () => {
     const response = await sendNoticeRequest({push: false});
     console.log('Response:', response);
     if (response && response.status === 200) {
-      navigation.navigate('Main');
-      showToast(`${name}님 환영합니다.`);
+      handleSignin();
     }
   };
 
@@ -220,6 +222,13 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
               다음에 할게요!
             </Text>
           </View>
+        </View>
+      )}
+      {step === 3 && (
+        //step3
+        <View>
+          <Text>Something went wrong while sign-up process.</Text>
+          <Text>Please restart app.</Text>
         </View>
       )}
     </View>
