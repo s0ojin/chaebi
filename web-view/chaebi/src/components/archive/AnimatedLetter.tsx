@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function AnimatedLetter({
-  letterContent,
+  children,
   onOpenComplete,
 }: {
-  letterContent: React.ReactNode
+  children: React.ReactNode
   onOpenComplete?: () => void
 }) {
   const [isOpening, setIsOpening] = useState(false)
@@ -59,7 +59,7 @@ export default function AnimatedLetter({
         {isOpening && (
           <motion.div
             key="letter"
-            className="absolute w-40 h-60 bg-_white shadow-lg"
+            className="absolute w-40 h-60 bg-white shadow-lg overflow-hidden"
             initial={{ y: '50%', scale: 0.8, opacity: 0 }}
             animate={{ y: '-50%', scale: 2, opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.8 }}
@@ -68,9 +68,9 @@ export default function AnimatedLetter({
               initial={{ opacity: 0, scale: 1 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1.3, duration: 1 }}
-              className="h-full flex justify-center items-center"
+              className="h-full overflow-y-auto p-3 text-xs"
             >
-              {letterContent}
+              {children}
             </motion.div>
           </motion.div>
         )}

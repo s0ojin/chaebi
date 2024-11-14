@@ -40,16 +40,17 @@ export default function ThemeModal({ theme, onClose }: ThemeModalProps) {
           {theme.images.map((image, index) => (
             <div
               key={index}
-              className="relative flex items-center justify-center"
+              className="relative flex items-center justify-center h-[80vh]"
             >
-              <Image
-                src={image}
-                alt={`${theme.name} ${index + 1}`}
-                width={800}
-                height={450}
-                style={{ objectFit: 'contain' }}
-                className="transition-opacity duration-500"
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src={image}
+                  alt={`${theme.name} ${index + 1}`}
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  className="transition-opacity duration-500"
+                />
+              </div>
             </div>
           ))}
         </Slider>

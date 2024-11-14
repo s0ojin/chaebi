@@ -11,4 +11,15 @@ const ChosunNm = localFont({
   variable: '--font-ChosunNm',
 })
 
-export default ChosunNm
+const SoBangGwan = localFont({
+  src: [
+    {
+      path: '../../public/fonts/SoBangGwan.ttf',
+      weight: '400',
+    },
+  ],
+  display: 'swap',
+  variable: '--font-SoBangGwan',
+})
+
+export { ChosunNm, SoBangGwan }
