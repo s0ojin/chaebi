@@ -1,6 +1,6 @@
 import {Switch, View} from 'react-native';
 import Text from '../../components/CustomText';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MypageModal from '../../components/mypage/MypageModal';
 import {
   NOTIFICATION_ALERT_1,
@@ -10,10 +10,22 @@ import {
 import Header from '../../components/Header';
 import SettingItem from '../../components/mypage/MypageItem';
 import AlertIcon from '../../assets/icon/alert.svg';
+import {getUsersAlert, postUsersAlert} from '../../api/mypage';
+import { useMutation } from '@tanstack/react-query';
 
 export default function SetAlertScreen() {
   const [canAlert, setCanAlert] = useState<boolean>(false);
   const [modalVisiable, setModalVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    getUsersAlert()
+      .then(data => setCanAlert(data))
+      .catch(error => console.log(error));
+  }, []);
+
+  useEffect(() => {
+    postUsersAlert(canAlert)
+  }, [canAlert]);
 
   return (
     <View className="flex-1 bg-primary-100">
@@ -25,7 +37,9 @@ export default function SetAlertScreen() {
         onClose={() => {
           setModalVisible(false);
         }}
-        toDo={()=>{setCanAlert(false)}}></MypageModal>
+        toDo={() => {
+          setCanAlert(false);
+        }}></MypageModal>
       <Header pageName="설정 - 푸시알림 설정" />
       {/* 설정 리스트뷰 */}
       <View className="flex-1 mt-4 gap-9">
