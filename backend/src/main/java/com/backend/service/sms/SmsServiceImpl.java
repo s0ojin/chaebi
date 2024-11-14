@@ -95,7 +95,7 @@ public class SmsServiceImpl implements SmsService {
         User user = userRepository.findByPhone(phone).get();
         System.out.println(phoneNumber);
         if(user != null && user.getName().equals(name)) { // 전화번호와 이름이 일치할 경우
-            for(RecipientResDTO r : recipientService.getRecipients(user).get()){
+            for(RecipientResDTO r : recipientService.getRecipients(user)){
                 //String code = idConverterService.combineIds(user.getId(), r.getId());
                 String code = idConverterService.generateRandomCode(r.getId()); //난수 코드
                 System.out.println("code 생성");
