@@ -7,7 +7,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.Set;
-import java.util.stream.Collectors;
+
 @Data
 @AllArgsConstructor
 public class GalleryRecipientRes {
@@ -16,10 +16,9 @@ public class GalleryRecipientRes {
     private String fileType;
     private String fileName;
     private LocalDateTime createdDate;
-    private Set<RecipientInfoDTO> recipients;
     private Set<Keyword> keywords;
     private String locate;
-    private LocalDateTime date;
+    private LocalDateTime capturedDate;
 
     public GalleryRecipientRes(Gallery gallery) {
         this.id = gallery.getId();
@@ -27,11 +26,8 @@ public class GalleryRecipientRes {
         this.fileType = gallery.getFileType();
         this.fileName = gallery.getFileName();
         this.createdDate = gallery.getCreatedDate();
-        this.recipients = gallery.getGalleryRecipients().stream()
-                .map(RecipientInfoDTO::new)
-                .collect(Collectors.toSet());
         this.keywords = gallery.getKeywords();
         this.locate = gallery.getLocate();
-        this.date = gallery.getCapturedDate();
+        this.capturedDate = gallery.getCapturedDate();
     }
 }
