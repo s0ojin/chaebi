@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public void signup(SignDTO signDTO, HttpServletResponse response) { //회원가입
+    public TokenRes signup(SignDTO signDTO, HttpServletResponse response) { //회원가입
         User user = User.builder()
                 .phone(signDTO.getPhone())
                 .status(true)
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         userRepository.save(user);
-        this.login(signDTO.getPhone(), response); // 회원가입 후 로그인 까지
+        return this.login(signDTO.getPhone(), response); // 회원가입 후 로그인 까지
     }
 
     @Transactional
