@@ -19,7 +19,7 @@ export interface Recipient {
   secretQuestion?: string;
   secretAnswer?: string;
   imgUrl?: string;
-  lastModifiedDate?: string;
+  lastModified?: string;
 }
 
 export interface Message {
@@ -95,37 +95,19 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
                 <View className="my-2">
                   <RecipientCard
                     recipient={item}
-                    isSetting={true}
+                    isSetting={false}
                     setOnPress={() => {
                       setMoveToList([
                         {
                           title: '편지 수정하기',
                           moveTo: () => {
-                            navigation.navigate('RemainEditor');
+                            navigation.navigate('RemainEditor', item);
                           },
                         },
                         {
                           title: '편지 삭제하기',
                           moveTo: () => {
                             // 편지삭제 API
-                            if(item.id) deleteRecipient(item.id);
-                          },
-                        },
-                      ]);
-                      setShowAuth(true);
-                      console.log(showAuth);
-                    }}
-                    setOnSet={() => {
-                      setMoveToList([
-                        {
-                          title: '질문 수정하기',
-                          moveTo: () => {
-                            navigation.navigate('RemainQuestion', item);
-                          },
-                        },
-                        {
-                          title: '수신인 삭제하기',
-                          moveTo: () => {
                             if(item.id) deleteRecipient(item.id);
                           },
                         },

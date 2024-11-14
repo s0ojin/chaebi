@@ -1,4 +1,4 @@
-import {View, TouchableOpacity, Image} from 'react-native';
+import {View, TouchableOpacity, Image, Pressable} from 'react-native';
 import React from 'react';
 import Setting from '../assets/icon/settings-alt.svg';
 import Text from './CustomText';
@@ -7,7 +7,6 @@ import {Recipient} from '../screens/Remain/index';
 const calculateDate = function (date: string) {
   let update = new Date(date);
   let now = new Date();
-  console.log(now.getHours());
   // 차이 구하고
   let sub = now.getTime() - update.getTime();
   const minutes = Math.floor(sub / (1000 * 60)); // 분 단위로 변환
@@ -70,8 +69,8 @@ export default function RemainListView({
       ) : (
         <View className="flex-row h-full py-4 items-end">
           <Text className="">
-            {recipient.lastModifiedDate
-              ? `마지막 수정 : ${calculateDate(recipient.lastModifiedDate)}`
+            {recipient.lastModified
+              ? `마지막 수정 : ${calculateDate(recipient.lastModified)}`
               : ''}
           </Text>
         </View>
