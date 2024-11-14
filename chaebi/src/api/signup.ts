@@ -59,6 +59,7 @@ export interface SigninRequest {
 }
 
 export interface SigninResponseData {
+  name: string;
   accessToken: string;
   refreshToken: string;
 }
