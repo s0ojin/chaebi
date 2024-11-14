@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TokenRes {
     private String name;
+    private String phoneNumber;
     private String accessToken;
     private String refreshToken;
 }

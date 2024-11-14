@@ -39,7 +39,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 path.equals("/api/sms/extract/**") ||
                 path.equals("/api/sms/combine") ||
                 path.startsWith("/swagger-ui") ||
-                path.startsWith("/v3/api-docs");}
+                path.startsWith("/v3/api-docs") ||
+                path.startsWith("/api/gallery/recipientList") ||
+                path.startsWith("/api/recipient/enter") ||
+                path.startsWith("/api/letter/") ||
+                path.startsWith("/api/fcm/test")
+                ;}
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
