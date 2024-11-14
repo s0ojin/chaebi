@@ -361,18 +361,23 @@ public class GalleryServiceImpl implements GalleryService {
         log.info("FastAPI 통신 시작");
         StringBuilder sb = new StringBuilder();
         try {
-            log.info(presignedUrl.toString());
-            sb.append(fastApiUrl).append("categorize?presigned_url=").append(presignedUrl.toString());
-            log.info(sb.toString());
+            log.info("Original Presigned URL: {}", presignedUrl.toString());
+
+            // URLEncoder를 사용하여 파라미터 인코딩
+            String encodedPresignedUrl = URLEncoder.encode(presignedUrl.toString(), StandardCharsets.UTF_8);
+            String url = fastApiUrl + "/categorize?presigned_url=" + encodedPresignedUrl;
+
+            log.info("Encoded Request URL: {}", url);
+
             String response = webClient
                     .get()
-                    .uri(sb.toString())
+                    .uri(url)
                     .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
                     .bodyToMono(String.class)
                     .doOnError(error -> log.error("FastAPI 통신 중 에러 발생: {}", error.getMessage()))
                     .doOnSuccess(result -> log.info("FastAPI 응답 성공: {}", result))
-                    .block(Duration.ofSeconds(30)); // timeout 시간을 30초로 증가
+                    .block(Duration.ofSeconds(30));
 
             if (response != null) {
                 log.info("FastAPI 응답: {}", response);

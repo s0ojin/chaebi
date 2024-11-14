@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByPhone(phone)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
             user.setLastLogin(LocalDateTime.now());
-            TokenRes token = new TokenRes(jwtUtil.generateAccessToken(user.getPhone()),jwtUtil.generateRefreshToken(user.getPhone()));
+            TokenRes token = new TokenRes(user.getName(),jwtUtil.generateAccessToken(user.getPhone()),jwtUtil.generateRefreshToken(user.getPhone()));
             System.out.println(" token " + " " + token.getAccessToken());
             userRepository.save(user);
             return token;
@@ -72,13 +72,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getUserByToken(HttpServletRequest request) { //JWT 토큰을 해석한 결과값으로 유저를 추출
-//        String userPhone = jwtUtil.getUserByJwt(request);
-//        System.out.println("email : " + userPhone);
-//        Optional<User> user = userRepository.findByPhone(userPhone);
-//        System.out.println("user : " + user.get().getPhone());
-//        System.out.println("user OP : " + user);
-//        return userRepository.findByPhone(userPhone);
-        return userRepository.findByPhone("01011111111"); //테스트
+        String userPhone = jwtUtil.getUserByJwt(request);
+        System.out.println("phone : " + userPhone);
+        Optional<User> user = userRepository.findByPhone(userPhone);
+        System.out.println("user : " + user.get().getPhone());
+        System.out.println("user OP : " + user);
+        return userRepository.findByPhone(userPhone);
+        //return userRepository.findByPhone("01011111111"); //테스트
     }
 
     @Override
