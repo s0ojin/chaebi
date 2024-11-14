@@ -88,6 +88,12 @@ public class SmsServiceImpl implements SmsService {
         return savedCode != null && savedCode.equals(code);
     }
 
+    @Override
+    public void sendSignal(String phone){
+        User user = userRepository.findByPhone(phone).get();
+        this.sendCode(user.getPhone(), user.getName());
+    }
+
     @Override // 유족들 메시지 발송
     public void sendCode(String phoneNumber, String name) {
         String phone = "01011111111"; // 잘 넘어오는지 확인
