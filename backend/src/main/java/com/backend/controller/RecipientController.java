@@ -68,13 +68,8 @@ public class RecipientController {
         // JWT를 통해 사용자 정보를 가져옴
         Optional<User> user = userService.getUserByToken(request);
         if (user.isPresent()) {
-            Optional<List<RecipientResDTO>> recipients = recipientService.getRecipients(user.get());
-            if (recipients.isPresent()) {
-                return ResponseEntity.ok(recipients.get());
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Collections.singletonList(new RecipientResDTO())); // 빈배열
-            }
+            List<RecipientResDTO> recipients = recipientService.getRecipients(user.get());
+            return ResponseEntity.ok(recipients);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 유효하지 않은 토큰
         }

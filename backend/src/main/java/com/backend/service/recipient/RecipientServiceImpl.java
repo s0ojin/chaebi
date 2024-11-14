@@ -73,14 +73,14 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     }
 
     @Override
-    public Optional<List<RecipientResDTO>> getRecipients(User user) {
+    public List<RecipientResDTO> getRecipients(User user) {
         // 사용자 열람자 리스트 조회
         List<Recipient> recipients = repository.findByUser(user);
 
         // 결과가 없을 경우 빈 Optional 반환
-        if (recipients.isEmpty()) {
-            return Optional.empty();
-        }
+//        if (recipients.isEmpty()) {
+//            return Optional.empty();
+//        }
 
         // Recipient 엔티티 리스트를 RecipientDTO 리스트로 변환
         List<RecipientResDTO> recipientDTOs = recipients.stream()
@@ -95,7 +95,7 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
                         .build())
                 .collect(Collectors.toList());
 
-        return Optional.of(recipientDTOs); // DTO 리스트 반환
+        return recipientDTOs; // DTO 리스트 반환
     }
 
     @Override
