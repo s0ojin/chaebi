@@ -31,7 +31,7 @@ pipeline {
 
         stage('Front - Docker - Build') {
           steps {
-            dir('./web-view') {
+            dir('./web-view/chaebi') {
               sh 'docker build -t frontend . '
             }
           }
