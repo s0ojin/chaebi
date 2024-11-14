@@ -5,4 +5,6 @@ export type GuideMessageProps = {
 
 export type GuideContentProps = {
   onNextClick: () => void
+  enterCode: string
+  setEnterCode: (code: string) => void
 }

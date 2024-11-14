@@ -6,7 +6,7 @@ import GuideMessage from '@/components/guide/GuideMessage'
 import CodeInput from '@/components/ui/CodeInput'
 import NextButton from '@/components/ui/NextButton'
 
-export default function GuideContent({ onNextClick }: GuideContentProps) {
+export default function GuideContent({ onNextClick, enterCode, setEnterCode }: GuideContentProps) {
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false)
 
   useEffect(() => {
@@ -25,7 +25,11 @@ export default function GuideContent({ onNextClick }: GuideContentProps) {
       <div className="flex-1 md:flex-initial flex flex-col items-center w-full">
         <GuideMessage />
         <div className="mt-10 md:mb-10 w-full flex justify-center">
-          <CodeInput mode="code" />
+          <CodeInput
+            mode="code"
+            value={enterCode}
+            onChange={setEnterCode}
+          />
         </div>
       </div>
       <div
