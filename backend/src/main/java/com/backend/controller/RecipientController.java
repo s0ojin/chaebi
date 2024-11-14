@@ -1,10 +1,7 @@
 package com.backend.controller;
 
 import com.backend.domain.User;
-import com.backend.dto.EnterReq;
-import com.backend.dto.PairDTO;
-import com.backend.dto.RecipientDTO;
-import com.backend.dto.RecipientResDTO;
+import com.backend.dto.*;
 import com.backend.service.letter.LetterService;
 import com.backend.service.recipient.RecipientService;
 import com.backend.service.user.UserService;
@@ -102,8 +99,9 @@ public class RecipientController {
     @Operation(summary = "열람자 입장")
     @PostMapping("/enter")
     public ResponseEntity<?> enterRecipient(@RequestBody EnterReq enterDTO) {
-        PairDTO pair = recipientService.enterRecipient(enterDTO);
-        return ResponseEntity.ok(pair);
+        EnterRes res = recipientService.enterRecipient(enterDTO);
+
+        return ResponseEntity.ok(res);
     }
 
 

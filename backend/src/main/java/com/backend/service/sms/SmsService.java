@@ -8,4 +8,5 @@ public interface SmsService {
     void SendSms(CertReqDTO certReqDTO);
     boolean verifyCode(String phoneNumber, String code);
     void sendCode(String phoneNumber, String code);
+    void sendSignal(String phone);
 }
