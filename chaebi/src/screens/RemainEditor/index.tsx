@@ -6,15 +6,26 @@ import SettingIcon from '../../assets/icon/settings-alt.svg';
 import TextInput from '../../components/CustomTextInput';
 import EditorInputAccessory from '../../components/EditorInputAccessory';
 import useEditorStore from '../../stores/editorStore';
+import {Recipient} from '../Remain';
+import {Route} from '@react-navigation/native';
+import { getLetter } from '../../api/remain';
 
-export default function RemainEditorScreen() {
+type RemainEditorScreenProps = {
+  route: Route<string, Recipient>;
+};
+
+export default function RemainEditorScreen({route}: RemainEditorScreenProps) {
+  const recipient: Recipient = route.params;
   const {align, text, setText} = useEditorStore();
   const textInputRef = useRef<TextInputType>(null);
 
   useEffect(() => {
-    useEditorStore.setState({
-      blurTextInput: () => textInputRef.current?.blur(),
-    });
+    getLetter(recipient.id?recipient.id:0).then((data)=>{
+      setText(data.content)
+      useEditorStore.setState({
+        blurTextInput: () => textInputRef.current?.blur(),
+      })
+    })
   }, []);
 
   return (
@@ -24,8 +35,8 @@ export default function RemainEditorScreen() {
         <View className="flex flex-row items-center gap-4 my-auto">
           <View className="w-12 h-12 rounded-full bg-primary-200" />
           <View>
-            <Text className="text-xl">박수진</Text>
-            <Text className="text-sm">010-3475-6626</Text>
+            <Text className="text-xl">{recipient.name}</Text>
+            <Text className="text-sm">{recipient.phone}</Text>
           </View>
         </View>
         <SettingIcon />
@@ -41,7 +52,7 @@ ex) 내 옷장아래 매일 오만원씩 적립하는중`}
         textAlign={align}
         className="flex-1 bg-transparent p-5 mt-5 text-xl"
       />
-      <EditorInputAccessory />
+      <EditorInputAccessory recipientId={recipient.id?recipient.id:0} />
     </>
   );
 }

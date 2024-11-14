@@ -47,7 +47,7 @@ export default function CompleteScreen({
             content={`${recipient.name} 님께 편지 남기기`}
             onPress={() => {
               // 편지 작성 페이지로 이동하기
-              navigation.navigate;
+              navigation.navigate('RemainEditor', recipient);
             }}
           />
           <RoundButton
