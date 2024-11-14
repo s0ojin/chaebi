@@ -57,7 +57,11 @@ public class SecurityConfig {
                                 mvcMatcherBuilder.pattern("/api/users/**"),
                                 mvcMatcherBuilder.pattern("/api/deposit/**"),
                                 mvcMatcherBuilder.pattern("/api/sms/**"),
+                                mvcMatcherBuilder.pattern("/api/fcm/**"),
                                 mvcMatcherBuilder.pattern("/error"),
+                                mvcMatcherBuilder.pattern("/api/gallery/recipientList"),
+                                mvcMatcherBuilder.pattern("/api/letter/{id}"),
+                                mvcMatcherBuilder.pattern("/api/recipient/enter"),
                                 mvcMatcherBuilder.pattern("/")
                         ).permitAll()
                         // Swagger UI 접근 허용

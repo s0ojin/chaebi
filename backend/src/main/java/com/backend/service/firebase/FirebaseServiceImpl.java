@@ -73,13 +73,15 @@ public class FirebaseServiceImpl implements FirebaseService {
 
     @Scheduled(cron = "0 0 0 * * *") //자정에 실행
     public void sendPushNotification() throws IOException {
-        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7); // 7일이 지난 경우
+//        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7); // 7일이 지난 경우
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusSeconds(1); // 1초 지난 경우
         List<User> user = userRepository.findByLastLogin(oneWeekAgo);
         //각 유저에게 푸쉬
         for(User u : user){
             String token = u.getFcmToken();
-            System.out.println("발송");
-            if(token != null){
+            System.out.println(u.getName() + "님 발송");
+            System.out.println("토큰 : " + u.getFcmToken());
+            if(token != null && u.isPush()){
                 String body = u.getName() + "님 입장하세요!";
                 this.sendMessageTo(token, "채비", body);
             }
