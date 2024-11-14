@@ -9,9 +9,12 @@ import {useMutation} from '@tanstack/react-query';
 import {Remain} from '../types/remain';
 import {postSaveRemain} from '../api/remain';
 
-export default function EditorInputAccessory() {
+interface EditorInputAccessoryProps {
+  recipientId: number;
+}
+
+export default function EditorInputAccessory({recipientId}: EditorInputAccessoryProps) {
   const {text, align, setText, setAlign, blurTextInput} = useEditorStore();
-  const recipientId = 2;
   const textMutation = useMutation({
     mutationFn: (payload: Remain) => postSaveRemain(payload, recipientId),
     onSuccess: data => console.log(data),

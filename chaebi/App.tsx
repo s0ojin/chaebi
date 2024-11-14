@@ -39,7 +39,7 @@ export type RootStackParamList = {
   RemainComplete: Recipient;
   Main: undefined;
   SetPw: undefined;
-  RemainEditor: undefined;
+  RemainEditor: Recipient;
   Album: undefined;
   Setting: undefined;
   SetAlert: undefined;
