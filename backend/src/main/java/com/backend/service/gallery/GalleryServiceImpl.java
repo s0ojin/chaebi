@@ -379,6 +379,7 @@ public class GalleryServiceImpl implements GalleryService {
                     .doOnSuccess(result -> log.info("FastAPI 응답 성공: {}", result))
                     .block(Duration.ofSeconds(30));
 
+
             if (response != null) {
                 log.info("FastAPI 응답: {}", response);
             } else {
