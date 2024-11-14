@@ -60,12 +60,10 @@ public class GalleryController {
 
     @Operation(summary = "열람자만의 갤러리")
     @PostMapping("/recipientList")
-    public ResponseEntity<?> getRecipientGallery(
-            @RequestParam Long recipientId,
-            HttpServletRequest httpServletRequest
+    public ResponseEntity<?> getRecipientGallery(@RequestParam Long userId,
+            @RequestParam Long recipientId
     ) {
-        User user = userService.getUserByToken(httpServletRequest).get();
-        List<GalleryRecipientRes> list = galleryService.getFileUrlByUserAndRecipient(user, recipientId);
+        List<GalleryRecipientRes> list = galleryService.getFileUrlByUserAndRecipient(userId, recipientId);
         return ResponseEntity.ok(list);
     }
 
