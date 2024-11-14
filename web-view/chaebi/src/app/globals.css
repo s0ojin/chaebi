@@ -8,6 +8,12 @@
   --background: #444444;
 }
 
+html,
+body {
+  height: 100%; /* 추가 */
+  overflow: hidden; /* 스크롤 방지 */
+}
+
 body {
   font-family: var(--font-ChosunNm);
   background: var(--background);
