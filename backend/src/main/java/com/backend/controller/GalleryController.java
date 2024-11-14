@@ -85,6 +85,9 @@ public class GalleryController {
             if (files.isEmpty()) {
                 return ResponseEntity.badRequest().build();
             }
+//            byte[] imageBytes = Base64.getDecoder().decode(request.getPhoto().getData());
+//            // MultipartFile로 변환 (필요한 경우)
+//            MultipartFile multipartFile = convertToMultipartFile(imageBytes, "image.jpg");
 
             // 각 파일별로 처리
             for (MultipartFile file : files) {
@@ -120,6 +123,16 @@ public class GalleryController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+//    // byte[]를 MultipartFile로 변환하는 유틸리티 메서드
+//    private MultipartFile convertToMultipartFile(byte[] fileData, String filename) {
+//        return new MockMultipartFile(
+//                "file",
+//                filename,
+//                "image/jpeg",
+//                fileData
+//        );
+//    }
 }
 
 

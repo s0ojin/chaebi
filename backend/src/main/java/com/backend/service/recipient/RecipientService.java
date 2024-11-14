@@ -13,5 +13,5 @@ public interface RecipientService {
     List<RecipientResDTO> getRecipients(User user); // 그 유저의 열람인들 불러오기
     void updateRecipient(RecipientDTO recipientDTO, User user, MultipartFile file);
     void deleteRecipient(long id);
-    PairDTO enterRecipient(EnterReq req);
+    EnterRes enterRecipient(EnterReq req);
 }

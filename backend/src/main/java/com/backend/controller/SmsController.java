@@ -4,6 +4,7 @@ import com.backend.dto.CertReqDTO;
 import com.backend.dto.MessageDTO;
 import com.backend.dto.PairDTO;
 import com.backend.dto.VerifyDTO;
+import com.backend.repository.UserRepository;
 import com.backend.service.idconvert.IdConverterService;
 import com.backend.service.sms.SmsService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class SmsController {
 
     private final SmsService smsService;
+    private final UserRepository userRepository;
 
 
     @Operation(summary = "문자 분석", description = "부고 문자인지 확인")
@@ -54,6 +56,13 @@ public class SmsController {
                 request.getCode()
         );
         return ResponseEntity.ok(isValid);
+    }
+
+    @Operation(summary = "코드 문자 발송 버튼", description = "열람자 들에게 코드 발송")
+    @PostMapping("/send")
+    public ResponseEntity<?> sendCode(@RequestBody CertReqDTO request) {
+        smsService.sendSignal(request.getPhoneNum());
+        return ResponseEntity.ok("코드발송");
     }
 
 
