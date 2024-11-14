@@ -4,24 +4,27 @@ import { useState, useCallback } from 'react'
 
 type CodeInputProps = {
   mode: 'code' | 'answer'
+  value: string
+  onChange: (value: string) => void
 }
 
-function CodeInput({ mode }: CodeInputProps) {
-  const [inputValue, setInputValue] = useState<string>('')
+function CodeInput({ mode, value, onChange }: CodeInputProps) {
   const [isComposing, setIsComposing] = useState(false)
 
   const validateAndSetValue = useCallback(
     (value: string) => {
+      let filteredValue = value
+
       if (mode === 'code') {
         const upperValue = value.toUpperCase()
-        const filtered = upperValue.replace(/[^A-Z0-9]/g, '').slice(0, 6)
-        setInputValue(filtered)
+        filteredValue = upperValue.replace(/[^A-Z0-9]/g, '').slice(0, 6)
       } else if (mode === 'answer') {
-        const truncated = value.slice(0, 20)
-        setInputValue(truncated)
+        filteredValue = value.slice(0, 20)
       }
+
+      onChange(filteredValue)
     },
-    [mode],
+    [mode, onChange],
   )
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -41,14 +44,14 @@ function CodeInput({ mode }: CodeInputProps) {
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (mode === 'answer' && e.key === 'Backspace' && !isComposing) {
       e.preventDefault()
-      setInputValue((prev) => prev.slice(0, -1))
+      onChange(value.slice(0, -1))
     }
   }
 
   return (
     <input
       type="text"
-      value={inputValue}
+      value={value}
       onChange={handleChange}
       onCompositionStart={handleCompositionStart}
       onCompositionEnd={handleCompositionEnd}

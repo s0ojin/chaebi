@@ -1,16 +1,12 @@
 'use client'
 
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import Mum from '../../public/dummy/MUM.png'
 import GuideContent from '@/containers/GuideContent'
+import { useState } from 'react'
 
 export default function Guide() {
-  const router = useRouter()
-
-  function handleNextClick() {
-    router.push('/security')
-  }
+  const [enterCode, setEnterCode] = useState('')
 
   return (
     <div className="h-full w-full flex flex-col">
@@ -26,7 +22,7 @@ export default function Guide() {
             />
           </div>
         </div>
-        <GuideContent onNextClick={handleNextClick} />
+        <GuideContent enterCode={enterCode} setEnterCode={setEnterCode} />
       </div>
     </div>
   )
