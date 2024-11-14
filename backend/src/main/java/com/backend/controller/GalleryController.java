@@ -4,6 +4,7 @@ import com.backend.domain.User;
 import com.backend.dto.*;
 import com.backend.exception.NotFoundException;
 import com.backend.exception.UnauthorizedException;
+import com.backend.service.gallery.GalleryService;
 import com.backend.service.gallery.GalleryServiceImpl;
 import com.backend.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +26,7 @@ import java.util.List;
 @Tag(name = "앨범관리", description = "앨범 API")
 public class GalleryController {
 
-    private final GalleryServiceImpl galleryService;
+    private final GalleryService galleryService;
     private final UserService userService;
 
 //    @Operation(summary = "PresignedURL 생성")
@@ -59,12 +60,12 @@ public class GalleryController {
 
     @Operation(summary = "열람자만의 갤러리")
     @PostMapping("/recipientList")
-    public ResponseEntity<?> generatePresignedUrl(
+    public ResponseEntity<?> getRecipientGallery(
             @RequestParam Long recipientId,
             HttpServletRequest httpServletRequest
     ) {
         User user = userService.getUserByToken(httpServletRequest).get();
-        List<GalleryResDTO> list = galleryService.getFileUrlByUserAndRecipient(user, recipientId);
+        List<GalleryRecipientRes> list = galleryService.getFileUrlByUserAndRecipient(user, recipientId);
         return ResponseEntity.ok(list);
     }
 
