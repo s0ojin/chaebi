@@ -1,6 +1,7 @@
 # main.py
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from urllib.parse import unquote
 from app.fasttest import categorize_from_url
 import requests
 
