@@ -4,10 +4,7 @@ import com.backend.domain.GalleryRecipient;
 import com.backend.domain.Letter;
 import com.backend.domain.Recipient;
 import com.backend.domain.User;
-import com.backend.dto.EnterReq;
-import com.backend.dto.PairDTO;
-import com.backend.dto.RecipientDTO;
-import com.backend.dto.RecipientResDTO;
+import com.backend.dto.*;
 import com.backend.exception.AlreadyExistsException;
 import com.backend.exception.NotFoundException;
 import com.backend.repository.RecipientRepository;
@@ -65,7 +62,7 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
         Recipient recipient = repository.findById(id).orElseThrow(NoSuchElementException::new);
         RecipientResDTO recipientResDTO = RecipientResDTO.builder()
                 .name(recipient.getName())
-                .imgUrl(recipient.getImgurl())
+                //.imgUrl(recipient.getImgurl())
                 .secretQuestion(recipient.getSecurityQuestion())
                 .secretAnswer(recipient.getSecurityAnswer())
                 .build();
@@ -129,17 +126,30 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     }
 
     @Override
-    public PairDTO enterRecipient(EnterReq req) {  //열람자 삭제
+    public EnterRes enterRecipient(EnterReq req) {  //열람자 삭제
         //PairDTO pair = idConverterService.extractIds(req.getEnterCode());
         Recipient recipient = repository.findByEnterCode(req.getEnterCode());
-        PairDTO pair = PairDTO.builder()
-                        .userId(recipient.getUser().getId())
-                                .recipientId(recipient.getId())
-                                        .build();
+        EnterRecipient enterR = EnterRecipient.builder()
+                        .id(recipient.getId())
+                        .phone(recipient.getPhone())
+                        .secretQuestion(recipient.getSecurityQuestion())
+                        .secretAnswer(recipient.getSecurityAnswer())
+                        .name(recipient.getName())
+                        .build();
 
-        System.out.println("user : " + pair.getUserId() + "recipientId :" + pair.getRecipientId());
-        if(!repository.findById(pair.getRecipientId()).isPresent())
+        UserInfoDTO userInfoDTO = UserInfoDTO.builder()
+                        .userName(recipient.getUser().getName())
+                                .userId(recipient.getUser().getId())
+                                        .phoneNumber(recipient.getUser().getPhone())
+                                                .build();
+
+        EnterRes res = EnterRes.builder()
+                .enterRecipient(enterR)
+                .userInfo(userInfoDTO)
+                .build();
+
+        if(!repository.findById(recipient.getId()).isPresent())
             throw new NotFoundException("Recipient not found");
-        return pair;
+        return res;
     }
 }

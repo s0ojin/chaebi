@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByPhone(phone)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
             user.setLastLogin(LocalDateTime.now());
-            TokenRes token = new TokenRes(user.getName(),jwtUtil.generateAccessToken(user.getPhone()),jwtUtil.generateRefreshToken(user.getPhone()));
+            TokenRes token = new TokenRes(user.getName(),user.getPhone(),jwtUtil.generateAccessToken(user.getPhone()),jwtUtil.generateRefreshToken(user.getPhone()));
             System.out.println(" token " + " " + token.getAccessToken());
             userRepository.save(user);
             return token;
