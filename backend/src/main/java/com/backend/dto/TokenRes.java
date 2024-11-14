@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TokenRes {
+    private String name;
     private String accessToken;
     private String refreshToken;
 }
