@@ -11,6 +11,7 @@ import com.backend.exception.UnauthorizedException;
 import com.backend.repository.GalleryRecipientRepository;
 import com.backend.repository.GalleryRepository;
 import com.backend.repository.RecipientRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -91,17 +92,21 @@ public class GalleryServiceImpl implements GalleryService {
 
             //1. presignedUrl을 FastAPI에 전송
             //2. 메타데이터 토대로 정보 추출
-            //List<Keyword> keywords = this.sendToFastApi(presignedUrl);
+            List<Keyword> keywords = new ArrayList<>();
+            String type = determineFileType(file.getContentType());
+            if(type.equals("IMAGE"))
+                 keywords = this.sendToFastApi(presignedUrl);
             // 3. Gallery 엔티티 생성 및 저장
-            this.sendToFastApi(presignedUrl);
+//            this.sendToFastApi(presignedUrl);
             Gallery gallery = new Gallery();
             gallery.setUser(user);
             gallery.setFileUrl(presignedUrl.toString());
-            gallery.setFileType(determineFileType(file.getContentType()));
+            gallery.setFileType(type);
             gallery.setFileName(fileName);
-//            for(Keyword keyword : keywords){
-//                gallery.addKeyword(keyword);
-//            }
+
+            for(Keyword keyword : keywords){
+                gallery.addKeyword(keyword);
+            }
 
             if (recipientIds != null && !recipientIds.isEmpty()) {
                 List<Recipient> recipients = recipientRepository.findAllById(recipientIds);
@@ -342,11 +347,11 @@ public class GalleryServiceImpl implements GalleryService {
     }
 
     //유저와 열람자의 파일명을 반환(마지막 송신했을 때 용)
-    public List<GalleryResDTO> getFileUrlByUserAndRecipient(User user, Long recipientId) {
+    public List<GalleryRecipientRes> getFileUrlByUserAndRecipient(User user, Long recipientId) {
 
         List<Gallery> urls = galleryRepository.findByRecipientUserAndRecipientId(user, recipientId);
         // 갤러리 소유자 체크
-        List<GalleryResDTO> list = toGalleryResDTOList(urls);
+        List<GalleryRecipientRes> list = toGalleryRecipientResList(urls);
         return list;
     }
 
@@ -355,9 +360,15 @@ public class GalleryServiceImpl implements GalleryService {
                 .map(gallery -> new GalleryResDTO(gallery))
                 .collect(Collectors.toList());
     }
+
+    private static List<GalleryRecipientRes> toGalleryRecipientResList(List<Gallery> galleries) {
+        return galleries.stream()
+                .map(gallery -> new GalleryRecipientRes(gallery))
+                .collect(Collectors.toList());
+    }
     
     //Fast API 통신
-    private void sendToFastApi(URL presignedUrl) {
+    private List<Keyword> sendToFastApi(URL presignedUrl) {
         log.info("FastAPI 통신 시작");
         StringBuilder sb = new StringBuilder();
         try {
@@ -378,13 +389,21 @@ public class GalleryServiceImpl implements GalleryService {
                     .doOnError(error -> log.error("FastAPI 통신 중 에러 발생: {}", error.getMessage()))
                     .doOnSuccess(result -> log.info("FastAPI 응답 성공: {}", result))
                     .block(Duration.ofSeconds(30));
-
+            // JSON 문자열을 String 배열로 변환
+            ObjectMapper objectMapper = new ObjectMapper();
+            String[] keywords = objectMapper.readValue(response, String[].class);
 
             if (response != null) {
                 log.info("FastAPI 응답: {}", response);
             } else {
                 throw new RuntimeException("FastAPI로부터 응답이 없습니다.");
             }
+
+            return Arrays.stream(keywords)
+                    .map(keyword -> Keyword.valueOf(keyword.toLowerCase()))
+                    .collect(Collectors.toList());
+
+
 
         } catch (WebClientResponseException e) {
             log.error("FastAPI 응답 에러: {} - {}", e.getRawStatusCode(), e.getResponseBodyAsString());

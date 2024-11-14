@@ -51,18 +51,11 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "유저 로그아웃", description = "LOG OUT")
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request) {
-        userServiceImpl.logout(request);
-        return ResponseEntity.ok("로그아웃이 완료되었습니다."); //로그아웃(?)
-    }
-
     @Operation(summary = "유저 설정", description = "설정 기능")
     @PostMapping("/setting")
     public ResponseEntity<String> setting(SettingDTO settingDTO, HttpServletRequest request) {
-        userServiceImpl.logout(request);
-        return ResponseEntity.ok("로그아웃이 완료되었습니다."); //로그아웃(?)
+        userServiceImpl.setting(settingDTO, request);
+        return ResponseEntity.ok("설정이 변경되었습니다."); //로그아웃(?)
     }
 
     @Operation(summary = "유저 탈퇴", description = "탈퇴")
