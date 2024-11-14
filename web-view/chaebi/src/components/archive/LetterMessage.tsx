@@ -1,6 +1,6 @@
 import { SoBangGwan } from '@/utils/fonts'
 
-export default function LetterContent() {
+export default function LetterMessage() {
   return (
     <div
       className={`${SoBangGwan.variable} font-SoBangGwan h-full overflow-y-auto p-2 text-xs`}

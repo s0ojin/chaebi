@@ -1,18 +1,21 @@
-'use client'
-
 import Image from 'next/image'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import { Theme } from '@/types/archive'
+import { MasonryItem } from '@/types/archive'
 import LeftArrow from 'public/svg/left-arrow.svg'
 
-interface ThemeModalProps {
-  theme: Theme
+interface ImageModalProps {
+  images: MasonryItem[]
+  initialSlide: number
   onClose: () => void
 }
 
-export default function ThemeModal({ theme, onClose }: ThemeModalProps) {
+export default function ImageModal({
+  images,
+  initialSlide,
+  onClose,
+}: ImageModalProps) {
   const sliderSettings = {
     dots: false,
     arrows: false,
@@ -20,8 +23,7 @@ export default function ThemeModal({ theme, onClose }: ThemeModalProps) {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
+    initialSlide,
     fade: true,
     cssEase: 'linear',
     pauseOnHover: false,
@@ -37,18 +39,18 @@ export default function ThemeModal({ theme, onClose }: ThemeModalProps) {
 
       <div className="w-full max-w-7xl mx-auto px-4">
         <Slider {...sliderSettings}>
-          {theme.images.map((image, index) => (
+          {images.map((item) => (
             <div
-              key={index}
-              className="relative flex items-center justify-center h-[80vh]"
+              key={item.id}
+              className="relative flex items-center justify-center"
             >
-              <div className="relative w-full h-full">
+              <div className="relative h-[80vh]">
                 <Image
-                  src={image}
-                  alt={`${theme.name} ${index + 1}`}
+                  src={item.uri}
+                  alt={`Image ${item.id}`}
                   fill
                   style={{ objectFit: 'contain' }}
-                  className="transition-opacity duration-500"
+                  className="transition-opacity duration-300"
                 />
               </div>
             </div>

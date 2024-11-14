@@ -5,7 +5,7 @@ import { MasonryItem } from '@/types/archive'
 import CustomTab from '@/components/ui/CustomTab'
 import CustomCarousel from '@/components/archive/CustomCarousel'
 import MasonryGrid from '@/components/archive/MasonryGrid'
-import ArchiveContent from '@/containers/ArchiveContent'
+import LetterContent from '@/containers/LetterContent'
 
 export default function Archive() {
   const [data, setData] = useState<MasonryItem[]>([])
@@ -30,7 +30,7 @@ export default function Archive() {
         <CustomTab onTabChange={handleTabChange} />
       </div>
       {currentTab === '편지' ? (
-        <ArchiveContent />
+        <LetterContent />
       ) : (
         <>
           <div className="w-full mb-4">
