@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import ChosunNm from '@/utils/fonts'
+import { ChosunNm } from '@/utils/fonts'
 import Logo from 'public/svg/logo.svg'
 import './globals.css'
 
