@@ -71,8 +71,8 @@ public class GalleryController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<GalleryResDTO>> uploadFiles(
-            @RequestParam("files") List<MultipartFile> files,
-            UploadDTO uploadDTO,
+            @RequestPart("files") List<MultipartFile> files,
+            @RequestPart("data") UploadDTO uploadDTO,
             HttpServletRequest request) {
 
         User user = userService.getUserByToken(request).get();
