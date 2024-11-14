@@ -78,6 +78,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     const signinResponse = await sendSigninRequest({phone: phoneNumber});
     console.log('Signin Response:', signinResponse);
     if (signinResponse && signinResponse.status === 200) {
+      await AsyncStorage.setItem('name', signinResponse.data.name);
       await AsyncStorage.setItem(
         'accessToken',
         signinResponse.data.accessToken,
@@ -86,9 +87,10 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
         'refreshToken',
         signinResponse.data.refreshToken,
       );
+      console.log('name', await AsyncStorage.getItem('name'));
       console.log('accessToken:', await AsyncStorage.getItem('accessToken'));
       console.log('refreshToken:', await AsyncStorage.getItem('refreshToken'));
-      showToast(`${name}님 환영합니다.`);
+      showToast(`${signinResponse.data.name}님 환영합니다.`);
       navigation.navigate('Main');
     } else if (signinResponse && signinResponse.status === 215) {
       setStep(step + 1);
