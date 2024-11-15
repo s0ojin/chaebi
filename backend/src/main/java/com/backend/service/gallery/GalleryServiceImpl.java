@@ -19,6 +19,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -281,10 +284,13 @@ public class GalleryServiceImpl implements GalleryService {
     }
 
     //유저의 파일 들을 반환
-    public List<GalleryResDTO> getFileUrlByUser(User user) {
-        List<Gallery> urls = galleryRepository.findAllByUser(user);
-        List<GalleryResDTO> list = toGalleryResDTOList(urls);
-        return list;
+    public GalleryPageResDTO getFileUrlByUser(User user, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdDate").descending());
+
+        Page<Gallery> galleryPage = galleryRepository.findAllByUser(user, pageRequest);
+        Page<GalleryResDTO> dtoPage = galleryPage.map(GalleryResDTO::new);
+
+        return new GalleryPageResDTO(dtoPage);
     }
 
     @Transactional
