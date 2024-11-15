@@ -18,8 +18,8 @@ const calculateDate = function (date: string) {
     return `${hours}시간 전`;
   }
   const days = Math.floor(hours / 24); // 일 단위로 변환
-  if (days <= 30) {
-    return `${hours}일 전`;
+  if (days >= 1 && days <= 30) {
+    return `${days}일 전`;
   }
   const months = Math.floor(days / 30); // 월 단위로 변환
   if (months < 12) {
@@ -27,6 +27,13 @@ const calculateDate = function (date: string) {
   }
   const years = Math.floor(days / 365); // 년 단위로 변환
   return `${years}년 전`;
+};
+
+const formatPhoneNumber:(phoneNumber:string)=> string = (phoneNumber:string) => {
+  return phoneNumber.replace(
+    /^(02|01[0-9])(\d{3,4})(\d{4})$/,
+    "$1-$2-$3"
+  );
 };
 
 interface RemainListViewProp {
@@ -59,7 +66,7 @@ export default function RemainListView({
         {/* 사용자 정보 */}
         <View className="ml-4 gap-2">
           <Text className="text-xl">{recipient.name}</Text>
-          <Text className="text-base">{recipient.phone}</Text>
+          <Text className="text-base">{formatPhoneNumber(recipient.phone)}</Text>
         </View>
       </View>
       {isSetting ? (
