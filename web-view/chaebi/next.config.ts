@@ -22,6 +22,16 @@ const nextConfig: NextConfig = {
     return config
   },
 
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'amzn-s3-s11p31a309-rip.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/**',
+      },
+    ],
+  },
+
   async rewrites() {
     return [
       {

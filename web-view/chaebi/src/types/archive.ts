@@ -1,15 +1,3 @@
-export type Theme = {
-  id: number
-  name: string
-  images: string[]
-}
-
-export type MasonryItem = {
-  uri: string
-  id: string
-  height: number
-}
-
 export type Letter = {
   id: number
   content: string
@@ -25,4 +13,27 @@ export type Letter = {
   }
   lastModifiedDate: string
   sort: string
+}
+
+export type GalleryItem = {
+  id: number
+  fileUrl: string
+  fileType: string
+  fileName: string
+  createdDate: string
+  keywords: string[]
+  locate: string | null
+  capturedDate: string | null
+}
+
+export type MasonryItem = {
+  uri: string
+  id: string
+  height: number
+}
+
+export type Theme = {
+  id: number
+  name: string
+  images: string[]
 }
