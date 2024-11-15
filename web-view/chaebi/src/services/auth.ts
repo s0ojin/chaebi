@@ -1,5 +1,5 @@
 import axios from 'axios'
-import useUserStore from '@/stores/userStore'
+import useUserStore from '@/stores/useUserStore'
 
 export async function verifyEnterCode(enterCode: string) {
   try {
