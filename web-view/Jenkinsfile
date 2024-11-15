@@ -42,8 +42,8 @@ pipeline {
             parallel {
                 stage('Next Docker Run') {
                     steps {
-                        dir('./backend') {
-                            sh 'docker run --name frontend-app -d -v data:/data -p 3000:3000 -e TZ=Asia/Seoul backend'
+                        dir('./web-view') {
+                            sh 'docker run --name frontend-app -d -v data:/data -p 3000:3000 -e TZ=Asia/Seoul frontend'
                         }
                     }
                 }

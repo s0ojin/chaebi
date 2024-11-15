@@ -2,9 +2,9 @@
 
 import { useState, useCallback } from 'react'
 
-type CodeInputProps = { 
-  mode: 'code' | 'answer',
-  value: string,
+type CodeInputProps = {
+  mode: 'code' | 'answer'
+  value: string
   onChange: (value: string) => void
 }
 
@@ -13,7 +13,7 @@ function CodeInput({ mode, value, onChange }: CodeInputProps) {
 
   const validateAndSetValue = useCallback(
     (value: string) => {
-      let filteredValue = value;
+      let filteredValue = value
 
       if (mode === 'code') {
         const upperValue = value.toUpperCase()
@@ -22,7 +22,7 @@ function CodeInput({ mode, value, onChange }: CodeInputProps) {
         filteredValue = value.slice(0, 20)
       }
 
-      onChange(filteredValue);
+      onChange(filteredValue)
     },
     [mode, onChange],
   )

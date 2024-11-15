@@ -22,13 +22,11 @@ const nextConfig: NextConfig = {
     return config
   },
 
-  // 프록시 설정
   async rewrites() {
     return [
       {
         source: '/api/:path*',
-        // destination: 'http://k11a309.p.ssafy.io:8080/api/:path*',
-        destination: 'http://localhost:8080/api/:path*',
+        destination: 'http://k11a309.p.ssafy.io:8080/api/:path*',
       },
     ]
   },
