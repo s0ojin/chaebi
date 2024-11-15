@@ -1,11 +1,7 @@
 import React from 'react';
-import {Image, ScrollView, View} from 'react-native';
-
-type MasonryItem = {
-  uri: string;
-  id: string;
-  height: number;
-};
+import {ScrollView, View} from 'react-native';
+import MasonryGridItem from './MasonryGridItem';
+import {MasonryItem} from '../../types/album';
 
 function MasonryGrid() {
   const data: MasonryItem[] = Array.from({length: 30}).map((_, index) => ({
@@ -25,12 +21,7 @@ function MasonryGrid() {
         {columns.map((column, colIndex) => (
           <View key={colIndex} className="flex-1">
             {column.map(item => (
-              <Image
-                key={item.id}
-                source={{uri: item.uri}}
-                className="rounded-lg mb-2"
-                style={{height: item.height}}
-              />
+              <MasonryGridItem key={item.id} image={item} />
             ))}
           </View>
         ))}

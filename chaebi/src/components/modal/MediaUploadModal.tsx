@@ -9,7 +9,8 @@ export default function MediaUploadModal({
 }: {
   closeModal: () => void;
 }) {
-  const {selectedMediaList} = useAlbumStore();
+  const {selectedMediaList, setSelectedMediaList, setAllRecipients} =
+    useAlbumStore();
 
   return (
     <View className="p-5 min-w-80 items-center max-w-[80%] overflow-hidden">
@@ -35,15 +36,16 @@ export default function MediaUploadModal({
           className="w-full h-full rounded-lg"
         />
         <Text className="mt-2 text-primary-400 text-lg self-end ml-3">
-          {`(${8}장)`}
+          {`(${selectedMediaList.length}장)`}
         </Text>
       </View>
 
       <View className="flex-row gap-2 h-11">
         <Pressable
           onPress={() => {
+            setAllRecipients([]);
+            setSelectedMediaList([]);
             closeModal();
-            // TODO: 앨범 상태 날리기
           }}
           className="bg-primary-200 flex-1 rounded-lg justify-center">
           <Text className="text-base text-primary-400 text-center">취소</Text>

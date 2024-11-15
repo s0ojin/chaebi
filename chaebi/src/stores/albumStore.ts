@@ -1,13 +1,15 @@
 import {create} from 'zustand';
-import {SelectedMediaType} from '../types/album';
+import {SelectedLocalMediaType} from '../types/album';
 
 type AlbumStore = {
   selectedRecipientIdList: number[];
   addRecipientsId: (recipientId: number) => void;
   removeRecipientsId: (recipientId: number) => void;
   setAllRecipients: (recipientList: number[]) => void;
-  selectedMediaList: SelectedMediaType[];
-  setSelectedMediaList: (mediaList: SelectedMediaType[]) => void;
+  selectedLocalMediaList: SelectedLocalMediaType[];
+  setSelectedLocalMediaList: (mediaList: SelectedLocalMediaType[]) => void;
+  isSelectMode: boolean;
+  setIsSelectMode: () => void;
 };
 
 const useAlbumStore = create<AlbumStore>(set => ({
@@ -27,11 +29,17 @@ const useAlbumStore = create<AlbumStore>(set => ({
   setAllRecipients: (recipientList: number[]) =>
     set({selectedRecipientIdList: recipientList}),
 
-  selectedMediaList: [],
-  setSelectedMediaList: (mediaList: SelectedMediaType[]) =>
+  selectedLocalMediaList: [],
+  setSelectedLocalMediaList: (mediaList: SelectedLocalMediaType[]) =>
     set({
-      selectedMediaList: mediaList,
+      selectedLocalMediaList: mediaList,
     }),
+
+  isSelectMode: false,
+  setIsSelectMode: () =>
+    set(state => ({
+      isSelectMode: !state.isSelectMode,
+    })),
 }));
 
 export default useAlbumStore;
