@@ -25,8 +25,19 @@ export type SelectedAppMediaType = {
   ];
 };
 
-export type MasonryItem = {
-  uri: string;
-  id: string;
-  height: number;
+export type Media = {
+  id: number;
+  fileUrl: string;
+  fileType: 'IMAGE' | 'VIDEO';
+  fileName: string;
+  createdDate: string;
+  recipients: number[];
+};
+
+export type AlbumListRes = {
+  content: Media[];
+  currentPage: number;
+  totalPages: number;
+  totalElements: number;
+  hasNext: false;
 };

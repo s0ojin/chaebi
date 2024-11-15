@@ -9,7 +9,7 @@ export default function MediaUploadModal({
 }: {
   closeModal: () => void;
 }) {
-  const {selectedMediaList, setSelectedMediaList, setAllRecipients} =
+  const {selectedLocalMediaList, setSelectedLocalMediaList, setAllRecipients} =
     useAlbumStore();
 
   return (
@@ -31,12 +31,12 @@ export default function MediaUploadModal({
         />
         <Image
           source={{
-            uri: selectedMediaList[0]?.uri,
+            uri: selectedLocalMediaList[0]?.uri,
           }}
           className="w-full h-full rounded-lg"
         />
         <Text className="mt-2 text-primary-400 text-lg self-end ml-3">
-          {`(${selectedMediaList.length}장)`}
+          {`(${selectedLocalMediaList.length}장)`}
         </Text>
       </View>
 
@@ -44,7 +44,7 @@ export default function MediaUploadModal({
         <Pressable
           onPress={() => {
             setAllRecipients([]);
-            setSelectedMediaList([]);
+            setSelectedLocalMediaList([]);
             closeModal();
           }}
           className="bg-primary-200 flex-1 rounded-lg justify-center">

@@ -1,17 +1,15 @@
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import MasonryGridItem from './MasonryGridItem';
-import {MasonryItem} from '../../types/album';
+import {Media} from '../../types/album';
 
-function MasonryGrid() {
-  const data: MasonryItem[] = Array.from({length: 30}).map((_, index) => ({
-    uri: `https://picsum.photos/id/${index + 30}/300`,
-    id: index.toString(),
-    height: 150 + Math.floor(Math.random() * 150),
-  }));
+interface MasonryGridProps {
+  mediaList: (Media & {height: number})[];
+}
 
-  const columns: MasonryItem[][] = [[], []];
-  data.forEach((item, index) => {
+function MasonryGrid({mediaList}: MasonryGridProps) {
+  const columns: (Media & {height: number})[][] = [[], []];
+  mediaList.forEach((item, index) => {
     columns[index % 2].push(item);
   });
 
@@ -21,7 +19,7 @@ function MasonryGrid() {
         {columns.map((column, colIndex) => (
           <View key={colIndex} className="flex-1">
             {column.map(item => (
-              <MasonryGridItem key={item.id} image={item} />
+              <MasonryGridItem key={item.id} media={item} />
             ))}
           </View>
         ))}
