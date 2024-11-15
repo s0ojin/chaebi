@@ -7,9 +7,11 @@ import CustomCarousel from '@/components/archive/CustomCarousel'
 import MasonryGrid from '@/components/archive/MasonryGrid'
 import LetterContent from '@/containers/LetterContent'
 import { fetchGallery } from '@/services/archive'
-import useUserStore from '@/stores/useUserStore'
+import useUserStore, { useInitializeUserStore } from '@/stores/useUserStore'
 
 export default function Archive() {
+  useInitializeUserStore()
+
   const [data, setData] = useState<MasonryItem[]>([])
   const [currentTab, setCurrentTab] = useState('편지')
   const { userInfo, recipientRes } = useUserStore()
