@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import CustomCarousel from './CustomCarousel';
 import { GalleryItem } from '../types/archive';
-import { groupByYear, groupByLocation } from '../utils/FilterUtils';
+import { groupByYear, groupByLocation } from '../utils/filterUtils';
 
 enum GroupType {
   Year = 'Year',
