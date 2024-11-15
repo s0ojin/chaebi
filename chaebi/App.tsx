@@ -20,6 +20,7 @@ import CompleteScreen from './src/screens/Remain/complete';
 import AlbumScreen from './src/screens/Album';
 import MypageScreen from './src/screens/Mypage';
 import SetAlertScreen from './src/screens/Mypage/SetAlert';
+import CheckPasswordScreen from './src/screens/CheckPw';
 
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import SetLockScreen from './src/screens/Mypage/SetLock';
@@ -44,6 +45,7 @@ export type RootStackParamList = {
   Setting: undefined;
   SetAlert: undefined;
   SetLock: undefined;
+  CheckPw: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -78,6 +80,7 @@ const App: React.FC = () => {
               <Stack.Screen name="Setting" component={MypageScreen} />
             <Stack.Screen name="SetAlert" component={SetAlertScreen} />
             <Stack.Screen name="SetLock" component={SetLockScreen} />
+            <Stack.Screen name="CheckPw" component={CheckPasswordScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </GestureHandlerRootView>

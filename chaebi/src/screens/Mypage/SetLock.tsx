@@ -36,19 +36,23 @@ export default function SetLockScreen({navigation}: SetLockScreenProps) {
   const checkAvailable: () => Promise<string> = async () => {
     try {
       const resultObject = await rnBiometrics.isSensorAvailable();
+      if (
+        resultObject.error &&
+        resultObject.error === 'BIOMETRIC_ERROR_NONE_ENROLLED'
+      ) {
+        showToast('등록된 생체정보가 없어 비활성화 되었습니다.');
+      }
       const {available, biometryType} = resultObject;
       if (available && biometryType === TouchID) {
-        // AsyncStorage.setItem('bioType', 'TouchID')
         return TouchID.toString();
       } else if (available && biometryType === FaceID) {
-        // AsyncStorage.setItem('bioType', 'FaceID')
         return FaceID.toString();
       } else if (available && biometryType === Biometrics) {
-        // AsyncStorage.setItem('bioType', 'Biometrics')
         return Biometrics.toString();
       }
       return '';
     } catch (error) {
+      console.log(error);
       return '';
     }
   };
@@ -119,6 +123,7 @@ export default function SetLockScreen({navigation}: SetLockScreenProps) {
                   thumbColor={usePassword ? '#444444' : '#D9D9D9'}
                   ios_backgroundColor="#3e3e3e"
                   onValueChange={() => {
+                    if (!usePassword) navigation.navigate('SetPw');
                     setUsePassword(!usePassword);
                   }}
                   value={usePassword}
@@ -149,7 +154,9 @@ export default function SetLockScreen({navigation}: SetLockScreenProps) {
                     setUseBiodata(false);
                   } else if (!useBiodata && canUseBiodata) {
                     rnBiometrics
-                      .simplePrompt({promptMessage: '화면잠금을 위한 생체정보 확인'})
+                      .simplePrompt({
+                        promptMessage: '화면잠금을 위한 생체정보 확인',
+                      })
                       .then(SimplePromptResult => {
                         if (canUseBiodata)
                           AsyncStorage.setItem('bioType', canUseBiodata);
@@ -162,11 +169,11 @@ export default function SetLockScreen({navigation}: SetLockScreenProps) {
                   // else showToast("생체인식을 이용할 수 없습니다.")
                 }}
                 value={useBiodata}
-                disabled={!canUseBiodata}
+                disabled={!useBiodata && !canUseBiodata}
               />
             }
             onPress={() => {}}
-            disabled={!canUseBiodata}
+            disabled={!useBiodata && !canUseBiodata}
           />
         </View>
       </View>
