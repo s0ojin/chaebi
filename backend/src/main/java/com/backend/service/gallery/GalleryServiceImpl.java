@@ -11,6 +11,8 @@ import com.backend.exception.UnauthorizedException;
 import com.backend.repository.GalleryRecipientRepository;
 import com.backend.repository.GalleryRepository;
 import com.backend.repository.RecipientRepository;
+import com.backend.repository.UserRepository;
+import com.backend.service.address.AddressService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +45,8 @@ public class GalleryServiceImpl implements GalleryService {
     private final GalleryRecipientRepository galleryRecipientRepository;
     private final AmazonS3 s3Client;
     private final WebClient webClient;
+    private final UserRepository userRepository;
+    private final AddressService addressService;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -114,7 +118,12 @@ public class GalleryServiceImpl implements GalleryService {
                     gallery.addRecipient(recipient);
                 }
             }
+            Location location = Location.builder()
+                            .longitude("127.101313354")
+                            .latitude("37.402352535")
+                            .build();
 
+            gallery.setLocate(addressService.addAddress(location));
             gallery = galleryRepository.save(gallery);
             return new GalleryResDTO(gallery);
 
@@ -347,8 +356,8 @@ public class GalleryServiceImpl implements GalleryService {
     }
 
     //유저와 열람자의 파일명을 반환(마지막 송신했을 때 용)
-    public List<GalleryRecipientRes> getFileUrlByUserAndRecipient(User user, Long recipientId) {
-
+    public List<GalleryRecipientRes> getFileUrlByUserAndRecipient(Long userId, Long recipientId) {
+        User user = userRepository.findById(userId).get();
         List<Gallery> urls = galleryRepository.findByRecipientUserAndRecipientId(user, recipientId);
         // 갤러리 소유자 체크
         List<GalleryRecipientRes> list = toGalleryRecipientResList(urls);
