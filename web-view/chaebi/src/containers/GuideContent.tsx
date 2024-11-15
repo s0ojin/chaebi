@@ -7,6 +7,7 @@ import CodeInput from '@/components/ui/CodeInput'
 import NextButton from '@/components/ui/NextButton'
 import { useRouter } from 'next/navigation'
 import { verifyEnterCode } from '@/services/auth'
+import useUserStore from '@/store/userStore'
 
 export default function GuideContent({
   enterCode,
@@ -14,6 +15,7 @@ export default function GuideContent({
 }: GuideContentProps) {
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false)
   const router = useRouter()
+  const { setUserInfo, setRecipientRes } = useUserStore()
 
   useEffect(() => {
     function handleResize() {
@@ -31,9 +33,11 @@ export default function GuideContent({
       const data = await verifyEnterCode(enterCode)
       console.log('API Response Data:', data)
       if (data) {
-        const { userInfo, recipientRes } = data
+        const { userInfo, enterRecipient } = data
         console.log('Extracted userInfo:', userInfo)
-        console.log('Extracted recipientRes:', recipientRes)
+        console.log('Extracted recipientRes:', enterRecipient)
+        setUserInfo(userInfo)
+        setRecipientRes(enterRecipient)
         router.push('/security')
       }
     } catch (error) {
