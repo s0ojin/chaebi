@@ -1,15 +1,16 @@
 'use client'
 
-import { useRouter, useParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import SecurityContent from '@/containers/SecurityContent'
+import useUserStore from '@/stores/userStore'
 
 export default function Security() {
   const router = useRouter()
-  const { id } = useParams()
+  const { recipientRes } = useUserStore()
 
   function handleNextClick() {
-    if (id) {
-      router.push(`/${id}`)
+    if (recipientRes?.id) {
+      router.push(`/archive/${recipientRes.id}`)
     }
   }
 

@@ -7,6 +7,7 @@ import CodeInput from '@/components/ui/CodeInput'
 import NextButton from '@/components/ui/NextButton'
 import { useRouter } from 'next/navigation'
 import { verifyEnterCode } from '@/services/auth'
+import useUserStore from '@/stores/userStore'
 
 export default function GuideContent({
   enterCode,
@@ -14,6 +15,7 @@ export default function GuideContent({
 }: GuideContentProps) {
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false)
   const router = useRouter()
+  const { setUserInfo, setRecipientRes } = useUserStore()
 
   useEffect(() => {
     function handleResize() {
@@ -28,14 +30,18 @@ export default function GuideContent({
 
   async function handleNextClick() {
     try {
-      const response = await verifyEnterCode(enterCode)
-      if (response.status === 200) {
+      const data = await verifyEnterCode(enterCode)
+      console.log('API Response Data:', data)
+      if (data) {
+        const { userInfo, enterRecipient } = data
+        console.log('Extracted userInfo:', userInfo)
+        console.log('Extracted recipientRes:', enterRecipient)
+        setUserInfo(userInfo)
+        setRecipientRes(enterRecipient)
         router.push('/security')
-      } else {
-        console.error('Failed to verify enter code')
       }
     } catch (error) {
-      console.error('Error occurred while verifying enter code')
+      console.error('Error occurred while verifying enter code:', error)
     }
   }
 
@@ -48,7 +54,9 @@ export default function GuideContent({
         </div>
       </div>
       <div
-        className={`w-full ${isKeyboardVisible ? 'mb-20' : 'mb-8'} sticky bottom-8 flex justify-center`}
+        className={`w-full ${
+          isKeyboardVisible ? 'mb-20' : 'mb-8'
+        } sticky bottom-8 flex justify-center`}
       >
         <NextButton label="다음" onClick={handleNextClick} />
       </div>
