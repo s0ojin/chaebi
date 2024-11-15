@@ -52,10 +52,12 @@ public class GalleryController {
 
     @Operation(summary = "유저가 작성한 갤러리")
     @GetMapping("/userList")
-    public ResponseEntity<?> getGalleryList(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<?> getGalleryList(HttpServletRequest httpServletRequest,
+                                            @RequestParam(defaultValue = "0") int page){
         User user = userService.getUserByToken(httpServletRequest).get();
-        List<GalleryResDTO> list = galleryService.getFileUrlByUser(user);
-        return ResponseEntity.ok(list);
+        int size = 20;
+        GalleryPageResDTO response = galleryService.getFileUrlByUser(user, page, size);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "열람자만의 갤러리")
