@@ -4,6 +4,8 @@ import com.backend.domain.User;
 import com.backend.dto.*;
 import com.backend.exception.NotFoundException;
 import com.backend.exception.UnauthorizedException;
+import com.backend.service.classify.ClassifyService;
+import com.backend.service.classify.ClassifyServiceImpl;
 import com.backend.service.gallery.GalleryService;
 import com.backend.service.gallery.GalleryServiceImpl;
 import com.backend.service.user.UserService;
@@ -28,6 +30,7 @@ public class GalleryController {
 
     private final GalleryService galleryService;
     private final UserService userService;
+    private final ClassifyService classifyService;
 
 //    @Operation(summary = "PresignedURL 생성")
 //    @PostMapping("/presigned")
@@ -67,6 +70,19 @@ public class GalleryController {
     ) {
         List<GalleryRecipientRes> list = galleryService.getFileUrlByUserAndRecipient(userId, recipientId);
         return ResponseEntity.ok(list);
+    }
+
+    @Operation(summary = "열람자만의 필터링 갤러리")
+    @PostMapping("/filterList")
+    public ResponseEntity<?> getClassifiedGalleries(
+            @RequestParam Long userId,
+            @RequestParam Long recipientId) {
+        try {
+            ClassifiedGalleries classifiedGalleries = classifyService.getClassifiedGalleries(userId, recipientId);
+            return ResponseEntity.ok(classifiedGalleries);
+        } catch (Exception e) {
+            return ResponseEntity.ok(e.getMessage());
+        }
     }
 
     @PostMapping(value = "/upload",
