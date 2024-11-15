@@ -38,6 +38,14 @@ export default function Archive() {
 
   function handleTabChange(selectedTab: string) {
     setCurrentTab(selectedTab)
+
+    if (data.length > 0) {
+      const updatedData = data.map((item) => ({
+        ...item,
+        height: 150 + Math.floor(Math.random() * 150),
+      }))
+      setData(updatedData)
+    }
   }
 
   return (
