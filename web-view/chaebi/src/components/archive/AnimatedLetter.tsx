@@ -59,16 +59,16 @@ export default function AnimatedLetter({
         {isOpening && (
           <motion.div
             key="letter"
-            className="absolute w-40 h-60 bg-white shadow-lg overflow-hidden"
+            className="absolute w-4/5 h-80 bg-_white shadow-lg overflow-hidden"
             initial={{ y: '50%', scale: 0.8, opacity: 0 }}
-            animate={{ y: '-50%', scale: 2, opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
+            animate={{ y: '-50%', scale: 1.8, opacity: 1 }}
+            transition={{ delay: 0.5, duration: 1.3 }}
           >
             <motion.div
               initial={{ opacity: 0, scale: 1 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.3, duration: 1 }}
-              className="h-full overflow-y-auto p-3 text-xs"
+              transition={{ delay: 1.8, duration: 1 }}
+              className="h-full overflow-y-auto"
             >
               {children}
             </motion.div>

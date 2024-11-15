@@ -8,6 +8,7 @@ import NextButton from '@/components/ui/NextButton'
 export default function SecurityContent({ onNextClick }: SecurityContentProps) {
   const [isClient, setIsClient] = useState(false)
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false)
+  const [inputValue, setInputValue] = useState('') // 추가된 상태
 
   useEffect(() => {
     setIsClient(true)
@@ -36,7 +37,7 @@ export default function SecurityContent({ onNextClick }: SecurityContentProps) {
         </div>
         <SecurityQuestion question="저의 고등학교 3학년 담임선생님 성함은 무엇일까요?" />
         <div className="mt-8 md:mt-12 md:mb-10 w-full flex justify-center">
-          <CodeInput mode="code" />
+          <CodeInput mode="code" value={inputValue} onChange={setInputValue} />
         </div>
       </div>
       <div
