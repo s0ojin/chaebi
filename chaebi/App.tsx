@@ -21,6 +21,7 @@ import AlbumScreen from './src/screens/Album';
 import MypageScreen from './src/screens/Mypage';
 import SetAlertScreen from './src/screens/Mypage/SetAlert';
 import CheckPasswordScreen from './src/screens/CheckPw';
+import {DevToolsBubble} from 'react-native-react-query-devtools';
 
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import SetLockScreen from './src/screens/Mypage/SetLock';
@@ -85,6 +86,7 @@ const App: React.FC = () => {
           </NavigationContainer>
         </GestureHandlerRootView>
       </ToastProvider>
+      <DevToolsBubble />
     </QueryClientProvider>
   );
 };

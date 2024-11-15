@@ -11,11 +11,29 @@ import AlbumAccessModal from '../../components/modal/AlbumAccessModal';
 import MediaUploadModal from '../../components/modal/MediaUploadModal';
 import useAlbumStore from '../../stores/albumStore';
 import TrashCanIcon from '../../assets/icon/trash-can.svg';
+import {useQuery} from '@tanstack/react-query';
+import {getMediaList} from '../../api/album';
+import {Media} from '../../types/album';
+import seedrandom from 'seedrandom';
 
 export default function AlbumScreen() {
   const albumAccessModal = useModal();
   const mediaUploadModal = useModal();
   const {isSelectMode, setIsSelectMode} = useAlbumStore();
+  const {data: mediaList} = useQuery({
+    queryKey: ['mediaList', 'all'],
+    queryFn: getMediaList,
+    select: data => {
+      return data.content.map((item: Media) => {
+        const seed = `${item.id}-${item.fileName}-${item.createdDate}`;
+        const rng = seedrandom(seed);
+        return {
+          ...item,
+          height: 150 + Math.floor(rng() * 150),
+        };
+      });
+    },
+  });
 
   return (
     <>
@@ -34,7 +52,7 @@ export default function AlbumScreen() {
           <Text className="text-2xl text-_white">전체</Text>
           <SettingAdjustIcon />
         </Pressable>
-        <MasonryGrid />
+        <MasonryGrid mediaList={mediaList || []} />
       </View>
       <Pressable
         onPress={albumAccessModal.openModal}
