@@ -18,8 +18,8 @@ const calculateDate = function (date: string) {
     return `${hours}시간 전`;
   }
   const days = Math.floor(hours / 24); // 일 단위로 변환
-  if (days <= 30) {
-    return `${hours}일 전`;
+  if (days >= 1 && days <= 30) {
+    return `${days}일 전`;
   }
   const months = Math.floor(days / 30); // 월 단위로 변환
   if (months < 12) {
