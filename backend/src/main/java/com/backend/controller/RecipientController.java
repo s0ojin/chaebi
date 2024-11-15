@@ -33,7 +33,7 @@ public class RecipientController {
     @Operation(summary = "열람자 등록")
     @PostMapping(value = "create",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> createRecipient(
+    public ResponseEntity<?> createRecipient(
             @RequestPart(value = "file", required = false) MultipartFile file,
             @RequestPart(value = "data") RecipientDTO recipientDTO,
             HttpServletRequest request) {
@@ -45,8 +45,9 @@ public class RecipientController {
         }
 
         try {
-            recipientService.createRecipient(recipientDTO, user.get(), file);
-            return ResponseEntity.ok("열람자가 생성되었습니다.");
+            Long id = recipientService.createRecipient(recipientDTO, user.get(), file);
+            System.out.println("열람자 생성 아이디 : " + id);
+            return ResponseEntity.ok(id);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("열람자 생성 실패: " + e.getMessage());

@@ -31,7 +31,7 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     private final IdConverterServiceImpl idConverterService;
 
     @Override
-    public String createRecipient(RecipientDTO recipientDTO, User user, MultipartFile file) {
+    public Long createRecipient(RecipientDTO recipientDTO, User user, MultipartFile file) {
         if(repository.findByUserAndPhone(user, recipientDTO.getPhone()) != null){
             throw new AlreadyExistsException(recipientDTO.getName() +  "님은 이미 등록되었습니다.");
         }
@@ -50,11 +50,11 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
                 .build();
 
 
-        repository.save(recipient); //열람자 저장
+        Recipient saved = repository.save(recipient); //열람자 저장
         //편지 생성
         Letter letter = letterService.createLetter(user, recipient);
         recipient.setLetter(letter);
-        return "success";
+        return saved.getId();
     }
 
     @Override
