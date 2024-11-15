@@ -2,9 +2,11 @@
 
 import { useRouter } from 'next/navigation'
 import SecurityContent from '@/containers/SecurityContent'
-import useUserStore from '@/stores/userStore'
+import useUserStore, { useInitializeUserStore } from '@/stores/useUserStore'
 
 export default function Security() {
+  useInitializeUserStore()
+
   const router = useRouter()
   const { recipientRes } = useUserStore()
 
