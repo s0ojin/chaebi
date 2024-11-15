@@ -60,15 +60,17 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public void SendSms(CertReqDTO certReqDTO) {
         String phoneNumber = certReqDTO.getPhoneNum();
-        String verificationCode = generateRandomCode(8); // 8자리 인증번호 생성
-
+        //String verificationCode = generateRandomCode(8); // 8자리 인증번호 생성
+        String verificationCode = "11111111";
         // Redis에 인증번호 저장 (3분 유효)
         redisTemplate.opsForValue()
                 .set("SMS:" + phoneNumber, verificationCode,
                         Duration.ofMinutes(VERIFICATION_TIME));
 
         // SMS 메시지 생성
-        smsCertificationUtil.sendSMS(phoneNumber, verificationCode);
+        System.out.println(verificationCode);
+        //smsCertificationUtil.sendSMS(phoneNumber, verificationCode);
+        System.out.println("문자 보냈다고 쳐");
     }
 
 
