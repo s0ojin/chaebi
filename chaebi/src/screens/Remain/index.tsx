@@ -43,7 +43,16 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
   useEffect(() => {
     getRecipient()
       .then(data => {
-        setRecipientList(data);
+        // 최근 수정일 기준으로 정렬하기
+        const dataList: Recipient[] = data.sort((a, b) => {
+          if (a.lastModified && b.lastModified) {
+            const aDate = new Date(a.lastModified).getTime();
+            const bDate = new Date(b.lastModified).getTime();
+            return bDate - aDate;
+          }
+          return 0;
+        });
+        setRecipientList(dataList);
       })
       .catch(error => {
         console.log(error);
@@ -108,7 +117,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
                           title: '편지 삭제하기',
                           moveTo: () => {
                             // 편지삭제 API
-                            if(item.id) deleteRecipient(item.id);
+                            if (item.id) deleteRecipient(item.id);
                           },
                         },
                       ]);
