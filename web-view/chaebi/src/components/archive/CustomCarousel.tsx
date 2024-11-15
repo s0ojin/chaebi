@@ -1,39 +1,72 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import ThemeModal from './ThemeModal'
-import { Theme } from '@/types/archive'
-
-const themes: Theme[] = [
-  {
-    id: 1,
-    name: '테마1',
-    images: ['/dummy/dummy1.png', '/dummy/dummy2.png', '/dummy/dummy3.png'],
-  },
-  {
-    id: 2,
-    name: '테마2',
-    images: ['/dummy/dummy4.png', '/dummy/dummy5.png', '/dummy/dummy6.png'],
-  },
-  {
-    id: 3,
-    name: '테마3',
-    images: [
-      '/dummy/dummy7.png',
-      '/dummy/dummy8.png',
-      '/dummy/dummy9.png',
-      '/dummy/dummy10.png',
-    ],
-  },
-]
+import { Theme, GalleryItem } from '@/types/archive'
+import { groupByYear, groupByLocation, groupByKeyword } from '@/utils/filter'
+import { fetchGallery } from '@/services/archive'
+import useUserStore from '@/stores/useUserStore'
+import { keywordMap } from '@/constants/keywordMap'
 
 export default function CustomCarousel() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedTheme, setSelectedTheme] = useState<Theme | null>(null)
+  const [themes, setThemes] = useState<Theme[]>([])
+  const { userInfo, recipientRes } = useUserStore()
+
+  useEffect(() => {
+    async function loadGallery() {
+      if (userInfo && recipientRes) {
+        try {
+          const galleryData: GalleryItem[] = await fetchGallery(
+            userInfo.userId,
+            recipientRes.id,
+          )
+
+          const yearGroups = groupByYear(galleryData)
+          const locationGroups = groupByLocation(galleryData)
+          const keywords = Object.keys(keywordMap)
+          const keywordGroups = keywords
+            .map((keyword, index: number) => ({
+              id:
+                Object.keys(yearGroups).length +
+                Object.keys(locationGroups).length +
+                index +
+                1,
+              name: keywordMap[keyword] || keyword,
+              images: groupByKeyword(galleryData, keyword).map(
+                (item) => item.fileUrl,
+              ),
+            }))
+            .filter((theme) => theme.images.length > 0)
+
+          const generatedThemes: Theme[] = [
+            ...Object.keys(yearGroups).map((year, index) => ({
+              id: index + 1,
+              name: `${year}년`,
+              images: yearGroups[year].map((item) => item.fileUrl),
+            })),
+            ...Object.keys(locationGroups).map((location, index) => ({
+              id: Object.keys(yearGroups).length + index + 1,
+              name: location,
+              images: locationGroups[location].map((item) => item.fileUrl),
+            })),
+            ...keywordGroups,
+          ].sort(() => Math.random() - 0.5)
+
+          setThemes(generatedThemes)
+        } catch (error) {
+          console.error('Failed to fetch and group gallery data:', error)
+        }
+      }
+    }
+
+    loadGallery()
+  }, [userInfo, recipientRes])
 
   const sliderSettings = {
     dots: false,
@@ -82,7 +115,7 @@ export default function CustomCarousel() {
                 className="rounded-xl transition-opacity duration-300"
               />
               <div className="absolute bottom-3 right-4 text-_white text-4xl">
-                2019년 {/* 원하는 텍스트로 변경 */}
+                {theme.name}
               </div>
             </div>
           ))}
