@@ -61,7 +61,9 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     public RecipientResDTO getRecipient(long id) {
         Recipient recipient = repository.findById(id).orElseThrow(NoSuchElementException::new);
         RecipientResDTO recipientResDTO = RecipientResDTO.builder()
+                .id(recipient.getId())
                 .name(recipient.getName())
+                .phone(recipient.getPhone())
                 //.imgUrl(recipient.getImgurl())
                 .secretQuestion(recipient.getSecurityQuestion())
                 .secretAnswer(recipient.getSecurityAnswer())
@@ -96,8 +98,8 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     }
 
     @Override
-    public void updateRecipient(RecipientDTO recipientDTO, User user, MultipartFile file) { // 열람자 업데이트
-        Recipient recipient = repository.findByUserAndPhone(user, recipientDTO.getPhone());
+    public void updateRecipient(RecipientDTO recipientDTO, User user, MultipartFile file, Long recipientId) { // 열람자 업데이트
+        Recipient recipient = repository.findById(recipientId).get();
         if (recipient == null) {
             throw new NotFoundException("Recipient not found");
         }

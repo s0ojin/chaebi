@@ -78,10 +78,11 @@ public class RecipientController {
     produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateRecipient(@RequestPart(value = "file", required = false) MultipartFile file,
                                                   @RequestPart(value = "data") RecipientDTO recipientDTO,
+                                                  @RequestParam(value = "recipientId") Long recipientId,
                                                   HttpServletRequest request) {
         Optional<User> user = userService.getUserByToken(request);
         if (user.isPresent()) {
-            recipientService.updateRecipient(recipientDTO, user.get(), file);
+            recipientService.updateRecipient(recipientDTO, user.get(), file, recipientId);
             return ResponseEntity.ok("열람자의 정보가 업데이트되었습니다.");
         }
         else {
