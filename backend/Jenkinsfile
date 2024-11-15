@@ -1,0 +1,110 @@
+pipeline {
+    agent any
+
+    environment {
+        // 공통 환경 변수
+        GITLAB_CREDENTIALS_ID = "gitlab"
+        GITLAB_REPO = "https://lab.ssafy.com/s11-final/S11P31A309.git"
+        BRANCH = "be"
+ 
+        SSH_CREDENTIALS_ID = "ssafy-ec2-user"
+        SERVER_IP = "43.201.33.45"
+    }
+
+   stages {
+        stage('Github Clone') {
+            steps {
+                git branch: "${BRANCH}",
+                credentialsId: "${GITLAB_CREDENTIALS_ID}",
+                url: "${GITLAB_REPO}"
+            }
+        }
+
+        stage('Backend - Add Env') {
+            steps {
+                dir('./backend') {
+                    withCredentials([
+                        file(credentialsId: 'application', variable: 'application'),
+                    ]) {
+                        sh '''
+                            mkdir -p src/main/resources
+                            chmod -R 777 src/main/resources
+                            cp ${application} src/main/resources/application.yml
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Shutdown') {
+            steps {
+                script {
+                    // 이미 실행 중인 컨테이너가 있다면 종료
+                    sh 'docker container rm -f backend-app || true'
+                    sh 'docker container rm -f ai-app || true'
+                }
+            }
+        }
+
+        stage('Build') {
+          steps {
+            dir('backend') {
+              sh 'chmod +x gradlew'     
+              sh './gradlew wrapper'
+              sh './gradlew build'
+            }
+          }
+        }
+
+        stage('Docker Build') {
+            parallel {
+                stage('Java Docker Build') {
+                    steps {
+                        dir('./backend') {
+                            sh 'docker build -t backend . '
+                        }
+                    }
+                }
+                stage('Python Docker Build') {
+                    steps {
+                        dir('./AI') {
+                            sh 'docker build -t ai . '
+                        }
+                    }
+                }
+            }
+        }
+
+//         stage('Create Volume') {
+//             steps {
+//                 sh 'docker volume create data || true'
+//             }
+//         }
+
+        stage('Docker Run') {
+            parallel {
+                stage('Java Docker Run') {
+                    steps {
+                        dir('./backend') {
+                            sh 'docker run --name backend-app -d -v data:/data -p 8080:8080 -e TZ=Asia/Seoul backend'
+                        }
+                    }
+                }
+                stage('Python Docker Run') {
+                    steps {
+                          dir('./AI') {
+                                    sh '''
+                                        docker run --name ai-app -d \
+                                        -v /home/ubuntu/code/data:/code/data \
+                                        -p 8000:8000 \
+                                        -e TZ=Asia/Seoul \
+                                        ai
+                                    '''
+                            }
+                    }
+                }
+            }
+        }
+    }
+}
+
