@@ -60,11 +60,12 @@ public class SecurityConfig {
                                 mvcMatcherBuilder.pattern("/api/fcm/**"),
                                 mvcMatcherBuilder.pattern("/error"),
                                 mvcMatcherBuilder.pattern("/api/gallery/recipientList"),
-                                mvcMatcherBuilder.pattern("/api/letter/{id}"),
+                                mvcMatcherBuilder.pattern("/api/letter/**"),
                                 mvcMatcherBuilder.pattern("/api/recipient/enter"),
                                 mvcMatcherBuilder.pattern("/")
                         ).permitAll()
                         // Swagger UI 접근 허용
+                        .requestMatchers(mvcMatcherBuilder.pattern("/api/letter/{id}/update")).hasRole("USER")
                         .requestMatchers(
                                 mvcMatcherBuilder.pattern("/swagger-ui/**"),
                                 mvcMatcherBuilder.pattern("/v3/api-docs/**")
