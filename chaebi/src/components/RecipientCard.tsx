@@ -29,6 +29,13 @@ const calculateDate = function (date: string) {
   return `${years}년 전`;
 };
 
+const formatPhoneNumber:(phoneNumber:string)=> string = (phoneNumber:string) => {
+  return phoneNumber.replace(
+    /^(02|01[0-9])(\d{3,4})(\d{4})$/,
+    "$1-$2-$3"
+  );
+};
+
 interface RemainListViewProp {
   recipient: Recipient;
   isSetting: boolean;
@@ -59,7 +66,7 @@ export default function RemainListView({
         {/* 사용자 정보 */}
         <View className="ml-4 gap-2">
           <Text className="text-xl">{recipient.name}</Text>
-          <Text className="text-base">{recipient.phone}</Text>
+          <Text className="text-base">{formatPhoneNumber(recipient.phone)}</Text>
         </View>
       </View>
       {isSetting ? (
