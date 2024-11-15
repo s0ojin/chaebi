@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.backend.domain.*;
 import com.backend.dto.*;
+import com.backend.exception.FileValidationException;
 import com.backend.exception.NotFoundException;
 import com.backend.exception.UnauthorizedException;
 import com.backend.repository.GalleryRecipientRepository;
@@ -50,6 +51,7 @@ public class GalleryServiceImpl implements GalleryService {
     private final WebClient webClient;
     private final UserRepository userRepository;
     private final AddressService addressService;
+    private static final Set<String> ALLOWED_FILE_TYPES = Set.of("IMAGE", "VIDEO");
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -241,11 +243,9 @@ public class GalleryServiceImpl implements GalleryService {
         if (file.getSize() > maxSize) {
             throw new IllegalArgumentException("File size exceeds maximum limit (10MB)");
         }
-
-        // 허용된 파일 타입 검사
-        String contentType = file.getContentType();
-        if (contentType == null || !(contentType.startsWith("image/") || contentType.startsWith("video/"))) {
-            throw new IllegalArgumentException("Invalid file type. Only images and videos are allowed");
+        String fileType = determineFileType(file.getContentType());
+        if (!ALLOWED_FILE_TYPES.contains(fileType)) {
+            throw new FileValidationException("Invalid file type. Only IMAGE and VIDEO files are allowed");
         }
     }
 
@@ -274,12 +274,16 @@ public class GalleryServiceImpl implements GalleryService {
 
     //타입 확인
     private String determineFileType(String contentType) {
+        if (contentType == null) {
+            throw new FileValidationException("Content type cannot be null");
+        }
+
         if (contentType.startsWith("image/")) {
             return "IMAGE";
         } else if (contentType.startsWith("video/")) {
             return "VIDEO";
         } else {
-            return "OTHER";
+            return "UNKNOWN";
         }
     }
 
@@ -381,7 +385,9 @@ public class GalleryServiceImpl implements GalleryService {
                 .map(gallery -> new GalleryRecipientRes(gallery))
                 .collect(Collectors.toList());
     }
-    
+
+
+
     //Fast API 통신
     private List<Keyword> sendToFastApi(URL presignedUrl) {
         log.info("FastAPI 통신 시작");
