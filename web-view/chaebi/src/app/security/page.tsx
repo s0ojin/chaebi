@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import SecurityContent from '@/containers/SecurityContent'
-import useUserStore from '@/store/userStore'
+import useUserStore from '@/stores/userStore'
 
 export default function Security() {
   const router = useRouter()
@@ -10,7 +10,7 @@ export default function Security() {
 
   function handleNextClick() {
     if (recipientRes?.id) {
-      router.push(`/${recipientRes.id}`)
+      router.push(`/archive/${recipientRes.id}`)
     }
   }
 

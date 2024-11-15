@@ -4,7 +4,7 @@ import QuestionIntro from '@/components/security/QuestionIntro'
 import SecurityQuestion from '@/components/security/SecurityQuestion'
 import CodeInput from '@/components/ui/CodeInput'
 import NextButton from '@/components/ui/NextButton'
-import useUserStore from '@/store/userStore'
+import useUserStore from '@/stores/userStore'
 
 export default function SecurityContent({ onNextClick }: SecurityContentProps) {
   const [isClient, setIsClient] = useState(false)
