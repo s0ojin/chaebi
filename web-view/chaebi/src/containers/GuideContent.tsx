@@ -28,14 +28,16 @@ export default function GuideContent({
 
   async function handleNextClick() {
     try {
-      const response = await verifyEnterCode(enterCode)
-      if (response.status === 200) {
+      const data = await verifyEnterCode(enterCode)
+      console.log('API Response Data:', data)
+      if (data) {
+        const { userInfo, recipientRes } = data
+        console.log('Extracted userInfo:', userInfo)
+        console.log('Extracted recipientRes:', recipientRes)
         router.push('/security')
-      } else {
-        console.error('Failed to verify enter code')
       }
     } catch (error) {
-      console.error('Error occurred while verifying enter code')
+      console.error('Error occurred while verifying enter code:', error)
     }
   }
 
@@ -48,7 +50,9 @@ export default function GuideContent({
         </div>
       </div>
       <div
-        className={`w-full ${isKeyboardVisible ? 'mb-20' : 'mb-8'} sticky bottom-8 flex justify-center`}
+        className={`w-full ${
+          isKeyboardVisible ? 'mb-20' : 'mb-8'
+        } sticky bottom-8 flex justify-center`}
       >
         <NextButton label="다음" onClick={handleNextClick} />
       </div>

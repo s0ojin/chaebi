@@ -8,7 +8,7 @@ import NextButton from '@/components/ui/NextButton'
 export default function SecurityContent({ onNextClick }: SecurityContentProps) {
   const [isClient, setIsClient] = useState(false)
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false)
-  const [inputValue, setInputValue] = useState('') // 추가된 상태
+  const [inputValue, setInputValue] = useState('')
 
   useEffect(() => {
     setIsClient(true)
