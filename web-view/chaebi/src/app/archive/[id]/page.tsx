@@ -1,24 +1,40 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { MasonryItem } from '@/types/archive'
+import { MasonryItem, GalleryItem } from '@/types/archive'
 import CustomTab from '@/components/ui/CustomTab'
 import CustomCarousel from '@/components/archive/CustomCarousel'
 import MasonryGrid from '@/components/archive/MasonryGrid'
 import LetterContent from '@/containers/LetterContent'
+import { fetchGallery } from '@/services/archive'
+import useUserStore from '@/stores/useUserStore'
 
 export default function Archive() {
   const [data, setData] = useState<MasonryItem[]>([])
   const [currentTab, setCurrentTab] = useState('편지')
+  const { userInfo, recipientRes } = useUserStore()
 
   useEffect(() => {
-    const generatedData = Array.from({ length: 10 }).map((_, index) => ({
-      uri: `/dummy/dummy${index + 1}.png`,
-      id: index.toString(),
-      height: 150 + Math.floor(Math.random() * 150),
-    }))
-    setData(generatedData)
-  }, [])
+    async function getGallery() {
+      if (userInfo && recipientRes) {
+        try {
+          const galleryData: GalleryItem[] = await fetchGallery(
+            userInfo.userId,
+            recipientRes.id,
+          )
+          const masonryData: MasonryItem[] = galleryData.map((item) => ({
+            uri: item.fileUrl,
+            id: item.id.toString(),
+            height: 150 + Math.floor(Math.random() * 150),
+          }))
+          setData(masonryData)
+        } catch (error) {
+          console.error('Failed to fetch gallery data:', error)
+        }
+      }
+    }
+    getGallery()
+  }, [userInfo, recipientRes])
 
   function handleTabChange(selectedTab: string) {
     setCurrentTab(selectedTab)
