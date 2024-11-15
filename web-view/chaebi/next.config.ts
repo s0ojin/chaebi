@@ -22,6 +22,10 @@ const nextConfig: NextConfig = {
     return config
   },
 
+  images: {
+    domains: ['amzn-s3-s11p31a309-rip.s3.ap-northeast-2.amazonaws.com'],
+  },
+
   async rewrites() {
     return [
       {
