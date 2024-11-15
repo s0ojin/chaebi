@@ -7,7 +7,7 @@ import CodeInput from '@/components/ui/CodeInput'
 import NextButton from '@/components/ui/NextButton'
 import { useRouter } from 'next/navigation'
 import { verifyEnterCode } from '@/services/auth'
-import useUserStore from '@/stores/userStore'
+import useUserStore from '@/stores/useUserStore'
 
 export default function GuideContent({
   enterCode,
