@@ -2,7 +2,6 @@ import React from 'react';
 import Text from '../../components/CustomText';
 import {Pressable, View} from 'react-native';
 import Header from '../../components/Header';
-import SettingAdjustIcon from '../../assets/icon/settings-adjust.svg';
 import MasonryGrid from '../../components/album/MasonryGrid';
 import CrossIcon from '../../assets/icon/cross.svg';
 import CenterModal from '../../components/modal/CustomCenterModal';
@@ -15,6 +14,7 @@ import {useQuery} from '@tanstack/react-query';
 import {getMediaList} from '../../api/album';
 import {Media} from '../../types/album';
 import seedrandom from 'seedrandom';
+import RecipientFilterBtn from '../../components/album/RecipientFilterBtn';
 
 export default function AlbumScreen() {
   const albumAccessModal = useModal();
@@ -48,10 +48,7 @@ export default function AlbumScreen() {
         </Pressable>
       </View>
       <View className="mx-3">
-        <Pressable className="bg-primary-400 rounded-full self-start flex-row items-center gap-1 px-5 py-[6px] my-4">
-          <Text className="text-2xl text-_white">전체</Text>
-          <SettingAdjustIcon />
-        </Pressable>
+        <RecipientFilterBtn />
         <MasonryGrid mediaList={mediaList || []} />
       </View>
       <Pressable
