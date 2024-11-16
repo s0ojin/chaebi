@@ -10,19 +10,19 @@ export type SelectedLocalMediaType = {
   width: number;
 };
 
+type Recipient = {
+  phoneNumber: string;
+  recipientId: number;
+  recipientName: string;
+};
+
 export type SelectedAppMediaType = {
   id: number;
   fileUrl: string;
   fileType: string;
   fileName: string;
   createdDate: string;
-  recipients: [
-    {
-      recipientId: number;
-      recipientName: string;
-      phoneNumber: string;
-    },
-  ];
+  recipients: Recipient[];
 };
 
 export type Media = {
@@ -31,7 +31,7 @@ export type Media = {
   fileType: 'IMAGE' | 'VIDEO';
   fileName: string;
   createdDate: string;
-  recipients: number[];
+  recipients: Recipient[];
 };
 
 export type AlbumListRes = {
