@@ -124,6 +124,9 @@ export default function SetLockScreen({navigation}: SetLockScreenProps) {
                   ios_backgroundColor="#3e3e3e"
                   onValueChange={() => {
                     if (!usePassword) navigation.navigate('SetPw');
+                    else if (usePassword) {
+                      AsyncStorage.removeItem('password');
+                    }
                     setUsePassword(!usePassword);
                   }}
                   value={usePassword}
