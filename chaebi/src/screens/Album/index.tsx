@@ -19,12 +19,24 @@ import RecipientFilterBtn from '../../components/album/RecipientFilterBtn';
 export default function AlbumScreen() {
   const albumAccessModal = useModal();
   const mediaUploadModal = useModal();
-  const {isSelectMode, setIsSelectMode} = useAlbumStore();
+  const {isSelectMode, setIsSelectMode, selectedRecipientIdForFilter} =
+    useAlbumStore();
+
   const {data: mediaList} = useQuery({
-    queryKey: ['mediaList', 'all'],
+    queryKey: ['mediaList', selectedRecipientIdForFilter],
     queryFn: getMediaList,
     select: data => {
-      return data.content.map((item: Media) => {
+      const filteredContent = data.content.filter((item: Media) => {
+        const recipients = item.recipients || [];
+        return (
+          selectedRecipientIdForFilter === null ||
+          recipients.some(
+            recipient => recipient.recipientId === selectedRecipientIdForFilter,
+          )
+        );
+      });
+
+      return filteredContent.map((item: Media) => {
         const seed = `${item.id}-${item.fileName}-${item.createdDate}`;
         const rng = seedrandom(seed);
         return {
