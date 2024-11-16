@@ -1,40 +1,16 @@
 import React from 'react';
 import {View, Pressable, ScrollView} from 'react-native';
-import {Recipient} from '../../types/remain';
 import Text from '../CustomText';
 import useAlbumStore from '../../stores/albumStore';
-
-const dummy: Recipient[] = [
-  {
-    id: 2,
-    name: '박수진',
-    phone: '111-1111-1111',
-    imgUrl: '',
-    secretQuestion: '',
-    secretAnswer: '',
-    lastModified: '',
-  },
-  {
-    id: 3,
-    name: '한아름송이',
-    phone: '222-2222-2222',
-    imgUrl: '',
-    secretQuestion: '',
-    secretAnswer: '',
-    lastModified: '',
-  },
-  {
-    id: 4,
-    name: '석석바오',
-    phone: '222-2222-2222',
-    imgUrl: '',
-    secretQuestion: '',
-    secretAnswer: '',
-    lastModified: '',
-  },
-];
+import {useQuery} from '@tanstack/react-query';
+import {getRecipientList} from '../../api/album';
 
 export default function RecipientTagList() {
+  const {data: recipientList} = useQuery({
+    queryKey: ['recipientList'],
+    queryFn: getRecipientList,
+  });
+
   const {
     selectedRecipientIdList,
     removeRecipientsId,
@@ -51,10 +27,10 @@ export default function RecipientTagList() {
   };
 
   const handleToggleSelectAll = () => {
-    if (selectedRecipientIdList.length === dummy.length) {
+    if (selectedRecipientIdList.length === recipientList?.length) {
       setAllRecipients([]);
-    } else {
-      setAllRecipients(dummy.map(item => item.id));
+    } else if (recipientList) {
+      setAllRecipients(recipientList.map(item => item.id));
     }
   };
 
@@ -68,20 +44,20 @@ export default function RecipientTagList() {
         <Pressable
           onPress={handleToggleSelectAll}
           className={`${
-            selectedRecipientIdList.length === dummy.length
+            selectedRecipientIdList.length === recipientList?.length
               ? 'bg-primary-400'
               : 'bg-primary-200'
           } py-[5px] px-5 rounded-full mr-2`}>
           <Text
             className={`text-xl ${
-              selectedRecipientIdList.length === dummy.length
+              selectedRecipientIdList.length === recipientList?.length
                 ? 'text-_white'
                 : 'text-primary-300'
             }`}>
             모두
           </Text>
         </Pressable>
-        {dummy.map(item => (
+        {recipientList?.map(item => (
           <Pressable
             key={item.id}
             onPress={() => handleToggleRecipient(item.id)}
