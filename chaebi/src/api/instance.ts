@@ -23,7 +23,7 @@ export const privateApi = axios.create({
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIwMTAzNDc1NjYyNiIsImlhdCI6MTczMTY1Mzg2MywiZXhwIjoxNzMxOTEzMDYzfQ.lVspqIWvbf6m92-uSv8f3d_eIFGCZ4pOTNKw5M38s9gZ9cNk2CMBu34XYJn5y0SnFxnC9HvVMI_lYCxxUmUL3Q`,
+    Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIwMTAyNjY1NjkwOCIsImlhdCI6MTczMTc2NzgyOCwiZXhwIjoxNzMyMDI3MDI4fQ.7MQuUJgeqvstobufC6-UpO80x11YxCfhOnrDWctKvDtFqs7vj4zuK4JgaZ2qlnywa08tMRY6ifD_V4BREuu7aw`,
   },
 });
 
