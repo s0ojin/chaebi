@@ -1,16 +1,109 @@
 import React from 'react';
-import {Image, Pressable, View} from 'react-native';
+import {Alert, Image, Pressable, View} from 'react-native';
 import Text from '../CustomText';
 import RecipientTagList from '../album/RecipientTagList';
 import useAlbumStore from '../../stores/albumStore';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {postUploadMediaList} from '../../api/album';
+import {UploadMediaListReq} from '../../types/album';
 
-export default function MediaUploadModal({
-  closeModal,
-}: {
+interface MediaUploadModalProps {
   closeModal: () => void;
-}) {
-  const {selectedLocalMediaList, setSelectedLocalMediaList, setAllRecipients} =
-    useAlbumStore();
+}
+
+export default function MediaUploadModal({closeModal}: MediaUploadModalProps) {
+  const queryClient = useQueryClient();
+  const {
+    selectedLocalMediaList,
+    setSelectedLocalMediaList,
+    setAllRecipients,
+    selectedRecipientIdList,
+  } = useAlbumStore();
+
+  const mediaUploadMutation = useMutation({
+    mutationFn: (payload: UploadMediaListReq) => postUploadMediaList(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ['mediaList', 'all']});
+    },
+    onError: err => console.log(err.message),
+    onSettled: () => {
+      setAllRecipients([]);
+      setSelectedLocalMediaList([]);
+      closeModal();
+    },
+  });
+
+  const createPayload = async (): Promise<UploadMediaListReq> => {
+    const files = [];
+    const capturedTimes = [];
+    const locations = [];
+
+    const convertToDecimal = (
+      coordinate: string,
+      ref: string,
+    ): number | null => {
+      if (!coordinate || !ref) return null;
+      const [degrees, minutes, seconds] = coordinate.split(',').map(coord => {
+        const [num, denom] = coord.split('/').map(Number);
+        return denom ? num / denom : num;
+      });
+
+      let decimal = degrees + minutes / 60 + seconds / 3600;
+      if (ref === 'S' || ref === 'W') decimal = -decimal;
+      return decimal;
+    };
+
+    for (const media of selectedLocalMediaList) {
+      const latitude = convertToDecimal(
+        media.exif.GPSLatitude,
+        media.exif.GPSLatitudeRef,
+      );
+      const longitude = convertToDecimal(
+        media.exif.GPSLongitude,
+        media.exif.GPSLongitudeRef,
+      );
+
+      const location =
+        latitude !== null && longitude !== null
+          ? `${latitude},${longitude}`
+          : null;
+
+      capturedTimes.push(
+        media.exif.DateTimeDigitized?.split(' ')[0] ||
+          media.exif.DateTime?.split(' ')[0] ||
+          null,
+      );
+      locations.push(location || null);
+
+      files.push({
+        uri: media.path,
+        type: media.mime,
+        name: `media_${Date.now()}.jpg`,
+      });
+    }
+
+    return {
+      files,
+      data: {
+        recipientIds: selectedRecipientIdList,
+        location: locations,
+        capturedTime: capturedTimes,
+      },
+    };
+  };
+
+  const handleUpload = async () => {
+    if (selectedRecipientIdList.length === 0) {
+      Alert.alert(
+        '경고',
+        '최소 한 명 이상의 수신자를 선택해야 사진을 업로드할 수 있습니다.',
+        [{text: '확인'}],
+      );
+      return;
+    }
+    const payload = await createPayload();
+    mediaUploadMutation.mutate(payload);
+  };
 
   return (
     <View className="p-5 min-w-80 items-center max-w-[80%] overflow-hidden">
@@ -31,7 +124,7 @@ export default function MediaUploadModal({
         />
         <Image
           source={{
-            uri: selectedLocalMediaList[0]?.uri,
+            uri: selectedLocalMediaList[0]?.path,
           }}
           className="w-full h-full rounded-lg"
         />
@@ -50,7 +143,9 @@ export default function MediaUploadModal({
           className="bg-primary-200 flex-1 rounded-lg justify-center">
           <Text className="text-base text-primary-400 text-center">취소</Text>
         </Pressable>
-        <Pressable className="bg-primary-400 flex-1 rounded-lg justify-center">
+        <Pressable
+          onPress={handleUpload}
+          className="bg-primary-400 flex-1 rounded-lg justify-center">
           <Text className="text-base text-_white text-center">채우기</Text>
         </Pressable>
       </View>

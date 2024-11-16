@@ -1,7 +1,6 @@
 import React from 'react';
 import {Image, View} from 'react-native';
 import useAlbumStore from '../../stores/albumStore';
-// import MediaSelectBtn from './MediaSelectBtn';
 import CheckIcon from '../../assets/icon/check.svg';
 import {Media} from '../../types/album';
 

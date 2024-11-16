@@ -10,7 +10,7 @@ import {
   PERMISSIONS,
   check,
 } from 'react-native-permissions';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import DocumentPicker from 'react-native-document-picker';
 import useAlbumStore from '../../stores/albumStore';
 
@@ -23,7 +23,8 @@ export default function AlbumAccessModal({
   closeModal,
   mediaUploadModalOpenModal,
 }: AlbumAccessModalProps) {
-  const {setSelectedMediaList} = useAlbumStore();
+  const {setSelectedLocalMediaList} = useAlbumStore();
+
   const handleOptionPress = (option: AlbumAccessOptions) => {
     switch (option) {
       case 'ALBUM':
@@ -127,42 +128,31 @@ export default function AlbumAccessModal({
     );
   };
 
-  const openAlbum = () => {
-    launchImageLibrary(
-      {
-        mediaType: 'mixed',
-        selectionLimit: 10,
-      },
-      response => {
-        if (response.didCancel) {
-          console.log('앨범 접근 취소');
-        } else if (response.errorMessage) {
-          console.error('앨범 접근 에러', response.errorMessage);
-        } else if (response.assets) {
-          setSelectedMediaList(response.assets);
-          mediaUploadModalOpenModal();
-        }
-      },
-    );
+  const openAlbum = async () => {
+    try {
+      const images = await ImagePicker.openPicker({
+        mediaType: 'any',
+        multiple: true,
+        includeExif: true,
+      });
+      setSelectedLocalMediaList(images);
+      mediaUploadModalOpenModal();
+    } catch (error) {
+      console.error('앨범 접근 에러:', error);
+    }
   };
 
-  const openCamera = () => {
-    launchCamera(
-      {
-        mediaType: 'mixed',
-        saveToPhotos: true,
-      },
-      response => {
-        if (response.didCancel) {
-          console.log('카메라 사용 취소');
-        } else if (response.errorMessage) {
-          console.error('카메라 에러', response.errorMessage);
-        } else if (response.assets) {
-          setSelectedMediaList(response.assets);
-          mediaUploadModalOpenModal();
-        }
-      },
-    );
+  const openCamera = async () => {
+    try {
+      const image = await ImagePicker.openCamera({
+        mediaType: 'photo',
+        includeExif: true,
+      });
+      setSelectedLocalMediaList([image]);
+      mediaUploadModalOpenModal();
+    } catch (error) {
+      console.error('카메라 에러:', error);
+    }
   };
 
   const openFilePicker = async () => {
@@ -170,7 +160,7 @@ export default function AlbumAccessModal({
       const result = await DocumentPicker.pick({
         type: [DocumentPicker.types.images, DocumentPicker.types.video],
       });
-      setSelectedMediaList(result);
+      setSelectedLocalMediaList(result);
       mediaUploadModalOpenModal();
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
