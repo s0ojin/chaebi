@@ -1,13 +1,16 @@
 import {create} from 'zustand';
-import {SelectedLocalMediaType} from '../types/album';
+import {ImageOrVideo} from 'react-native-image-crop-picker';
+import {DocumentPickerResponse} from 'react-native-document-picker';
 
 type AlbumStore = {
   selectedRecipientIdList: number[];
   addRecipientsId: (recipientId: number) => void;
   removeRecipientsId: (recipientId: number) => void;
   setAllRecipients: (recipientList: number[]) => void;
-  selectedLocalMediaList: SelectedLocalMediaType[];
-  setSelectedLocalMediaList: (mediaList: SelectedLocalMediaType[]) => void;
+  selectedLocalMediaList: (ImageOrVideo | DocumentPickerResponse)[];
+  setSelectedLocalMediaList: (
+    mediaList: (ImageOrVideo | DocumentPickerResponse)[],
+  ) => void;
   isSelectMode: boolean;
   setIsSelectMode: () => void;
 };
@@ -30,7 +33,9 @@ const useAlbumStore = create<AlbumStore>(set => ({
     set({selectedRecipientIdList: recipientList}),
 
   selectedLocalMediaList: [],
-  setSelectedLocalMediaList: (mediaList: SelectedLocalMediaType[]) =>
+  setSelectedLocalMediaList: (
+    mediaList: (ImageOrVideo | DocumentPickerResponse)[],
+  ) =>
     set({
       selectedLocalMediaList: mediaList,
     }),

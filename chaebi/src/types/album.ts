@@ -41,3 +41,16 @@ export type AlbumListRes = {
   totalElements: number;
   hasNext: false;
 };
+
+export type UploadMediaListReq = {
+  files: {
+    uri: string;
+    type: string;
+    name: string;
+  }[];
+  data: {
+    recipientIds: number[];
+    location: (string | null)[];
+    capturedTime: string[];
+  };
+};
