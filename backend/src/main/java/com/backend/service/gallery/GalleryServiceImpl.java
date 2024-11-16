@@ -35,6 +35,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -60,7 +61,7 @@ public class GalleryServiceImpl implements GalleryService {
     String fastApiUrl;
 
     @Transactional
-    public GalleryResDTO uploadFile(MultipartFile file, UploadDTO uploadDTO, User user) {
+    public GalleryResDTO uploadFile(MultipartFile file, UploadDTO uploadDTO, User user, String locate, String date) {
         try {
             Set<Long> recipientIds = uploadDTO.getRecipientIds();
 
@@ -123,13 +124,24 @@ public class GalleryServiceImpl implements GalleryService {
                     gallery.addRecipient(recipient);
                 }
             }
-            Location location = Location.builder()
-                            .longitude("127.101313354")
-                            .latitude("37.402352535")
-                            .build();
+            // location 정보가 있을 때만 DB 저장
 
-            gallery.setLocate(addressService.addAddress(location));
+            if(uploadDTO.getLocation() != null){
+                String[] lo = locate.split(",");
+                System.out.println("좌표 : " + locate);
+                Location location = Location.builder()
+                        .longitude(lo[1]) // 경도
+                        .latitude(lo[0]) // 위도
+                        .build();
+                gallery.setLocate(addressService.addAddress(location));
+            }
+            //날 짜 변환
+            LocalDateTime capturedDate = this.convertDateTime(date);
+            System.out.println("찍은 날짜: " +capturedDate);
+            gallery.setCapturedDate(capturedDate);
+
             gallery = galleryRepository.save(gallery);
+            System.out.println("끝");
             return new GalleryResDTO(gallery);
 
         } catch (IOException e) {
@@ -433,5 +445,15 @@ public class GalleryServiceImpl implements GalleryService {
             log.error("예상치 못한 에러 발생: {}", e.getMessage());
             throw new RuntimeException("FastAPI 통신 중 에러 발생: " + e.getMessage());
         }
+    }
+
+    private LocalDateTime convertDateTime(String dateStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy:MM:dd");
+
+        // 문자열을 LocalDate로 파싱
+        LocalDate date = LocalDate.parse(dateStr, formatter);
+
+        // LocalDate를 LocalDateTime으로 변환 (시간을 자정으로 설정)
+        return date.atStartOfDay();
     }
 }
