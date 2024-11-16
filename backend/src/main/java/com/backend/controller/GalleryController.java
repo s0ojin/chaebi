@@ -109,7 +109,16 @@ public class GalleryController {
             for (int i = 0; i < files.size(); i++) {
                 if (!files.get(i).isEmpty()) {
                     System.out.println(i + "번째");
-                    GalleryResDTO response = galleryService.uploadFile(files.get(i), uploadDTO, user, uploadDTO.getLocation().get(i), uploadDTO.getCapturedTime().get(i));
+
+                    String location = (i < uploadDTO.getLocation().size())
+                            ? uploadDTO.getLocation().get(i)
+                            : null; // 값이 없으면 null
+                    String capturedTime = (i < uploadDTO.getCapturedTime().size())
+                            ? uploadDTO.getCapturedTime().get(i)
+                            : null; // 값이 없으면 null
+
+                    GalleryResDTO response = response = galleryService.uploadFile(files.get(i), uploadDTO, user, location, capturedTime);
+
                     responses.add(response);
                 }
             }
