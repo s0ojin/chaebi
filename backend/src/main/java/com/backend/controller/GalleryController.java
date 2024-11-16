@@ -106,9 +106,10 @@ public class GalleryController {
 //            MultipartFile multipartFile = convertToMultipartFile(imageBytes, "image.jpg");
 
             // 각 파일별로 처리
-            for (MultipartFile file : files) {
-                if (!file.isEmpty()) {
-                    GalleryResDTO response = galleryService.uploadFile(file, uploadDTO, user);
+            for (int i = 0; i < files.size(); i++) {
+                if (!files.get(i).isEmpty()) {
+                    System.out.println(i + "번째");
+                    GalleryResDTO response = galleryService.uploadFile(files.get(i), uploadDTO, user, uploadDTO.getLocation().get(i), uploadDTO.getCapturedTime().get(i));
                     responses.add(response);
                 }
             }
