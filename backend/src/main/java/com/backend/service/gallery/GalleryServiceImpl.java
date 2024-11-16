@@ -31,9 +31,12 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -126,20 +129,25 @@ public class GalleryServiceImpl implements GalleryService {
             }
             // location 정보가 있을 때만 DB 저장
 
-            if(uploadDTO.getLocation() != null){
+            if(locate != null){
                 String[] lo = locate.split(",");
                 System.out.println("좌표 : " + locate);
+                String latitude = truncateToFourDecimals(lo[0]);
+                String longitude = truncateToFourDecimals(lo[1]);
+
+                System.out.println(longitude + " " + latitude);
                 Location location = Location.builder()
-                        .longitude(lo[1]) // 경도
-                        .latitude(lo[0]) // 위도
+                        .longitude(longitude) // 경도
+                        .latitude(latitude) // 위도
                         .build();
                 gallery.setLocate(addressService.addAddress(location));
             }
             //날 짜 변환
-            LocalDateTime capturedDate = this.convertDateTime(date);
-            System.out.println("찍은 날짜: " +capturedDate);
-            gallery.setCapturedDate(capturedDate);
-
+            if(date != null){
+                LocalDateTime capturedDate = this.convertDateTime(date);
+                System.out.println("찍은 날짜: " +capturedDate);
+                gallery.setCapturedDate(capturedDate);
+            }
             gallery = galleryRepository.save(gallery);
             System.out.println("끝");
             return new GalleryResDTO(gallery);
@@ -455,5 +463,19 @@ public class GalleryServiceImpl implements GalleryService {
 
         // LocalDate를 LocalDateTime으로 변환 (시간을 자정으로 설정)
         return date.atStartOfDay();
+    }
+
+    private String truncateToFourDecimals(String number) {
+        double value = Double.parseDouble(number);
+        // 소수점 이하 자릿수를 구함
+        String strValue = String.valueOf(value);
+        int decimalIndex = strValue.indexOf('.');
+
+        if (decimalIndex != -1 && strValue.length() > decimalIndex + 5) {
+            // 소수점 + 4자리까지만 잘라냄
+            return strValue.substring(0, decimalIndex + 5);
+        }
+
+        return strValue;
     }
 }
