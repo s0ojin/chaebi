@@ -13,6 +13,8 @@ type AlbumStore = {
   ) => void;
   isSelectMode: boolean;
   setIsSelectMode: () => void;
+  selectedRecipientIdForFilter: number | null;
+  setSelectedRecipientIdForFilter: (recipientId: number) => void;
 };
 
 const useAlbumStore = create<AlbumStore>(set => ({
@@ -45,6 +47,10 @@ const useAlbumStore = create<AlbumStore>(set => ({
     set(state => ({
       isSelectMode: !state.isSelectMode,
     })),
+
+  selectedRecipientIdForFilter: null,
+  setSelectedRecipientIdForFilter: (recipientId: number) =>
+    set({selectedRecipientIdForFilter: recipientId}),
 }));
 
 export default useAlbumStore;
