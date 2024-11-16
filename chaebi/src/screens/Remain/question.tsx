@@ -150,8 +150,12 @@ export default function QuestionScreen({
               }
               recipient.secretQuestion = question;
               recipient.secretAnswer = answer;
-              postRecipient(recipient)
-              navigation.navigate('RemainComplete', recipient);
+              postRecipient(recipient).then(
+                (data)=>{
+                  recipient.id=parseInt(data);
+                  navigation.navigate('RemainComplete', recipient);
+                }
+              ).catch((error)=>console.log(`열람인 등록 중 오류 발생 : ${error}`))
             }}
             disabled={!showNext}
           />
