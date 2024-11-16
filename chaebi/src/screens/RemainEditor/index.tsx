@@ -26,6 +26,10 @@ export default function RemainEditorScreen({
   const textInputRef = useRef<TextInputType>(null);
 
   useEffect(() => {
+    // const checkId = async ()=> {
+    //   if(!recipient.id) 
+    // }
+    // checkId();
     getLetter(recipient.id ? recipient.id : 0).then(data => {
       setText(data.content);
       useEditorStore.setState({

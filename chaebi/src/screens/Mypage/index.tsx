@@ -16,7 +16,7 @@ import {RootStackParamList} from '../../../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal from '../../components/mypage/MypageModal';
 import {LOGOUT_WARNING, RESIGN_WARNING} from '../../constants/mypage';
-import {deleteResignUser, postLogoutUser} from '../../api/mypage';
+import {deleteResignUser} from '../../api/mypage';
 
 interface SettingScreenProps {
   navigation: StackNavigationProp<RootStackParamList>;
@@ -93,11 +93,12 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
             />
           </View>
           <View className="my-2">
-            <SettingItem icon={<SupportIcon />} title="문의하기" />
+            <SettingItem icon={<SupportIcon />} title="문의하기" onPress={()=>{}}/>
             <SettingItem
               icon={<WrenchIcon />}
               title="버전 정보"
               content={<Text className="p-4">v 1.0.0</Text>}
+              onPress={()=>{}}
             />
           </View>
         </View>
