@@ -21,6 +21,7 @@ import AlbumScreen from './src/screens/Album';
 import MypageScreen from './src/screens/Mypage';
 import SetAlertScreen from './src/screens/Mypage/SetAlert';
 import CheckPasswordScreen from './src/screens/CheckPw';
+import {DevToolsBubble} from 'react-native-react-query-devtools';
 
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import SetLockScreen from './src/screens/Mypage/SetLock';
@@ -78,13 +79,14 @@ const App: React.FC = () => {
               />
               <Stack.Screen name="Album" component={AlbumScreen} />
               <Stack.Screen name="Setting" component={MypageScreen} />
-            <Stack.Screen name="SetAlert" component={SetAlertScreen} />
-            <Stack.Screen name="SetLock" component={SetLockScreen} />
-            <Stack.Screen name="CheckPw" component={CheckPasswordScreen} />
+              <Stack.Screen name="SetAlert" component={SetAlertScreen} />
+              <Stack.Screen name="SetLock" component={SetLockScreen} />
+              <Stack.Screen name="CheckPw" component={CheckPasswordScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </GestureHandlerRootView>
       </ToastProvider>
+      <DevToolsBubble />
     </QueryClientProvider>
   );
 };
