@@ -1,40 +1,57 @@
-import React from 'react';
-import {Image, ScrollView, View} from 'react-native';
+import React, {useState} from 'react';
+import {Pressable, View} from 'react-native';
+import MasonryGridItem from './MasonryGridItem';
+import {Media} from '../../types/album';
+import {useModal} from '../../hooks/useModal';
+import MediaCarouselModal from '../modal/MediaCarouselModal';
+import useAlbumStore from '../../stores/albumStore';
 
-type MasonryItem = {
-  uri: string;
-  id: string;
-  height: number;
-};
+interface MasonryGridProps {
+  mediaList: (Media & {height: number})[];
+}
 
-export default function MasonryGrid() {
-  const data: MasonryItem[] = Array.from({length: 30}).map((_, index) => ({
-    uri: `https://picsum.photos/id/${index + 30}/300`,
-    id: index.toString(),
-    height: 150 + Math.floor(Math.random() * 150),
-  }));
-
-  const columns: MasonryItem[][] = [[], []];
-  data.forEach((item, index) => {
+function MasonryGrid({mediaList}: MasonryGridProps) {
+  const columns: (Media & {height: number})[][] = [[], []];
+  mediaList.forEach((item, index) => {
     columns[index % 2].push(item);
   });
 
+  const {isVisible, openModal, closeModal} = useModal();
+  const [initialIndex, setInitialIndex] = useState(0);
+  const {isSelectMode, toggleAppMediaSelection} = useAlbumStore();
+
+  const handlePress = (itemIndex: number) => {
+    setInitialIndex(itemIndex);
+    openModal();
+  };
+
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View className="flex-row justify-between gap-2">
-        {columns.map((column, colIndex) => (
-          <View key={colIndex} className="flex-1">
-            {column.map(item => (
-              <Image
-                key={item.id}
-                source={{uri: item.uri}}
-                className="rounded-lg mb-2"
-                style={{height: item.height}}
-              />
-            ))}
-          </View>
-        ))}
-      </View>
-    </ScrollView>
+    <View className="flex-row justify-between gap-2">
+      {columns.map((column, colIndex) => (
+        <View key={colIndex} className="flex-1">
+          {column.map(item => (
+            <Pressable
+              onPress={() =>
+                isSelectMode
+                  ? toggleAppMediaSelection(item.id)
+                  : handlePress(
+                      mediaList.findIndex(media => media.id === item.id),
+                    )
+              }
+              key={item.id}>
+              <MasonryGridItem media={item} />
+            </Pressable>
+          ))}
+        </View>
+      ))}
+      <MediaCarouselModal
+        visible={isVisible}
+        onClose={closeModal}
+        mediaList={mediaList}
+        initialIndex={initialIndex}
+      />
+    </View>
   );
 }
+
+export default React.memo(MasonryGrid);
