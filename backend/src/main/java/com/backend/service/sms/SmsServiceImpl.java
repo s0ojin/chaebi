@@ -32,29 +32,134 @@ public class SmsServiceImpl implements SmsService {
     private static final long VERIFICATION_TIME = 3L; // 인증번호 유효시간 3분
 
 
-    @Override
-    public boolean isObituaryMessage(String body) {
-        // 예시: "부고", "소천", "고인", "작고" 등 부고와 관련된 키워드 판별
-        String[] obituaryKeywords = {"부고", "소천", "작고", "고인"};
-        for (String keyword : obituaryKeywords) {
-            if (body.contains(keyword)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    private static final String[] OBITUARY_KEYWORDS = {
+                "부고", "소천", "작고", "고인", "별세", "영면", "장례", "발인", "천국환송", "천국환승"
+        };
 
-    @Override
-    public String extractDeceasedName(String body) {
-        // 예시 정규식으로 이름 추출
-        String namePattern = "고 (\\S+)";
-        Pattern pattern = Pattern.compile(namePattern);
-        Matcher matcher = pattern.matcher(body);
-        if (matcher.find()) {
-            return matcher.group(1); // 이름 부분 추출
+        private static final String[] NAME_PREFIXES = {
+                "고인", "고", "故", "선친", "빙부", "빙모", "장인", "장모"
+        };
+
+        private static final String[] NAME_SUFFIXES = {
+                "님", "씨", "전", "께서", "님께서"
+        };
+
+        @Override
+        public boolean isObituaryMessage(String body) {
+            if (body == null || body.trim().isEmpty()) {
+                return false;
+            }
+
+            // 대소문자 구분 없이 검색하기 위해 소문자로 변환
+            String normalizedBody = body.toLowerCase();
+
+            // 부고 키워드 검색
+            for (String keyword : OBITUARY_KEYWORDS) {
+                if (normalizedBody.contains(keyword.toLowerCase())) {
+                    // 추가적인 문맥 검증
+                    // 예: "부고입니다", "부고알림", "부고소식" 등의 패턴이 있는지 확인
+                    if (hasObituaryContext(normalizedBody, keyword)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
-        return ""; // 추출 실패 시 기본 메시지
-    }
+
+        private boolean hasObituaryContext(String body, String keyword) {
+            // 부고 문맥을 가진 일반적인 패턴들
+            String[] contextPatterns = {
+                    keyword + "\\s*입니다",
+                    keyword + "\\s*알림",
+                    keyword + "\\s*소식",
+                    keyword + "\\s*드립니다"
+            };
+
+            for (String pattern : contextPatterns) {
+                if (Pattern.compile(pattern).matcher(body).find()) {
+                    return true;
+                }
+            }
+
+            // 단순 키워드만 있어도 부고로 간주
+            return true;
+        }
+
+        @Override
+        public String extractDeceasedName(String body) {
+            if (body == null || body.trim().isEmpty()) {
+                return "";
+            }
+
+            // 여러 이름 추출 패턴 시도
+            String name = tryExtractNameWithPatterns(body);
+
+            // 추출된 이름이 있으면 후처리
+            if (!name.isEmpty()) {
+                name = postProcessExtractedName(name);
+                return name;
+            }
+
+            return "";
+        }
+
+        private String tryExtractNameWithPatterns(String body) {
+            // 1. "고 홍길동님" 형태
+            for (String prefix : NAME_PREFIXES) {
+                for (String suffix : NAME_SUFFIXES) {
+                    String pattern = prefix + "\\s+([가-힣]{2,4})" + suffix;
+                    Pattern p = Pattern.compile(pattern);
+                    Matcher m = p.matcher(body);
+                    if (m.find()) {
+                        return m.group(1);
+                    }
+                }
+            }
+
+            // 2. "홍길동님께서 별세하셨습니다" 형태
+            String pattern2 = "([가-힣]{2,4})(님께서|님이|께서)\\s*(별세|소천|작고|영면)";
+            Pattern p2 = Pattern.compile(pattern2);
+            Matcher m2 = p2.matcher(body);
+            if (m2.find()) {
+                return m2.group(1);
+            }
+
+            // 3. 일반적인 이름 패턴 (2~4자 한글)
+            for (String prefix : NAME_PREFIXES) {
+                String pattern3 = prefix + "\\s+([가-힣]{2,4})";
+                Pattern p3 = Pattern.compile(pattern3);
+                Matcher m3 = p3.matcher(body);
+                if (m3.find()) {
+                    return m3.group(1);
+                }
+            }
+
+            return "";
+        }
+
+        private String postProcessExtractedName(String name) {
+            // 1. 앞뒤 공백 제거
+            name = name.trim();
+
+            // 2. 이름 길이 검증 (2~4자)
+            if (name.length() < 2 || name.length() > 4) {
+                return "";
+            }
+
+            // 3. 한글 이름만 허용
+            if (!name.matches("^[가-힣]{2,4}$")) {
+                return "";
+            }
+
+            // 4. 불필요한 접미사 제거
+            for (String suffix : NAME_SUFFIXES) {
+                if (name.endsWith(suffix)) {
+                    name = name.substring(0, name.length() - suffix.length());
+                }
+            }
+
+            return name;
+        }
 
 
     @Override
