@@ -42,6 +42,10 @@ export type AlbumListRes = {
   hasNext: false;
 };
 
+export type AlbumListResWithHeight = Omit<AlbumListRes, 'content'> & {
+  content: (Media & {height: number})[];
+};
+
 export type UploadMediaListReq = {
   files: {
     uri: string;

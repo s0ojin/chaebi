@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {View} from 'react-native';
 import MasonryGridItem from './MasonryGridItem';
 import {Media} from '../../types/album';
 
@@ -14,17 +14,15 @@ function MasonryGrid({mediaList}: MasonryGridProps) {
   });
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View className="flex-row justify-between gap-2">
-        {columns.map((column, colIndex) => (
-          <View key={colIndex} className="flex-1">
-            {column.map(item => (
-              <MasonryGridItem key={item.id} media={item} />
-            ))}
-          </View>
-        ))}
-      </View>
-    </ScrollView>
+    <View className="flex-row justify-between gap-2">
+      {columns.map((column, colIndex) => (
+        <View key={colIndex} className="flex-1">
+          {column.map(item => (
+            <MasonryGridItem key={item.id} media={item} />
+          ))}
+        </View>
+      ))}
+    </View>
   );
 }
 

@@ -2,8 +2,10 @@ import {AlbumListRes, Media, UploadMediaListReq} from '../types/album';
 import {Recipient} from '../types/remain';
 import {privateApi} from './instance';
 
-export const getMediaList: () => Promise<AlbumListRes> = async () => {
-  const response = await privateApi.get(`/gallery/userList?page=${0}`);
+export const getMediaList: (
+  page: number,
+) => Promise<AlbumListRes> = async page => {
+  const response = await privateApi.get(`/gallery/userList?page=${page}`);
   return response.data;
 };
 
