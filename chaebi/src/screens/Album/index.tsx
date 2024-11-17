@@ -78,8 +78,10 @@ export default function AlbumScreen() {
           </Text>
         </Pressable>
       </View>
-      <View className="mx-3 flex-1">
+      <View className="mx-3">
         <RecipientFilterBtn />
+      </View>
+      <View className="mx-3 flex-1">
         <FlatList
           data={MediaList?.pages || []}
           keyExtractor={(_, index) => index.toString()}
