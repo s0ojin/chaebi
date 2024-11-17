@@ -131,6 +131,9 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     public EnterRes enterRecipient(EnterReq req) {  //열람자 삭제
         //PairDTO pair = idConverterService.extractIds(req.getEnterCode());
         Recipient recipient = repository.findByEnterCode(req.getEnterCode());
+        if(recipient == null){
+            throw new NotFoundException("Not found: " + req.getEnterCode());
+        }
         EnterRecipient enterR = EnterRecipient.builder()
                         .id(recipient.getId())
                         .phone(recipient.getPhone())
