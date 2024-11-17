@@ -1,51 +1,70 @@
 import React from 'react';
-import Text from '../../components/CustomText';
-import {Pressable, View} from 'react-native';
+import {FlatList, View, ActivityIndicator, Pressable} from 'react-native';
 import Header from '../../components/Header';
-import MasonryGrid from '../../components/album/MasonryGrid';
 import CrossIcon from '../../assets/icon/cross.svg';
 import CenterModal from '../../components/modal/CustomCenterModal';
-import {useModal} from '../../hooks/useModal';
 import AlbumAccessModal from '../../components/modal/AlbumAccessModal';
 import MediaUploadModal from '../../components/modal/MediaUploadModal';
 import useAlbumStore from '../../stores/albumStore';
 import TrashCanIcon from '../../assets/icon/trash-can.svg';
-import {useQuery} from '@tanstack/react-query';
+import {useInfiniteQuery} from '@tanstack/react-query';
 import {getMediaList} from '../../api/album';
-import {Media} from '../../types/album';
+import MasonryGrid from '../../components/album/MasonryGrid';
 import seedrandom from 'seedrandom';
+import {useModal} from '../../hooks/useModal';
+import {AlbumListResWithHeight, Media} from '../../types/album';
 import RecipientFilterBtn from '../../components/album/RecipientFilterBtn';
+import Text from '../../components/CustomText';
 
 export default function AlbumScreen() {
-  const albumAccessModal = useModal();
-  const mediaUploadModal = useModal();
   const {isSelectMode, setIsSelectMode, selectedRecipientIdForFilter} =
     useAlbumStore();
+  const albumAccessModal = useModal();
+  const mediaUploadModal = useModal();
 
-  const {data: mediaList} = useQuery({
+  const {
+    data: MediaList,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ['mediaList', selectedRecipientIdForFilter],
-    queryFn: getMediaList,
-    select: data => {
-      const filteredContent = data.content.filter((item: Media) => {
-        const recipients = item.recipients || [];
-        return (
-          selectedRecipientIdForFilter === null ||
-          recipients.some(
-            recipient => recipient.recipientId === selectedRecipientIdForFilter,
-          )
-        );
-      });
-
-      return filteredContent.map((item: Media) => {
-        const seed = `${item.id}-${item.fileName}-${item.createdDate}`;
-        const rng = seedrandom(seed);
-        return {
-          ...item,
-          height: 150 + Math.floor(rng() * 150),
-        };
-      });
-    },
+    queryFn: ({pageParam}) => getMediaList(pageParam),
+    initialPageParam: 0,
+    getNextPageParam: lastPage =>
+      lastPage.hasNext ? lastPage.currentPage + 1 : undefined,
+    select: data => ({
+      ...data,
+      pages: data.pages.map(page => ({
+        ...page,
+        content: page.content
+          .filter((item: Media) => {
+            const recipients = item.recipients || [];
+            return (
+              selectedRecipientIdForFilter === null ||
+              recipients.some(
+                recipient =>
+                  recipient.recipientId === selectedRecipientIdForFilter,
+              )
+            );
+          })
+          .map((item: Media) => {
+            const seed = `${item.id}-${item.fileName}-${item.createdDate}`;
+            const rng = seedrandom(seed);
+            return {
+              ...item,
+              height: 150 + Math.floor(rng() * 150),
+            };
+          }),
+      })),
+    }),
   });
+
+  const handleLoadMore = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
 
   return (
     <>
@@ -59,10 +78,24 @@ export default function AlbumScreen() {
           </Text>
         </Pressable>
       </View>
-      <View className="mx-3">
+      <View className="mx-3 flex-1">
         <RecipientFilterBtn />
-        <MasonryGrid mediaList={mediaList || []} />
+        <FlatList
+          data={MediaList?.pages || []}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({item}: {item: AlbumListResWithHeight}) => (
+            <MasonryGrid mediaList={item.content} />
+          )}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.1}
+          ListFooterComponent={
+            isFetchingNextPage ? (
+              <ActivityIndicator size="large" color="#444444" />
+            ) : null
+          }
+        />
       </View>
+
       <Pressable
         onPress={albumAccessModal.openModal}
         className="bg-_white w-16 h-16 rounded-full absolute bottom-5 right-5 justify-center items-center">
