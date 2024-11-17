@@ -6,11 +6,11 @@ import Modal from '../../components/CustomModal';
 import {ModalElement} from '../../components/CustomModal';
 import Plus from '../../assets/icon/plus.svg';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
 import RecipientCard from '../../components/RecipientCard';
 import Footer from '../../components/Footer';
 import {NO_ONE_HEADLINE, NO_ONE_INFO} from '../../constants/remain';
 import {deleteRecipient, getRecipient} from '../../api/recipient';
+import {RootStackParamList} from '../../types/navigator';
 
 export interface Recipient {
   id?: number;

@@ -5,8 +5,8 @@ import Header from '../../components/Header';
 import InputField from '../../components/InputField';
 import RoundButton from '../../components/RoundButton';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
 import {Recipient} from './index';
+import {RootStackParamList} from '../../types/navigator';
 
 type RemainWriteScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'RemainWrite'>;

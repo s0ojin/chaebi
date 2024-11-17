@@ -10,7 +10,7 @@ import {Recipient} from '../Remain';
 import {Route} from '@react-navigation/native';
 import {getLetter} from '../../api/remain';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../../App';
+import {RootStackParamList} from '../../types/navigator';
 
 type RemainEditorScreenProps = {
   route: Route<string, Recipient>;
@@ -27,7 +27,7 @@ export default function RemainEditorScreen({
 
   useEffect(() => {
     // const checkId = async ()=> {
-    //   if(!recipient.id) 
+    //   if(!recipient.id)
     // }
     // checkId();
     getLetter(recipient.id ? recipient.id : 0).then(data => {
