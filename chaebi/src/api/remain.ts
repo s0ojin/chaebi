@@ -1,12 +1,12 @@
-import { Recipient } from '../screens/Remain';
+import {Recipient} from '../screens/Remain';
 import {Remain} from '../types/remain';
-import {privateApi, publicApi} from './instance';
+import {privateApi} from './instance';
 
 export interface Letter {
   id: number;
   content: string;
   lastModifiedDate: string;
-  recipient: Recipient
+  recipient: Recipient;
   sort: string;
 }
 
@@ -15,17 +15,15 @@ export const postSaveRemain: (
   recipientId: number,
 ) => Promise<string> = async (payload: Remain, recipientId: number) => {
   const response = await privateApi.post(
-    `/api/letter/${recipientId}/update`,
+    `/letter/${recipientId}/update`,
     payload,
   );
   return response.data;
 };
 
-export const getLetter: (
+export const getLetter: (recipientId: number) => Promise<Letter> = async (
   recipientId: number,
-) => Promise<Letter> = async (recipientId: number) => {
-  const response = await privateApi.get(
-    `/api/letter/${recipientId}`,
-  );
+) => {
+  const response = await privateApi.get(`/letter/${recipientId}`);
   return response.data;
 };
