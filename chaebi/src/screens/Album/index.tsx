@@ -17,8 +17,12 @@ import RecipientFilterBtn from '../../components/album/RecipientFilterBtn';
 import Text from '../../components/CustomText';
 
 export default function AlbumScreen() {
-  const {isSelectMode, setIsSelectMode, selectedRecipientIdForFilter} =
-    useAlbumStore();
+  const {
+    isSelectMode,
+    setIsSelectMode,
+    selectedRecipientIdForFilter,
+    clearSelectedAppMediaList,
+  } = useAlbumStore();
   const albumAccessModal = useModal();
   const mediaUploadModal = useModal();
 
@@ -71,7 +75,12 @@ export default function AlbumScreen() {
       <View className="relative">
         <Header pageName="채우기" />
         <Pressable
-          onPress={setIsSelectMode}
+          onPress={() => {
+            if (isSelectMode) {
+              clearSelectedAppMediaList();
+            }
+            setIsSelectMode();
+          }}
           className="bg-primary-400 self-start px-3 rounded-full absolute right-4 top-1/4">
           <Text className="text-_white py-2 px-1">
             {isSelectMode ? '취소' : '선택'}
