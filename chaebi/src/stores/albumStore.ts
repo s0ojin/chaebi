@@ -15,29 +15,30 @@ type AlbumStore = {
   setIsSelectMode: () => void;
   selectedRecipientIdForFilter: number | null;
   setSelectedRecipientIdForFilter: (recipientId: number | null) => void;
+  selectedAppMediaList: number[];
+  toggleAppMediaSelection: (mediaId: number) => void;
+  clearSelectedAppMediaList: () => void;
 };
 
 const useAlbumStore = create<AlbumStore>(set => ({
   selectedRecipientIdList: [],
-  addRecipientsId: (recipientId: number) =>
+  addRecipientsId: recipientId =>
     set(state => ({
       selectedRecipientIdList: [...state.selectedRecipientIdList, recipientId],
     })),
 
-  removeRecipientsId: (recipientId: number) =>
+  removeRecipientsId: recipientId =>
     set(state => ({
       selectedRecipientIdList: state.selectedRecipientIdList.filter(
         id => id !== recipientId,
       ),
     })),
 
-  setAllRecipients: (recipientList: number[]) =>
+  setAllRecipients: recipientList =>
     set({selectedRecipientIdList: recipientList}),
 
   selectedLocalMediaList: [],
-  setSelectedLocalMediaList: (
-    mediaList: (ImageOrVideo | DocumentPickerResponse)[],
-  ) =>
+  setSelectedLocalMediaList: mediaList =>
     set({
       selectedLocalMediaList: mediaList,
     }),
@@ -48,8 +49,20 @@ const useAlbumStore = create<AlbumStore>(set => ({
       isSelectMode: !state.isSelectMode,
     })),
 
+  selectedAppMediaList: [],
+  toggleAppMediaSelection: mediaId =>
+    set(state => {
+      const isAlreadySelected = state.selectedAppMediaList.includes(mediaId);
+      return {
+        selectedAppMediaList: isAlreadySelected
+          ? state.selectedAppMediaList.filter(id => mediaId !== id)
+          : [...state.selectedAppMediaList, mediaId],
+      };
+    }),
+  clearSelectedAppMediaList: () => set({selectedAppMediaList: []}),
+
   selectedRecipientIdForFilter: null,
-  setSelectedRecipientIdForFilter: (recipientId: number | null) =>
+  setSelectedRecipientIdForFilter: recipientId =>
     set({selectedRecipientIdForFilter: recipientId}),
 }));
 

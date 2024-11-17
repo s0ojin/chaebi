@@ -4,6 +4,7 @@ import MasonryGridItem from './MasonryGridItem';
 import {Media} from '../../types/album';
 import {useModal} from '../../hooks/useModal';
 import MediaCarouselModal from '../modal/MediaCarouselModal';
+import useAlbumStore from '../../stores/albumStore';
 
 interface MasonryGridProps {
   mediaList: (Media & {height: number})[];
@@ -17,6 +18,7 @@ function MasonryGrid({mediaList}: MasonryGridProps) {
 
   const {isVisible, openModal, closeModal} = useModal();
   const [initialIndex, setInitialIndex] = useState(0);
+  const {isSelectMode, toggleAppMediaSelection} = useAlbumStore();
 
   const handlePress = (itemIndex: number) => {
     setInitialIndex(itemIndex);
@@ -30,7 +32,11 @@ function MasonryGrid({mediaList}: MasonryGridProps) {
           {column.map(item => (
             <Pressable
               onPress={() =>
-                handlePress(mediaList.findIndex(media => media.id === item.id))
+                isSelectMode
+                  ? toggleAppMediaSelection(item.id)
+                  : handlePress(
+                      mediaList.findIndex(media => media.id === item.id),
+                    )
               }
               key={item.id}>
               <MasonryGridItem media={item} />
