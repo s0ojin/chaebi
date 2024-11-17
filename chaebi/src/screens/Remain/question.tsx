@@ -9,8 +9,8 @@ import RoundButton from '../../components/RoundButton';
 import InfoIcon from '../../assets/icon/information.svg';
 import Modal from '../../components/CustomModal';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
-import { postRecipient, updateRecipient } from '../../api/recipient';
+import {postRecipient, updateRecipient} from '../../api/recipient';
+import {RootStackParamList} from '../../types/navigator';
 
 type QuestionScreenProps = {
   route: Route<string, Recipient>;
@@ -141,21 +141,23 @@ export default function QuestionScreen({
           <RoundButton
             content="등록"
             onPress={() => {
-              if(recipient.secretAnswer) {
+              if (recipient.secretAnswer) {
                 recipient.secretQuestion = question;
                 recipient.secretAnswer = answer;
-                updateRecipient(recipient)
+                updateRecipient(recipient);
                 navigation.navigate('RemainComplete', recipient);
                 return;
               }
               recipient.secretQuestion = question;
               recipient.secretAnswer = answer;
-              postRecipient(recipient).then(
-                (data)=>{
-                  recipient.id=parseInt(data);
+              postRecipient(recipient)
+                .then(data => {
+                  recipient.id = parseInt(data);
                   navigation.navigate('RemainComplete', recipient);
-                }
-              ).catch((error)=>console.log(`열람인 등록 중 오류 발생 : ${error}`))
+                })
+                .catch(error =>
+                  console.log(`열람인 등록 중 오류 발생 : ${error}`),
+                );
             }}
             disabled={!showNext}
           />

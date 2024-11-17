@@ -5,9 +5,9 @@ import Cross from '../../assets/icon/cross.svg';
 import CustomNumberpad from '../../components/CustomNumberpad';
 import PasswordState from '../../components/PasswordState';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ReactNativeBiometrics from 'react-native-biometrics';
+import {RootStackParamList} from '../../types/navigator';
 
 type SetPasswordScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'CheckPw'>;
@@ -40,7 +40,6 @@ export default function CheckPasswordScreen({
         const password = await AsyncStorage.getItem('password');
         if (password) setPassword(password);
       }
-
     };
     checkIsPassword();
   }, []);

@@ -3,7 +3,7 @@ import Text from '../../components/CustomText';
 import React, {useState} from 'react';
 import RoundButton from '../../components/RoundButton';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
+import {RootStackParamList} from '../../types/navigator';
 
 type AppIntroScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'AppIntro'>;

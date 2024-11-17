@@ -8,7 +8,7 @@ import RoundButton from '../../components/RoundButton';
 import DecoTopIcon from '../../assets/icon/deco-top.svg';
 import DecoBotIcon from '../../assets/icon/deco-bottom.svg';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
+import {RootStackParamList} from '../../types/navigator';
 
 type CompleteScreenProps = {
   route: Route<string, Recipient>;
