@@ -5,11 +5,12 @@ import SettingAdjustIcon from '../../assets/icon/settings-adjust.svg';
 import useAlbumStore from '../../stores/albumStore';
 import {useQuery} from '@tanstack/react-query';
 import {getRecipientList} from '../../api/album';
+import {Recipient} from '../../types/remain';
 
 export default function RecipientFilterBtn() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [selectedRecipient, setSelectedRecipient] = useState('전체'); // 선택된 버튼 텍스트 상태
-  const scrollViewRef = useRef(null);
+  const [selectedRecipient, setSelectedRecipient] = useState('전체');
+  const scrollViewRef = useRef<ScrollView | null>(null);
   const {setSelectedRecipientIdForFilter} = useAlbumStore();
 
   const {data: recipientList = []} = useQuery({
@@ -17,7 +18,10 @@ export default function RecipientFilterBtn() {
     queryFn: getRecipientList,
   });
 
-  const handleSelect = (item, index) => {
+  const handleSelect = (
+    item: Recipient | {id: null; name: string},
+    index: number,
+  ) => {
     setSelectedRecipient(item.name);
     setSelectedRecipientIdForFilter(item.id || null);
     setIsFilterOpen(false);
@@ -40,7 +44,7 @@ export default function RecipientFilterBtn() {
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{alignItems: 'center'}}
-      className="flex-row shrink-0">
+      className="flex-row shrink-0 max-h-20">
       <Pressable
         onPress={handleFilterToggle}
         className="bg-primary-400 rounded-full flex-row items-center gap-1 px-5 py-[6px] my-4 mr-2">
@@ -59,8 +63,7 @@ export default function RecipientFilterBtn() {
             <Pressable
               key={item.id}
               className="bg-primary-400 rounded-full flex-row items-center gap-1 px-5 py-[6px] my-4 mr-2"
-              onPress={() => handleSelect(item, index + 1)} // '전체' 버튼을 고려한 인덱스
-            >
+              onPress={() => handleSelect(item, index + 1)}>
               <Text className="text-2xl text-_white">{item.name}</Text>
             </Pressable>
           ))}
