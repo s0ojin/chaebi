@@ -27,7 +27,7 @@ export default function MediaCarouselModal({
       visible={visible}
       onRequestClose={onClose}>
       <Pressable onPress={onClose} className="absolute top-4 right-4 z-10 p-2">
-        <CrossIcon width={44} height={44} color="#ffffff" />
+        <CrossIcon width={44} height={44} color="#fafafa" />
       </Pressable>
       <View className="flex-1 bg-black">
         <Carousel

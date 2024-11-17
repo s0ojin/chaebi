@@ -15,6 +15,7 @@ import {useModal} from '../../hooks/useModal';
 import {AlbumListResWithHeight, Media} from '../../types/album';
 import RecipientFilterBtn from '../../components/album/RecipientFilterBtn';
 import Text from '../../components/CustomText';
+import MediaDeleteModal from '../../components/modal/MediaDeleteModal';
 
 export default function AlbumScreen() {
   const {
@@ -25,6 +26,7 @@ export default function AlbumScreen() {
   } = useAlbumStore();
   const albumAccessModal = useModal();
   const mediaUploadModal = useModal();
+  const mediaDeleteModal = useModal();
 
   const {
     data: MediaList,
@@ -114,10 +116,13 @@ export default function AlbumScreen() {
           style={{transform: [{rotate: '45deg'}]}}
           width={60}
           height={60}
+          color="#444444"
         />
       </Pressable>
       {isSelectMode && (
-        <Pressable className="bg-white w-full h-[72px] rounded-t-xl absolute bottom-0 justify-center items-center">
+        <Pressable
+          onPress={mediaDeleteModal.openModal}
+          className="bg-white w-full h-[72px] rounded-t-xl absolute bottom-0 justify-center items-center">
           <TrashCanIcon width={32} height={32} />
         </Pressable>
       )}
@@ -135,6 +140,10 @@ export default function AlbumScreen() {
         onClose={mediaUploadModal.closeModal}>
         <MediaUploadModal closeModal={mediaUploadModal.closeModal} />
       </CenterModal>
+      <MediaDeleteModal
+        visible={mediaDeleteModal.isVisible}
+        onClose={mediaDeleteModal.closeModal}
+      />
     </>
   );
 }
