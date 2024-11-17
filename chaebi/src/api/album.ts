@@ -37,3 +37,11 @@ export const getRecipientList: () => Promise<Recipient[]> = async () => {
   const response = await privateApi.get('/recipient/list');
   return response.data;
 };
+
+export const deleteMedia: (
+  mediaIdList: number[],
+) => Promise<void> = async mediaIdList => {
+  const queryString = mediaIdList.map(id => `fileIds=${id}`).join('&');
+  const response = await privateApi.delete(`/gallery/delete?${queryString}`);
+  return response.data;
+};

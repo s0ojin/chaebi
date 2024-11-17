@@ -23,7 +23,7 @@ export default function MediaUploadModal({closeModal}: MediaUploadModalProps) {
   const mediaUploadMutation = useMutation({
     mutationFn: (payload: UploadMediaListReq) => postUploadMediaList(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['mediaList', 'all']});
+      queryClient.invalidateQueries({queryKey: ['mediaList']});
     },
     onError: err => console.log(err.message),
     onSettled: () => {
