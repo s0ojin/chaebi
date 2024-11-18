@@ -7,10 +7,11 @@ import InputField from '../../components/InputField';
 import Header from '../../components/Header';
 import RoundButton from '../../components/RoundButton';
 import InfoIcon from '../../assets/icon/information.svg';
-import Modal from '../../components/CustomModal';
+import Modal from '../../components/modal/QuestionScrollModal';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {postRecipient, updateRecipient} from '../../api/recipient';
 import {RootStackParamList} from '../../types/navigator';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type QuestionScreenProps = {
   route: Route<string, Recipient>;
@@ -47,21 +48,69 @@ export default function QuestionScreen({
   }, [question, answer]);
 
   return (
-    <View className="flex-1 bg-white">
+    <ScrollView className="flex-1 bg-white">
       <Modal
         showAuth={modalVisiable}
         setShowAuth={setModalVisible}
         showList={[
           {
-            title: '당신의 태명은?',
+            title: '저와 함께 다녔던 학교의 이름은 무엇인가요?',
             moveTo: function () {
-              setQuestion('당신의 태명은?');
+              setQuestion('저와 함께 다녔던 학교의 이름은 무엇인가요?');
             },
           },
           {
-            title: '같은 반 담임선생님 성함은?',
+            title: '같은 반 담임선생님 성함은 무엇인가요?',
             moveTo: function () {
-              setQuestion('같은 반 담임선생님 성함은?');
+              setQuestion('같은 반 담임선생님 성함은 무엇인가요?');
+            },
+          },
+          {
+            title: '저를 주로 뭐라고 부르셨나요?',
+            moveTo: function () {
+              setQuestion('저를 주로 뭐라고 부르셨나요?');
+            },
+          },
+          {
+            title: '제 반려동물 이름은 무엇인가요?',
+            moveTo: function () {
+              setQuestion('제 반려동물 이름은 무엇인가요?');
+            },
+          },
+          {
+            title: '제가 다니던 직장 이름은 무엇인가요?',
+            moveTo: function () {
+              setQuestion('제가 다니던 직장 이름은 무엇인가요?');
+            },
+          },
+          {
+            title: '제가 좋아하는 스포츠팀은 어디인가요?',
+            moveTo: function () {
+              setQuestion('제가 좋아하는 스포츠팀은 어디인가요?');
+            },
+          },
+          {
+            title: '제 자동차의 기종은 무엇인가요?',
+            moveTo: function () {
+              setQuestion('제 자동차의 기종은 무엇인가요?');
+            },
+          },
+          {
+            title: '제 애인/배우자 이름은 무엇인가요?',
+            moveTo: function () {
+              setQuestion('제 애인/배우자 이름은 무엇인가요?');
+            },
+          },
+          {
+            title: '제 직업은 무엇인가요?',
+            moveTo: function () {
+              setQuestion('제 직업은 무엇인가요?');
+            },
+          },
+          {
+            title: '제 애창곡은 무엇인가요?',
+            moveTo: function () {
+              setQuestion('제 애창곡은 무엇인가요?');
             },
           },
           {
@@ -163,6 +212,6 @@ export default function QuestionScreen({
           />
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
