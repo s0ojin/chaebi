@@ -74,7 +74,8 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
                 setContent(LOGOUT_WARNING);
                 setMessage('로그아웃');
                 setAction(() => () => {
-                  AsyncStorage.removeItem('token');
+                  AsyncStorage.removeItem('accessToken');
+                  AsyncStorage.removeItem('refreshToken');
                   AsyncStorage.removeItem('bioType');
                   AsyncStorage.removeItem('password');
                   navigation.reset({
@@ -97,7 +98,8 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
                   deleteResignUser();
                   AsyncStorage.removeItem('bioType');
                   AsyncStorage.removeItem('password');
-                  AsyncStorage.removeItem('token');
+                  AsyncStorage.removeItem('accessToken');
+                  AsyncStorage.removeItem('refreshToken');
                   navigation.reset({
                     index: 0,
                     routes: [{name: 'AppIntro'}],
@@ -122,7 +124,7 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
           </View>
         </View>
       </View>
-      <View className="p-4 bg-white">
+      <View className="bg-white">
         <Footer navigation={navigation} currentPage="mypage"></Footer>
       </View>
     </View>
