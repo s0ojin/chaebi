@@ -13,7 +13,7 @@ import {deleteRecipient, getRecipientList} from '../../api/recipient';
 import {RootStackParamList} from '../../types/navigator';
 
 export interface Recipient {
-  id?: number;
+  id: number;
   name: string;
   phone: string;
   secretQuestion?: string;
