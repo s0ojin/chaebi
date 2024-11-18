@@ -60,6 +60,7 @@ public class SecurityConfig {
                                 mvcMatcherBuilder.pattern("/api/fcm/**"),
                                 mvcMatcherBuilder.pattern("/error"),
                                 mvcMatcherBuilder.pattern("/api/gallery/recipientList"),
+                                mvcMatcherBuilder.pattern("/api/gallery/filterList"),
                                 mvcMatcherBuilder.pattern("/api/letter/**"),
                                 mvcMatcherBuilder.pattern("/api/recipient/enter"),
                                 mvcMatcherBuilder.pattern("/")
