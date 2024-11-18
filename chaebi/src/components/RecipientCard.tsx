@@ -55,7 +55,7 @@ export default function RemainListView({
       onPress={setOnPress}>
       <View className="flex-row justify-left items-center">
         {/* 사용자 이미지 */}
-        {recipient.imgUrl === null || recipient.imgUrl === '' ? (
+        { !recipient.imgUrl || recipient.imgUrl===undefined ? (
           <View className="bg-primary-300 rounded-full w-12 h-12" />
         ) : (
           <Image

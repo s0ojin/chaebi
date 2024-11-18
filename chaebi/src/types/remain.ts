@@ -12,3 +12,5 @@ export type Recipient = {
   secretAnswer: string;
   lastModified: string;
 };
+
+export type RecipientSettingOptions = 'EDIT' | 'DELETE';

@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import ArrowLeftIcon from '../../assets/icon/arrow-left.svg';
-import {TextInput as TextInputType, View} from 'react-native';
+import {Pressable, TextInput as TextInputType, View} from 'react-native';
 import Text from '../../components/CustomText';
 import SettingIcon from '../../assets/icon/settings-alt.svg';
 import TextInput from '../../components/CustomTextInput';
@@ -13,6 +13,9 @@ import {RootStackParamList} from '../../types/navigator';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {getSavedLetter, postSaveLetter} from '../../api/remain';
 import {Remain} from '../../types/remain';
+import RecipientSettingModal from '../../components/modal/RecipientSettingModal';
+import {useModal} from '../../hooks/useModal';
+import RecipientDeleteModal from '../../components/modal/RecipientDeleteModal';
 
 type RemainEditorScreenProps = {
   route: Route<string, Recipient>;
@@ -24,6 +27,8 @@ export default function RemainEditorScreen({
   navigation,
 }: RemainEditorScreenProps) {
   const recipient: Recipient = route.params;
+  const recipientSettingModal = useModal();
+  const recipientDeleteModal = useModal();
 
   const {align, text, setText, setAlign} = useEditorStore();
   const textInputRef = useRef<TextInputType>(null);
@@ -81,7 +86,9 @@ export default function RemainEditorScreen({
             <Text className="text-sm">{recipient.phone}</Text>
           </View>
         </View>
-        <SettingIcon />
+        <Pressable onPress={recipientSettingModal.openModal}>
+          <SettingIcon />
+        </Pressable>
       </View>
       <TextInput
         ref={textInputRef}
@@ -95,6 +102,17 @@ ex) 내 옷장아래 매일 오만원씩 적립하는중`}
         className="flex-1 bg-transparent p-5 mt-5 text-xl"
       />
       <EditorInputAccessory recipientId={recipient.id ? recipient.id : 0} />
+      <RecipientSettingModal
+        visible={recipientSettingModal.isVisible}
+        onClose={recipientSettingModal.closeModal}
+        recipient={recipient}
+        recipientDeleteModalOpen={recipientDeleteModal.openModal}
+      />
+      <RecipientDeleteModal
+        visible={recipientDeleteModal.isVisible}
+        onClose={recipientDeleteModal.closeModal}
+        recipientId={recipient.id}
+      />
     </>
   );
 }

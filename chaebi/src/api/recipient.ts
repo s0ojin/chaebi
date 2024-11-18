@@ -6,7 +6,6 @@ export const getRecipientList: () => Promise<Recipient[]> = async () => {
   return response.data;
 };
 
-// 등록하기 (등록할 때 편지도 함께 만들지는 백엔드와 상의하기)
 export const postRecipient: (payload: Recipient) => Promise<string> = async (
   payload: Recipient,
 ) => {
@@ -20,7 +19,6 @@ export const postRecipient: (payload: Recipient) => Promise<string> = async (
   return response.data;
 };
 
-// 수정하기 (등록할 때 편지도 함께 만들지는 백엔드와 상의하기)
 export const updateRecipient: (payload: Recipient) => Promise<string> = async (
   payload: Recipient,
 ) => {
@@ -35,6 +33,7 @@ export const updateRecipient: (payload: Recipient) => Promise<string> = async (
 };
 
 // 삭제하기
+
 export const deleteRecipient: (recipientId: number) => Promise<string> = async (
   recipientId: number,
 ) => {
