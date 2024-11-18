@@ -8,6 +8,8 @@ import NextButton from '@/components/ui/NextButton'
 import { useRouter } from 'next/navigation'
 import { verifyEnterCode } from '@/services/auth'
 import useUserStore from '@/stores/useUserStore'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function GuideContent({
   enterCode,
@@ -41,7 +43,7 @@ export default function GuideContent({
         router.push('/security')
       }
     } catch (error) {
-      console.error('Error occurred while verifying enter code:', error)
+      toast.error('입장 코드를 다시 확인해주세요.')
     }
   }
 

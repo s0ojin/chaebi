@@ -5,6 +5,8 @@ import SecurityQuestion from '@/components/security/SecurityQuestion'
 import CodeInput from '@/components/ui/CodeInput'
 import NextButton from '@/components/ui/NextButton'
 import useUserStore from '@/stores/useUserStore'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function SecurityContent({ onNextClick }: SecurityContentProps) {
   const [isClient, setIsClient] = useState(false)
@@ -41,7 +43,7 @@ export default function SecurityContent({ onNextClick }: SecurityContentProps) {
     if (inputValue === recipientRes?.secretAnswer) {
       onNextClick()
     } else {
-      alert('정답이 일치하지 않습니다. 다시 시도해 주세요.')
+      toast.error('정답이 일치하지 않습니다. 다시 시도해 주세요.')
     }
   }
 

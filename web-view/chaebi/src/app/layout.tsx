@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next'
 import { ChosunNm } from '@/utils/fonts'
 import Logo from 'public/svg/logo.svg'
 import './globals.css'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export const metadata: Metadata = {
   title: 'ChaeBi',
@@ -30,6 +32,7 @@ export default function RootLayout({
           </header>
           {children}
         </div>
+        <ToastContainer position="top-center" autoClose={3000} />
       </body>
     </html>
   )
