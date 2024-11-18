@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next'
 import { ChosunNm } from '@/utils/fonts'
 import Logo from 'public/svg/logo.svg'
 import './globals.css'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export const metadata: Metadata = {
   title: 'ChaeBi',
@@ -23,12 +25,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${ChosunNm.variable} font-ChosunNm w-full h-screen`}>
-        <div className="h-full flex flex-col">
+      <body
+        className={`${ChosunNm.variable} font-ChosunNm w-full h-screen overflow-auto`}
+      >
+        <div className="h-screen flex flex-col relative">
           <header className="hidden md:flex w-full p-5 bg-_gray-800 justify-start shrink-0">
             <Logo />
           </header>
-          {children}
+          <main className="flex-1">{children}</main>
+          <ToastContainer position="top-center" autoClose={3000} />
         </div>
       </body>
     </html>

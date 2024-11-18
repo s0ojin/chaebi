@@ -4,7 +4,8 @@ function GuideMessage() {
   return (
     <div>
       <motion.div
-        className="mb-10 text-2xl md:text-4xl text-_white text-center stroke-_white stroke-0.5"
+        className="mb-10 text-2xl md:text-4xl text-_white text-center"
+        style={{ WebkitTextStroke: '0.5px #FAFAFA' }}
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1 }}
