@@ -60,7 +60,7 @@ export default function SetPasswordScreen({
   return (
     <View className="p-5">
       <View className="items-end">
-        <Cross width={40} height={40} onPress={() => navigation.goBack()} />
+        <Cross width={40} height={40} color={'#444444'} onPress={() => navigation.goBack()} />
       </View>
       <Text className="mt-32 mb-16 text-center text-2xl">
         {isConfirming ? '한번 더 입력해주세요.' : '비밀번호를 입력해주세요.'}
