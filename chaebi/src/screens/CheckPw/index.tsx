@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import Text from '../../components/CustomText';
-import Cross from '../../assets/icon/cross.svg';
 import CustomNumberpad from '../../components/CustomNumberpad';
 import PasswordState from '../../components/PasswordState';
 import {StackNavigationProp} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ReactNativeBiometrics from 'react-native-biometrics';
 import {RootStackParamList} from '../../types/navigator';
+import {useToast} from '../../components/ToastContext';
+import {NO_PASSWORD_ALERT, NO_PASSWORD_TOAST} from '../../constants/password';
 
 type SetPasswordScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'CheckPw'>;
@@ -19,11 +20,16 @@ export default function CheckPasswordScreen({
   const [password, setPassword] = useState<string>('');
   const [isPassword, setIsPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [disabled, setDisabled] = useState<boolean>(false);
+  const {showToast} = useToast();
 
   useEffect(() => {
+    // const {showToast} = useToast();
+
     // 등록된 생체정보 있는지 확인
     const checkIsPassword: () => Promise<void> = async () => {
       const bioType = await AsyncStorage.getItem('bioType');
+      const password = await AsyncStorage.getItem('password');
       if (bioType) {
         // 생체인식 데이터가 있다면,,,
         new ReactNativeBiometrics()
@@ -31,14 +37,21 @@ export default function CheckPasswordScreen({
             promptMessage: '잠금해제를 위한 생체정보 확인',
           })
           .then(SimplePromptResult => {
-            if (SimplePromptResult.success) navigation.replace('Main');
+            if (SimplePromptResult.success) {
+              navigation.replace('Main');
+              return;
+            }
+            if(password) {
+              setPassword(password);
+            } else{
+              showToast(NO_PASSWORD_TOAST);
+              setError(NO_PASSWORD_ALERT);
+              setDisabled(true)
+            }
           })
           .catch(error => {
             console.log(error);
           });
-      } else {
-        const password = await AsyncStorage.getItem('password');
-        if (password) setPassword(password);
       }
     };
     checkIsPassword();
@@ -69,9 +82,6 @@ export default function CheckPasswordScreen({
 
   return (
     <View className="p-5">
-      <View className="items-end">
-        <Cross width={40} height={40} onPress={() => navigation.goBack()} />
-      </View>
       <Text className="mt-32 mb-16 text-center text-2xl">
         {'비밀번호를 입력해주세요.'}
       </Text>
@@ -83,6 +93,7 @@ export default function CheckPasswordScreen({
       <CustomNumberpad
         onNumberPress={handleNumberPress}
         onBackspacePress={handleBackspace}
+        disabled={disabled}
       />
     </View>
   );

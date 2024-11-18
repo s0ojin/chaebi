@@ -12,7 +12,7 @@ import Text from '../../components/CustomText';
 import Contacts from 'react-native-contacts';
 import {Contact} from 'react-native-contacts/type';
 import {StackNavigationProp} from '@react-navigation/stack';
-import User from '../../assets/icon/User.svg';
+import User from '../../assets/icon/user-base.svg';
 import Header from '../../components/Header';
 import RoundButton from '../../components/RoundButton';
 import {RootStackParamList} from '../../types/navigator';

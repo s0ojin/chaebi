@@ -11,7 +11,6 @@ import CheckPasswordScreen from '../screens/CheckPw';
 import MainScreen from '../screens/Main';
 import RemainScreen from '../screens/Remain';
 import ContactScreen from '../screens/Remain/contacts';
-import RemainWriteScreen from '../screens/Remain/write';
 import QuestionScreen from '../screens/Remain/question';
 import CompleteScreen from '../screens/Remain/complete';
 import SetPasswordScreen from '../screens/Setpw';
@@ -34,7 +33,6 @@ export default function RootStackNavigator() {
       <Stack.Screen name="Main" component={MainScreen} />
       <Stack.Screen name="Remain" component={RemainScreen} />
       <Stack.Screen name="Contacts" component={ContactScreen} />
-      <Stack.Screen name="RemainWrite" component={RemainWriteScreen} />
       <Stack.Screen name="RemainQuestion" component={QuestionScreen} />
       <Stack.Screen name="RemainComplete" component={CompleteScreen} />
       <Stack.Screen name="SetPw" component={SetPasswordScreen} />
