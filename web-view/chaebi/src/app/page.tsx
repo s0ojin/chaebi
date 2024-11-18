@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import Mum from '../../public/image/MUM.png'
+import Mum from '../../public/images/MUM.png'
 import GuideContent from '@/containers/GuideContent'
 import { useState } from 'react'
 
