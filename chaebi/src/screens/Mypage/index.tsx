@@ -145,7 +145,7 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
         </View>
       </View>
       <View className="bg-white">
-        <Footer navigation={navigation} currentPage="mypage"></Footer>
+        <Footer navigation={navigation} currentPage="mypage" />
       </View>
     </View>
   );
