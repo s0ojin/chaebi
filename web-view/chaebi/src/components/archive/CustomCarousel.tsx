@@ -92,7 +92,7 @@ export default function CustomCarousel() {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: themes.length > 2,
     autoplaySpeed: 3000,
     centerMode: true,
   }
