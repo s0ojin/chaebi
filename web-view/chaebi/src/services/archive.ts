@@ -23,3 +23,36 @@ export async function fetchGallery(
     throw error
   }
 }
+
+export async function fetchFilteredGallery(
+  userId: number,
+  recipientId: number,
+): Promise<{
+  christmas: GalleryItem[]
+  endstart: GalleryItem[]
+  yearClassification: { [key: string]: GalleryItem[] }
+  locationClassification: { [key: string]: GalleryItem[] }
+  keywordClassification: { [key: string]: GalleryItem[] }
+}> {
+  try {
+    const response = await axios.post(
+      `/api/gallery/filterList?userId=${userId}&recipientId=${recipientId}`,
+    )
+    const {
+      filteredSpecialDatesMap = {},
+      yearClassification = {},
+      locationClassification = {},
+      keywordClassification = {},
+    } = response.data
+
+    return {
+      christmas: filteredSpecialDatesMap.christmas || [],
+      endstart: filteredSpecialDatesMap.endstart || [],
+      yearClassification,
+      locationClassification,
+      keywordClassification,
+    }
+  } catch (error) {
+    throw error
+  }
+}
