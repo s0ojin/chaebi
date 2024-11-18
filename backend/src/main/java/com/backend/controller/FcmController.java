@@ -24,16 +24,6 @@ public class FcmController {
     private final UserService userService;
     private final UserRepository userRepository;
 
-    @Operation(summary = "푸쉬 알람 테스트")
-    @PostMapping("/api/fcm")
-    public ResponseEntity pushMessage(@RequestBody RequestDTO requestDTO) throws IOException {
-        System.out.println(requestDTO.getTargetToken());
-        firebaseService.sendMessageTo(
-                requestDTO.getTargetToken(),
-                "채비",
-                "입장하세요");
-        return ResponseEntity.ok().build();
-    }
 
     @Operation(summary = "푸쉬 알람 테스트")
     @GetMapping("/api/fcm/test")
