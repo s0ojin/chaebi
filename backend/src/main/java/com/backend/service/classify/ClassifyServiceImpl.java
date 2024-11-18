@@ -95,7 +95,7 @@ public class ClassifyServiceImpl implements ClassifyService{
                 });
 
         // 상위 2개 지역 선택
-        Map<String, List<GalleryRecipientRes>> topLocationMap = getTopEntries(locationMap, usedGalleryIds, 2);
+        Map<String, List<GalleryRecipientRes>> topLocationMap = getTopEntries(locationMap, usedGalleryIds, 1);
 
         // 3. 키워드별 분류
         galleries.stream()
@@ -105,7 +105,7 @@ public class ClassifyServiceImpl implements ClassifyService{
                 });
 
         // 상위 2개 키워드 선택
-        Map<Keyword, List<GalleryRecipientRes>> topKeywordMap = getTopEntries(keywordMap, usedGalleryIds, 2);
+        Map<Keyword, List<GalleryRecipientRes>> topKeywordMap = getTopEntries(keywordMap, usedGalleryIds, 1);
 
         return new ClassifiedGalleries(filteredSpecialDatesMap,topYearMap, topLocationMap, topKeywordMap);
     }
