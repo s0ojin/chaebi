@@ -15,6 +15,7 @@ import messaging from '@react-native-firebase/messaging';
 import {useToast} from '../../components/ToastContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RootStackParamList} from '../../types/navigator';
+import Header from '../../components/Header';
 
 type SignUpScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'SignUp'>;

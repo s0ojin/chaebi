@@ -74,7 +74,9 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
                 setContent(LOGOUT_WARNING);
                 setMessage('로그아웃');
                 setAction(() => () => {
-                  AsyncStorage.setItem('token', '');
+                  AsyncStorage.removeItem('token');
+                  AsyncStorage.removeItem('bioType');
+                  AsyncStorage.removeItem('password');
                   navigation.reset({
                     index: 0,
                     routes: [{name: 'AppIntro'}],
@@ -93,7 +95,9 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
                 setMessage('탈퇴하기');
                 setAction(() => () => {
                   deleteResignUser();
-                  AsyncStorage.setItem('token', '');
+                  AsyncStorage.removeItem('bioType');
+                  AsyncStorage.removeItem('password');
+                  AsyncStorage.removeItem('token');
                   navigation.reset({
                     index: 0,
                     routes: [{name: 'AppIntro'}],
