@@ -1,49 +1,31 @@
 import {View, Text, Image, FlatList, ImageSourcePropType} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Logo from '../../assets/logo/logo.svg';
 import ArrowRight from '../../assets/icon/arrow-right.svg';
 import Footer from '../../components/Footer';
 import LightPlus from '../../assets/icon/light-plus.svg';
 import RemainListView from '../../components/RecipientCard';
-import {Message} from '../Remain';
 import {StackNavigationProp} from '@react-navigation/stack';
 import BannerContent from '../../components/main/BannerContent';
 import {RootStackParamList} from '../../types/navigator';
+import {useQuery} from '@tanstack/react-query';
+import {getRecipientList} from '../../api/recipient';
+import {getMediaList} from '../../api/album';
 
 interface MainScreenProps {
   navigation: StackNavigationProp<RootStackParamList>;
 }
 
 export default function MainScreen({navigation}: MainScreenProps) {
-  const [leaveData, setLeaveData] = useState<Message | null>(null);
-  const [fillData, setFillData] = useState<ImageSourcePropType[]>([]);
-  const [contentPage, setContentPage] = useState<number>(0);
+  const {data: recipientList} = useQuery({
+    queryKey: ['recipientList'],
+    queryFn: getRecipientList,
+  });
 
-  useEffect(() => {
-    setLeaveData({
-      id: 1,
-      content: '잘가시게',
-      userId: 1,
-      recipient: {
-        id: 1,
-        name: '박수진',
-        phone: '010-1111-1111',
-        imgUrl: '',
-      },
-      lastModifiedDate: '2024-11-05T18:03:01.519939',
-      sort: 'center',
-    });
-
-    const images: ImageSourcePropType[] = [
-      require('../../assets/dummy/test_image1.jpg'),
-      require('../../assets/dummy/test_image2.jpg'),
-      require('../../assets/dummy/test_image5.jpg'),
-      require('../../assets/dummy/test_image6.jpg'),
-    ];
-    setFillData(images);
-
-    setContentPage(0);
-  }, []);
+  const {data: mediaList} = useQuery({
+    queryKey: ['mediaList'],
+    queryFn: () => getMediaList(0),
+  });
 
   const renderImageItem = ({item}: {item: ImageSourcePropType}) => (
     <Image
@@ -60,7 +42,7 @@ export default function MainScreen({navigation}: MainScreenProps) {
       </View>
 
       <View className="flex-1 px-4 gap-2">
-        <BannerContent contentPage={contentPage} />
+        <BannerContent contentPage={0} />
 
         {/* 남기기 */}
         <View className="gap-1">
@@ -72,8 +54,8 @@ export default function MainScreen({navigation}: MainScreenProps) {
               onPress={() => navigation.navigate('Remain')}
             />
           </View>
-          {leaveData ? (
-            <RemainListView recipient={leaveData.recipient} isSetting={false} />
+          {recipientList ? (
+            <RemainListView recipient={recipientList[0]} isSetting={false} />
           ) : (
             <View className="flex-row w-full h-24 bg-[#F4F4F4] rounded-xl items-center justify-center">
               <LightPlus width={40} height={40} />
@@ -91,9 +73,11 @@ export default function MainScreen({navigation}: MainScreenProps) {
               onPress={() => navigation.navigate('Album')}
             />
           </View>
-          {fillData.length > 0 ? (
+          {mediaList && mediaList.content.length > 0 ? (
             <FlatList
-              data={fillData}
+              data={mediaList.content
+                .slice(0, 4)
+                .map(media => ({uri: media.fileUrl}))}
               renderItem={renderImageItem}
               keyExtractor={(item, index) => index.toString()}
               numColumns={2}
