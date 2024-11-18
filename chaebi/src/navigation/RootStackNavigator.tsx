@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {RootStackParamList} from '../types/navigator';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import AppIntroScreen from '../screens/Appintro';
 import SignUpScreen from '../screens/Signup';
@@ -22,7 +22,7 @@ import AlbumScreen from '../screens/Album';
 import MypageScreen from '../screens/Mypage';
 import SetAlertScreen from '../screens/Mypage/SetAlert';
 import SetLockScreen from '../screens/Mypage/SetLock';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 

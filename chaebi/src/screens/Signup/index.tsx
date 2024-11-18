@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Image, View} from 'react-native';
+import {Image, PermissionsAndroid, View} from 'react-native';
 import Text from '../../components/CustomText';
 import InfoCircle from '../../assets/icon/info-circle.svg';
 import InputField from '../../components/InputField';
@@ -29,7 +29,6 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
   const [name, setName] = useState<string>('');
   const [countdown, setCountdown] = useState<number>(300);
   const [isCounting, setIsCounting] = useState<boolean>(false);
-  // const [fcmToken, setFcmToken] = useState<string>('');
   const {showToast} = useToast();
 
   useEffect(() => {
@@ -141,6 +140,17 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     handleSignup(false);
   };
 
+  const requestNotificationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      );
+      console.log('granted', granted);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View className="flex-1 bg-white">
       {(step === 0 || step === 1) && <Header pageName="시작하기" />}
@@ -202,7 +212,13 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
               value={name}
               onChangeText={setName}
             />
-            <RoundButton content="회원가입" onPress={() => setStep(step + 1)} />
+            <RoundButton
+              content="회원가입"
+              onPress={() => {
+                setStep(step + 1);
+                requestNotificationPermission();
+              }}
+            />
           </View>
         </View>
       )}
@@ -246,7 +262,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
           <Text>원활한 서비스 이용을 위해</Text>
           <Text>다음 전화번호를 고객님의 연락처에 저장해주세요.</Text>
           <Text>채비 서비스 : 010-7659-6450</Text>
-          <Text onPress={handleSignin} >시작하기</Text>
+          <Text onPress={handleSignin}>시작하기</Text>
         </View>
       )}
       {step === 4 && (
