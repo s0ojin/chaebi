@@ -258,11 +258,21 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
       )}
       {step === 3 && (
         //step3
-        <View>
-          <Text>원활한 서비스 이용을 위해</Text>
-          <Text>다음 전화번호를 고객님의 연락처에 저장해주세요.</Text>
-          <Text>채비 서비스 : 010-7659-6450</Text>
-          <Text onPress={handleSignin}>시작하기</Text>
+        <View className="flex-1 p-4">
+          <View className="flex-1 justify-center">
+            <Text className="text-center text-4xl">
+              원활한 서비스 이용을 위해
+            </Text>
+            <Text className="text-center text-4xl mt-10">
+              다음 전화번호를 고객님의 연락처에 저장해주세요.
+            </Text>
+            <Text className="text-center text-4xl my-10">
+              채비 서비스 : 010-7659-6450
+            </Text>
+          </View>
+          <View className="w-full justify-end">
+            <RoundButton content="시작하기" onPress={handleSignin} />
+          </View>
         </View>
       )}
       {step === 4 && (
