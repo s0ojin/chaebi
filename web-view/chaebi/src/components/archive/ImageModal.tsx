@@ -3,7 +3,7 @@ import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import { MasonryItem } from '@/types/archive'
-import LeftArrow from 'public/svg/left-arrow.svg'
+import LeftArrowIcon from 'public/svg/left-arrow.svg'
 
 interface ImageModalProps {
   images: MasonryItem[]
@@ -33,7 +33,7 @@ export default function ImageModal({
     <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center">
       <div className="absolute top-4 left-4 z-50">
         <button onClick={onClose} className="p-2">
-          <LeftArrow width={32} height={32} />
+          <LeftArrowIcon width={32} height={32} />
         </button>
       </div>
 

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 
 export default function AnimatedLetter({
   children,
@@ -21,6 +22,11 @@ export default function AnimatedLetter({
         }
       }, 1000)
     }
+  }
+
+  function handleCloseClick() {
+    setIsFullyOpen(false)
+    setIsOpening(false)
   }
 
   return (
@@ -69,17 +75,31 @@ export default function AnimatedLetter({
         {isOpening && (
           <motion.div
             key="letter"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[80%] max-w-4xl"
+            className="absolute top-0 left-0 w-full h-full max-w-full"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
           >
             <motion.div
-              className="w-full h-full bg-_white shadow-lg rounded-lg overflow-hidden"
-              initial={{ y: '50%', scale: 0.8, opacity: 0 }}
-              animate={{ y: 0, scale: 1, opacity: 1 }}
+              className="w-full h-full bg-white shadow-lg rounded-lg overflow-hidden relative"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.5, duration: 1 }}
             >
+              {/* Close Button */}
+              <button
+                onClick={handleCloseClick}
+                className="absolute top-2 right-2"
+              >
+                {/* Using next/image for optimization */}
+                <Image
+                  src="/svg/close.svg"
+                  alt="Close"
+                  width={24}
+                  height={24}
+                  priority
+                />
+              </button>
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
