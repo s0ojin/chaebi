@@ -43,14 +43,15 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         userRepository.save(user);
-        return this.login(signDTO.getPhone(), response); // 회원가입 후 로그인 까지
+        return this.login(signDTO.getPhone(),signDTO.getFcmToken(), response); // 회원가입 후 로그인 까지
     }
 
     @Transactional
-    public TokenRes login(String phone, HttpServletResponse response) {
+    public TokenRes login(String phone, String fcmToken, HttpServletResponse response) {
         User user = userRepository.findByPhone(phone)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
             user.setLastLogin(LocalDateTime.now());
+            user.setFcmToken(fcmToken);
             TokenRes token = new TokenRes(user.getName(),user.getPhone(),jwtUtil.generateAccessToken(user.getPhone()),jwtUtil.generateRefreshToken(user.getPhone()));
             System.out.println(" token " + " " + token.getAccessToken());
             userRepository.save(user);

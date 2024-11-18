@@ -47,7 +47,7 @@ public class UserController {
             return ResponseEntity.status(215).body("회원가입 해야합니다.");
         }
         else {
-           TokenRes token =  userServiceImpl.login(loginDTO.getPhone(), response);
+           TokenRes token =  userServiceImpl.login(loginDTO.getPhone(), loginDTO.getFcmToken(),response);
             //로그인 되었을 때 토큰 발급
             System.out.println("로그인 성공  token : " + token.getAccessToken());
             User user = userRepository.findByPhone(loginDTO.getPhone()).get();
