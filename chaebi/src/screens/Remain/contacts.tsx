@@ -82,6 +82,7 @@ export default function ContactScreen({navigation}: ContactScreenProps) {
               className="flex-row h-24 px-8 my-2 bg-[#F4F4F4] rounded-2xl justify-between items-center"
               onPress={() => {
                 navigation.navigate('RemainQuestion', {
+                  id:0,
                   name: `${item.familyName.trim()}${item.givenName}`,
                   phone: `${item.phoneNumbers[0]?.number}`,
                   imgUrl: `${item.thumbnailPath}`,
