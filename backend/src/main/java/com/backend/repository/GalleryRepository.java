@@ -39,4 +39,7 @@ public interface GalleryRepository extends JpaRepository<Gallery, Long> {
             @Param("recipientId") Long recipientId
     );
     Page<Gallery> findAllByUser(User user, Pageable pageable);
+
+    @Query("SELECT g FROM Gallery g WHERE SIZE(g.galleryRecipients) = 0")
+    List<Gallery> findGalleriesWithNoRecipients();
 }
