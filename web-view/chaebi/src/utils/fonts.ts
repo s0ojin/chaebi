@@ -22,4 +22,15 @@ const SoBangGwan = localFont({
   variable: '--font-SoBangGwan',
 })
 
-export { ChosunNm, SoBangGwan }
+const NotoSansKR = localFont({
+  src: [
+    {
+      path: '../../public/fonts/NotoSansKR.ttf',
+      weight: '400',
+    },
+  ],
+  display: 'swap',
+  variable: '--font-NotoSansKR',
+})
+
+export { ChosunNm, SoBangGwan, NotoSansKR }
