@@ -10,7 +10,7 @@ export type RootStackParamList = {
   SetPw: undefined;
   Remain: undefined;
   Contacts: undefined;
-  RemainWrite: undefined;
+  RemainWrite: Recipient;
   RemainQuestion: Recipient;
   RemainComplete: Recipient;
   Main: undefined;
