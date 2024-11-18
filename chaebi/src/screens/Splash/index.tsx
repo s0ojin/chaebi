@@ -1,10 +1,10 @@
 import {View} from 'react-native';
 import Text from '../../components/CustomText';
 import Logo from '../../assets/logo/logo.svg';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {RootStackParamList} from '../../types/navigator';
 
 type SplashScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Splash'>;
@@ -22,13 +22,13 @@ export default function SplashScreen({navigation}: SplashScreenProps) {
         } else {
           const bioType = await AsyncStorage.getItem('bioType');
           const password = await AsyncStorage.getItem('password');
-          setTimeout(()=>{
+          setTimeout(() => {
             if (password || bioType) {
               navigation.replace('CheckPw');
             } else {
               navigation.replace('Main');
             }
-          })
+          });
         }
       } catch (error) {
         console.log(error);

@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Image, View} from 'react-native';
 import Text from '../../components/CustomText';
-import Header from '../../components/Header';
 import InputField from '../../components/InputField';
 import RoundButton from '../../components/RoundButton';
 import {
@@ -12,10 +11,10 @@ import {
   sendSmsVerifyRequest,
 } from '../../api/signup';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
 import messaging from '@react-native-firebase/messaging';
 import {useToast} from '../../components/ToastContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {RootStackParamList} from '../../types/navigator';
 
 type SignUpScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'SignUp'>;

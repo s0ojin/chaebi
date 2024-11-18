@@ -11,13 +11,13 @@ import ChangeIcon from '../../assets/icon/change.svg';
 import FaceLockIcon from '../../assets/icon/face-security.svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
 import ReactNativeBiometrics, {
   Biometrics,
   FaceID,
   TouchID,
 } from 'react-native-biometrics';
 import {useToast} from '../../components/ToastContext';
+import {RootStackParamList} from '../../types/navigator';
 
 interface SetLockScreenProps {
   navigation: StackNavigationProp<RootStackParamList>;

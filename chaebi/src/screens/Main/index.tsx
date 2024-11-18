@@ -7,8 +7,8 @@ import LightPlus from '../../assets/icon/light-plus.svg';
 import RemainListView from '../../components/RecipientCard';
 import {Message} from '../Remain';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
 import BannerContent from '../../components/main/BannerContent';
+import {RootStackParamList} from '../../types/navigator';
 
 interface MainScreenProps {
   navigation: StackNavigationProp<RootStackParamList>;
@@ -31,7 +31,7 @@ export default function MainScreen({navigation}: MainScreenProps) {
         imgUrl: '',
       },
       lastModifiedDate: '2024-11-05T18:03:01.519939',
-      sort: "center",
+      sort: 'center',
     });
 
     const images: ImageSourcePropType[] = [

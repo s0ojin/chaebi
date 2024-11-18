@@ -12,10 +12,10 @@ import Text from '../../components/CustomText';
 import Contacts from 'react-native-contacts';
 import {Contact} from 'react-native-contacts/type';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
 import User from '../../assets/icon/User.svg';
 import Header from '../../components/Header';
 import RoundButton from '../../components/RoundButton';
+import {RootStackParamList} from '../../types/navigator';
 
 type ContactScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'RemainWrite'>;
@@ -84,7 +84,7 @@ export default function ContactScreen({navigation}: ContactScreenProps) {
                 navigation.navigate('RemainQuestion', {
                   name: `${item.familyName.trim()}${item.givenName}`,
                   phone: `${item.phoneNumbers[0]?.number}`,
-                  imgUrl: `${item.thumbnailPath}`
+                  imgUrl: `${item.thumbnailPath}`,
                 });
               }}>
               <View className="flex-row justify-left items-center">

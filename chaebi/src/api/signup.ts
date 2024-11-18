@@ -15,10 +15,7 @@ export const sendSmsCertRequest = async (
   try {
     console.log('Sending SMS cert request with data:', data); // 요청 전에 데이터 로깅
 
-    const response = await publicApi.post<SmsCertResponse>(
-      '/api/sms/cert',
-      data,
-    );
+    const response = await publicApi.post<SmsCertResponse>('/sms/cert', data);
 
     console.log('SMS cert request successful:', response); // 성공적으로 응답을 받은 경우
     return response;
@@ -43,7 +40,7 @@ export const sendSmsVerifyRequest = async (
   try {
     console.log('Sending SMS verification request with data:', data); // 디버깅용 로그
     const response = await publicApi.post<SmsVerifyResponse>(
-      '/api/sms/verify',
+      '/sms/verify',
       data,
     );
     console.log('SMS verification response:', response); // 디버깅용 로그
@@ -73,7 +70,7 @@ export const sendSigninRequest = async (
   try {
     console.log('Sending Signin request with data:', data);
     const response = await publicApi.post<SigninResponseData>(
-      '/api/users/login',
+      '/users/login',
       data,
     );
     console.log('Signin response:', response);
@@ -100,7 +97,7 @@ export const sendSignupRequest = async (
   try {
     console.log('Sending Signup request with data:', data);
     const response = await publicApi.post<SignupResponse>(
-      '/api/users/signup',
+      '/users/signup',
       data,
     );
     console.log('Signup response:', response);
@@ -125,7 +122,7 @@ export const sendNoticeRequest = async (
   try {
     console.log('Sending Notice request with data:', data);
     const response = await publicApi.post<NoticeResponse>(
-      '/api/users/setting',
+      '/users/setting',
       data,
     );
     console.log('Notice response:', response);
