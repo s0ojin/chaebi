@@ -28,18 +28,20 @@ export default function LetterContent() {
   if (!userInfo || !recipientRes) return null
 
   return (
-    <div>
-      <div className="mt-10">
+    <div className="flex flex-col h-[calc(100vh-120px)]">
+      <div className="mb-8">
         <IntroMessage
           senderName={userInfo?.userName || '보낸 사람'}
           receiverName={recipientRes.name || '받는 사람'}
         />
       </div>
-      <AnimatedLetter>
-        <LetterMessage
-          content={letter?.content || '남기신 메세지가 없습니다'}
-        />
-      </AnimatedLetter>
+      <div className="flex-1">
+        <AnimatedLetter>
+          <LetterMessage
+            content={letter?.content || '남기신 메세지가 없습니다'}
+          />
+        </AnimatedLetter>
+      </div>
     </div>
   )
 }

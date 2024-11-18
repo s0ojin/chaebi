@@ -7,18 +7,15 @@ export async function verifyEnterCode(enterCode: string) {
 
     if (response.status === 200) {
       const { userInfo, recipientRes } = response.data
-
       const { setUserInfo, setRecipientRes } = useUserStore.getState()
       setUserInfo(userInfo)
       setRecipientRes(recipientRes)
 
       return response.data
     } else {
-      console.error('Failed to verify enter code')
       throw new Error('Verification failed')
     }
   } catch (error) {
-    console.error('Error occurred while verifying enter code', error)
     throw error
   }
 }
