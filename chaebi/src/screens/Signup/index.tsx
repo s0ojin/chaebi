@@ -74,7 +74,11 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
   };
 
   const handleSignin = async () => {
-    const signinResponse = await sendSigninRequest({phone: phoneNumber});
+    const token = await getFcmToken();
+    const signinResponse = await sendSigninRequest({
+      phone: phoneNumber,
+      fcmToken: token,
+    });
     console.log('Signin Response:', signinResponse);
     if (signinResponse && signinResponse.status === 200) {
       await AsyncStorage.setItem('name', signinResponse.data.name);
@@ -101,17 +105,18 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     }
   };
 
+  const getFcmToken = async () => {
+    try {
+      const token = await messaging().getToken();
+      console.log('token is : ', token);
+      return token;
+    } catch (error) {
+      console.log('Error getting FcmToken : ', error);
+      return '';
+    }
+  };
+
   const handleSignup = async (push: boolean) => {
-    const getFcmToken = async () => {
-      try {
-        const token = await messaging().getToken();
-        console.log('token is : ', token);
-        return token;
-      } catch (error) {
-        console.log('Error getting FcmToken : ', error);
-        return '';
-      }
-    };
     const token = await getFcmToken();
     const response = await sendSignupRequest({
       phone: phoneNumber,

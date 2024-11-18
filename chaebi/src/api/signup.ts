@@ -53,6 +53,7 @@ export const sendSmsVerifyRequest = async (
 
 export interface SigninRequest {
   phone: string;
+  fcmToken: string;
 }
 
 export interface SigninResponseData {
