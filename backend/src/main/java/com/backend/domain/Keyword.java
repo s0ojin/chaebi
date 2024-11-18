@@ -1,5 +1,5 @@
 package com.backend.domain;
 
 public enum Keyword {
-    people, sky, sea, dog, cat, food
+    people, sea, dog, cat, food
 }
