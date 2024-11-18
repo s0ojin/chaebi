@@ -1,5 +1,6 @@
-import axios from 'axios'
+import axios, { isAxiosError } from 'axios'
 import useUserStore from '@/stores/useUserStore'
+import { handleApiError } from '@/utils/errorHandler'
 
 export async function verifyEnterCode(enterCode: string) {
   try {
@@ -18,7 +19,12 @@ export async function verifyEnterCode(enterCode: string) {
       throw new Error('Verification failed')
     }
   } catch (error) {
-    console.error('Error occurred while verifying enter code', error)
+    if (isAxiosError(error)) {
+      handleApiError(error)
+    } else {
+      console.error('Unknown error:', error)
+      alert('알 수 없는 에러가 발생했습니다.')
+    }
     throw error
   }
 }
