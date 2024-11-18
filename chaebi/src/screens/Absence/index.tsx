@@ -7,6 +7,9 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import WarningModal from '../../components/WarningModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RootStackParamList} from '../../types/navigator';
+import {sendSigninRequest} from '../../api/signup';
+import messaging from '@react-native-firebase/messaging';
+import {useToast} from '../../components/ToastContext';
 
 type AbsenceScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Absence'>;
@@ -16,6 +19,51 @@ export default function AbsenceScreen({navigation}: AbsenceScreenProps) {
   // 모달 가시성 상태
   const [modalVisible, setModalVisible] = useState(false);
   const [username, setUsername] = useState<string | null>('');
+  const {showToast} = useToast();
+
+  const getFcmToken = async () => {
+    try {
+      const token = await messaging().getToken();
+      console.log('token is : ', token);
+      return token;
+    } catch (error) {
+      console.log('Error getting FcmToken : ', error);
+      return '';
+    }
+  };
+
+  const handleSignin = async () => {
+    const token = await getFcmToken();
+    const phoneNumber = (await AsyncStorage.getItem('phoneNumber')) ?? '';
+    const signinResponse = await sendSigninRequest({
+      phone: phoneNumber,
+      fcmToken: token,
+    });
+    console.log('Signin Response:', signinResponse);
+    if (signinResponse && signinResponse.status === 200) {
+      await AsyncStorage.setItem('name', signinResponse.data.name);
+      await AsyncStorage.setItem(
+        'phoneNumber',
+        signinResponse.data.phoneNumber,
+      );
+      await AsyncStorage.setItem(
+        'accessToken',
+        signinResponse.data.accessToken,
+      );
+      await AsyncStorage.setItem(
+        'refreshToken',
+        signinResponse.data.refreshToken,
+      );
+      console.log('name', await AsyncStorage.getItem('name'));
+      console.log('phoneNumber', await AsyncStorage.getItem('phoneNumber'));
+      console.log('accessToken:', await AsyncStorage.getItem('accessToken'));
+      console.log('refreshToken:', await AsyncStorage.getItem('refreshToken'));
+      showToast(`${signinResponse.data.name}님 환영합니다.`);
+      navigation.replace('Main');
+    } else {
+      console.log('error');
+    }
+  };
 
   useEffect(() => {
     const getName = async () => {
@@ -35,9 +83,7 @@ export default function AbsenceScreen({navigation}: AbsenceScreenProps) {
       <View className="justify-end w-full gap-5">
         <RoundButton
           content={`${username}님이신가요?`}
-          onPress={() => {
-            navigation.navigate('SignUp');
-          }}
+          onPress={handleSignin}
         />
         <RoundButton
           content={'유족이신가요?'}
