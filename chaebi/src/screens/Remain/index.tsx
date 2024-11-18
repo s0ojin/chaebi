@@ -9,7 +9,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import RecipientCard from '../../components/RecipientCard';
 import Footer from '../../components/Footer';
 import {NO_ONE_HEADLINE, NO_ONE_INFO} from '../../constants/remain';
-import {deleteRecipient, getRecipient} from '../../api/recipient';
+import {deleteRecipient, getRecipientList} from '../../api/recipient';
 import {RootStackParamList} from '../../types/navigator';
 
 export interface Recipient {
@@ -41,7 +41,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
   const [moveToList, setMoveToList] = useState<ModalElement[]>([]);
 
   useEffect(() => {
-    getRecipient()
+    getRecipientList()
       .then(data => {
         // 최근 수정일 기준으로 정렬하기
         const dataList: Recipient[] = data.sort((a, b) => {
