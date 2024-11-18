@@ -51,12 +51,12 @@ export default function Archive() {
   }
 
   return (
-    <div className="flex flex-col items-center w-full min-h-screen p-5">
+    <div className="flex flex-col items-center w-full min-h-screen h-screen p-5">
       <div className="mt-5 mb-3">
         <CustomTab onTabChange={handleTabChange} />
       </div>
       {currentTab === '편지' ? (
-        <div className="flex-1 w-full">
+        <div className="flex-1 w-full h-full">
           <LetterContent />
         </div>
       ) : (
