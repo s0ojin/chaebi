@@ -1,5 +1,6 @@
 import axios from 'axios'
 import useUserStore from '@/stores/useUserStore'
+import { error } from 'console'
 
 export async function verifyEnterCode(enterCode: string) {
   try {
@@ -13,8 +14,7 @@ export async function verifyEnterCode(enterCode: string) {
 
       return response.data
     } else {
-      console.error('Failed to verify enter code')
-      throw new Error('Verification failed')
+      throw error
     }
   } catch (error) {
     throw error
