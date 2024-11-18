@@ -133,7 +133,7 @@ public class ClassifyServiceImpl implements ClassifyService{
         }
         return galleries.stream()
                 .filter(g -> !usedGalleryIds.contains(g.getId()))
-                .limit(15) // 15개 미만으로 제한
+                .limit(10) // 15개 미만으로 제한
                 .peek(g -> usedGalleryIds.add(g.getId()))
                 .collect(Collectors.toList());
     }
