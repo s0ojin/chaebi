@@ -18,9 +18,11 @@ const config: Config = {
       },
       stroke: {
         _white: '#FAFAFA',
+        _black: '#0A0A0A',
       },
       strokeWidth: {
         '0.5': '.0313rem',
+        '0.3': '.1875rem',
       },
       lineHeight: {
         _46: '2.875rem',

@@ -78,7 +78,7 @@ export default function AnimatedLetter({
               className="w-full h-full bg-_white shadow-lg rounded-lg overflow-hidden"
               initial={{ y: '50%', scale: 0.8, opacity: 0 }}
               animate={{ y: 0, scale: 1, opacity: 1 }}
-              transition={{ delay: 0.8, duration: 1 }}
+              transition={{ delay: 0.5, duration: 1 }}
             >
               <motion.div
                 initial={{ opacity: 0 }}
