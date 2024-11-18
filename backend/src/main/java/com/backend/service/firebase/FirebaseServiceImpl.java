@@ -87,7 +87,7 @@ public class FirebaseServiceImpl implements FirebaseService {
             System.out.println(u.getName() + "님 발송");
             System.out.println("토큰 : " + u.getFcmToken());
             if(token != null && u.isPush()){
-                String body = u.getName() + "님 입장하세요!";
+                String body = u.getName() + "님이 남기신 유언을 확인해주세요.";
                 this.sendMessageTo(token, "채비", body, u.getName(),u.getPhone());
             }
         }
