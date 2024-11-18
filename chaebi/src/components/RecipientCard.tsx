@@ -55,18 +55,18 @@ export default function RemainListView({
       onPress={setOnPress}>
       <View className="flex-row justify-left items-center">
         {/* 사용자 이미지 */}
-        {recipient.imgUrl === null || recipient.imgUrl === '' ? (
+        { !recipient?.imgUrl || recipient?.imgUrl===undefined ? (
           <View className="bg-primary-300 rounded-full w-12 h-12" />
         ) : (
           <Image
-            source={{uri: recipient.imgUrl}}
+            source={{uri: recipient?.imgUrl}}
             className="rounded-full w-12 h-12"
           />
         )}
         {/* 사용자 정보 */}
         <View className="ml-4 gap-2">
-          <Text className="text-xl">{recipient.name}</Text>
-          <Text className="text-base">{formatPhoneNumber(recipient.phone)}</Text>
+          <Text className="text-xl">{recipient?.name}</Text>
+          <Text className="text-base">{formatPhoneNumber(recipient?.phone)}</Text>
         </View>
       </View>
       {isSetting ? (
@@ -76,7 +76,7 @@ export default function RemainListView({
       ) : (
         <View className="flex-row h-full py-4 items-end">
           <Text className="">
-            {recipient.lastModified
+            {recipient?.lastModified
               ? `마지막 수정 : ${calculateDate(recipient.lastModified)}`
               : ''}
           </Text>
