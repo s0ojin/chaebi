@@ -50,7 +50,7 @@ export default function AnimatedLetter({
             <div className="w-64 h-40 bg-gray-200 relative z-10 rounded-md shadow-lg">
               {/* Envelope Flap */}
               <motion.div
-                className="absolute top-0 left-0 w-0 h-0 border-l-[128px] border-r-[128px] border-t-[64px] border-l-transparent border-r-transparent border-t-gray-200"
+                className="absolute top-0 left-0 w-0 h-0 border-l-[128px] border-r-[128px] border-t-[96px] border-l-transparent border-r-transparent border-t-gray-200"
                 style={{
                   top: '2px',
                   transformOrigin: 'top center',

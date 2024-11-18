@@ -38,7 +38,7 @@ export default function LetterContent() {
       <div className="flex-1">
         <AnimatedLetter>
           <LetterMessage
-            content={letter?.content || '남기신 메세지가 없습니다'}
+            content={letter?.content || `남기신 메세지가 없습니다.`}
           />
         </AnimatedLetter>
       </div>
