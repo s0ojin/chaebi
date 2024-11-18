@@ -27,19 +27,22 @@ export default function AnimatedLetter({
   }
 
   function handleCloseClick() {
-    setIsFullyOpen(false)
     setTimeout(() => {
       setIsOpening(false)
       if (onCloseComplete) {
         onCloseComplete() // 콜백 호출
       }
     }, 500)
+
+    setTimeout(() => {
+      setIsFullyOpen(false)
+    }, 2000)
   }
 
   return (
     <div
       className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center ${
-        isOpening ? 'z-50' : 'z-0'
+        !isFullyOpen ? 'z-0' : 'z-50'
       }`}
     >
       <AnimatePresence>
@@ -64,7 +67,7 @@ export default function AnimatedLetter({
             }}
           >
             {/* Envelope Body */}
-            <div className="w-64 h-40 bg-gray-200 relative z-10 rounded-md shadow-lg">
+            <div className="w-64 h-40 bg-gray-200 relative rounded-md shadow-lg z-10">
               {/* Envelope Flap */}
               <motion.div
                 className="absolute top-0 left-0 w-0 h-0 border-l-[128px] border-r-[128px] border-t-[96px] border-l-transparent border-r-transparent border-t-gray-200"
