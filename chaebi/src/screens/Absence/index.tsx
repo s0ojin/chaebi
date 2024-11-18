@@ -4,7 +4,8 @@ import React, {useEffect, useState} from 'react';
 import Logo from '../../assets/logo/logo.svg';
 import RoundButton from '../../components/RoundButton';
 import {StackNavigationProp} from '@react-navigation/stack';
-import WarningModal from '../../components/WarningModal'; // 모달 컴포넌트 import
+import WarningModal from '../../components/WarningModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RootStackParamList} from '../../types/navigator';
 
 type AbsenceScreenProps = {
@@ -14,10 +15,14 @@ type AbsenceScreenProps = {
 export default function AbsenceScreen({navigation}: AbsenceScreenProps) {
   // 모달 가시성 상태
   const [modalVisible, setModalVisible] = useState(false);
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState<string | null>('');
 
   useEffect(() => {
-    setUsername('박수진');
+    const getName = async () => {
+      const name = await AsyncStorage.getItem('name');
+      setUsername(name);
+    };
+    getName();
   }, []);
 
   return (
@@ -31,7 +36,7 @@ export default function AbsenceScreen({navigation}: AbsenceScreenProps) {
         <RoundButton
           content={`${username}님이신가요?`}
           onPress={() => {
-            navigation.navigate('SignIn');
+            navigation.navigate('SignUp');
           }}
         />
         <RoundButton
