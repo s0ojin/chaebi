@@ -3,7 +3,7 @@ import {View, Pressable, ScrollView} from 'react-native';
 import Text from '../CustomText';
 import useAlbumStore from '../../stores/albumStore';
 import {useQuery} from '@tanstack/react-query';
-import {getRecipientList} from '../../api/album';
+import {getRecipientList} from '../../api/recipient';
 
 export default function RecipientTagList() {
   const {data: recipientList} = useQuery({
