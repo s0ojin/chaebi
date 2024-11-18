@@ -86,6 +86,7 @@ export interface SignupRequest {
   phone: string;
   name: string;
   fcmToken: string;
+  push: boolean;
 }
 
 export interface SignupResponse {
