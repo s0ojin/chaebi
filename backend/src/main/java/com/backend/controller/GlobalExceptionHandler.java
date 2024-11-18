@@ -2,6 +2,7 @@ package com.backend.controller;
 
 import com.backend.dto.ErrorResponse;
 import com.backend.exception.*;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -54,7 +55,11 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse("UNAUTHORIZED", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
-
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorResponse> handleExpiredJwtException(UnauthorizedException ex) {
+        ErrorResponse errorResponse = new ErrorResponse("UNAUTHORIZED", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
     // NoSuchElementException 처리 (404 Not Found)
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ErrorResponse> handleNoSuchElementException(NoSuchElementException ex) {
