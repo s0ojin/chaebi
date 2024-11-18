@@ -58,6 +58,7 @@ public class FirebaseServiceImpl implements FirebaseService {
                                 .title(title)
                                 .body(body)
                                 .image(img)
+                                .android_channel_id("default_channel")
                                 .build())
                         .data(FcmMessage.Data.builder()
                                 .screenName("Absence")  // 예: "product_detail"
