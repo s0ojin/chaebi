@@ -14,11 +14,7 @@ export default function SecurityContent({ onNextClick }: SecurityContentProps) {
   const [inputValue, setInputValue] = useState('')
   const { userInfo, recipientRes } = useUserStore()
 
-  useEffect(() => {
-    console.log('userInfo:', userInfo)
-    console.log('recipientRes:', recipientRes)
-    console.log('isClient:', isClient)
-  }, [userInfo, recipientRes, isClient])
+  useEffect(() => {}, [userInfo, recipientRes, isClient])
 
   useEffect(() => {
     setIsClient(true)
