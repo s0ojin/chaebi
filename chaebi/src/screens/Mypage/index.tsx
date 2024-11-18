@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {View} from 'react-native';
+import React, {useState} from 'react';
+import {View, Alert} from 'react-native';
 import Text from '../../components/CustomText';
 import Header from '../../components/Header';
 import SettingItem from '../../components/mypage/MypageItem';
@@ -17,6 +17,7 @@ import Modal from '../../components/mypage/MypageModal';
 import {LOGOUT_WARNING, RESIGN_WARNING} from '../../constants/mypage';
 import {deleteResignUser} from '../../api/mypage';
 import {RootStackParamList} from '../../types/navigator';
+import {Linking} from 'react-native';
 
 interface SettingScreenProps {
   navigation: StackNavigationProp<RootStackParamList>;
@@ -28,6 +29,26 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
   const [message, setMessage] = useState<string>('');
   const [isWarn, setIsWarn] = useState<boolean>(false);
   const [action, setAction] = useState<() => void>(() => {});
+
+  const handleSupportPress = () => {
+    const email = 'onepst@hanyang.ac.kr';
+    const subject = '채비 어플 문의드립니다.';
+    const body = '문의하실 내용을 자유롭게 작성해주세요!';
+
+    const emailUrl = `mailto:${email}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(body)}`;
+
+    Linking.canOpenURL(emailUrl)
+      .then(supported => {
+        if (supported) {
+          Linking.openURL(emailUrl);
+        } else {
+          Alert.alert('이메일 앱을 열 수 없습니다.');
+        }
+      })
+      .catch(err => console.error('An error occurred', err));
+  };
 
   return (
     <View className="flex-1 bg-primary-100">
@@ -90,7 +111,6 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
               icon={<QuitIcon />}
               title="탈퇴하기"
               onPress={() => {
-                // 모달
                 setIsWarn(true);
                 setContent(RESIGN_WARNING);
                 setMessage('탈퇴하기');
@@ -113,7 +133,7 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
             <SettingItem
               icon={<SupportIcon />}
               title="문의하기"
-              onPress={() => {}}
+              onPress={handleSupportPress}
             />
             <SettingItem
               icon={<WrenchIcon />}
