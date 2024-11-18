@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { ChosunNm } from '@/utils/fonts'
-import Logo from 'public/svg/logo.svg'
+import LogoIcon from 'public/svg/logo.svg'
 import './globals.css'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -30,7 +30,7 @@ export default function RootLayout({
       >
         <div className="h-screen flex flex-col relative">
           <header className="hidden md:flex w-full p-5 bg-_gray-800 justify-start shrink-0">
-            <Logo />
+            <LogoIcon />
           </header>
           <main className="flex-1">{children}</main>
           <ToastContainer position="top-center" autoClose={3000} />
