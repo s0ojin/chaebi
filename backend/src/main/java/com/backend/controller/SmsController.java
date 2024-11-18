@@ -27,6 +27,7 @@ public class SmsController {
     @PostMapping("/analyze")
     public void analyzeMessage(@RequestBody MessageDTO message) {
         System.out.println(message.getBody());
+        String cleanedBody = message.getBody().replaceAll("\\r\\n|\\r|\\n", " ");
         if (smsService.isObituaryMessage(message.getBody())) {
             String deceasedName = smsService.extractDeceasedName(message.getBody());
             if(deceasedName != null) {
@@ -62,7 +63,7 @@ public class SmsController {
     @PostMapping("/send")
     public ResponseEntity<?> sendCode(@RequestBody CertReqDTO request) {
         smsService.sendSignal(request.getPhoneNum());
-        return ResponseEntity.ok("코드발송");
+        return ResponseEntity.ok("코드발송"); // 수정 필요
     }
 
 

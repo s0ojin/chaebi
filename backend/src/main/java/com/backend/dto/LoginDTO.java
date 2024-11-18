@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginDTO {
     private String phone;
+    private String fcmToken;
 }

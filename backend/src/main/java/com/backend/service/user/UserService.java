@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface UserService {
     TokenRes signup(SignDTO signDTO, HttpServletResponse response);
-    TokenRes login(String phone, HttpServletResponse response);
+    TokenRes login(String phone, String fcmToken, HttpServletResponse response);
     void logout(HttpServletRequest request);
     void setting(SettingDTO settingDTO, HttpServletRequest request);
     Optional<User> getUser(String id);
