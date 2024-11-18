@@ -13,6 +13,7 @@ import RemainScreen from '../screens/Remain';
 import ContactScreen from '../screens/Remain/contacts';
 import QuestionScreen from '../screens/Remain/question';
 import CompleteScreen from '../screens/Remain/complete';
+import RemainEditPreScreen from '../screens/Remain/editPrecident';
 import SetPasswordScreen from '../screens/Setpw';
 import RemainEditorScreen from '../screens/RemainEditor';
 import AlbumScreen from '../screens/Album';
@@ -35,6 +36,7 @@ export default function RootStackNavigator() {
       <Stack.Screen name="Contacts" component={ContactScreen} />
       <Stack.Screen name="RemainQuestion" component={QuestionScreen} />
       <Stack.Screen name="RemainComplete" component={CompleteScreen} />
+      <Stack.Screen name="RemainWrite" component={RemainEditPreScreen} />
       <Stack.Screen name="SetPw" component={SetPasswordScreen} />
       <Stack.Screen name="RemainEditor" component={RemainEditorScreen} />
       <Stack.Screen name="Album" component={AlbumScreen} />
