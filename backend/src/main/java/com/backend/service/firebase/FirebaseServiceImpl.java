@@ -10,6 +10,7 @@ import com.google.common.net.HttpHeaders;
 import com.google.gson.JsonParseException;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -46,14 +47,17 @@ public class FirebaseServiceImpl implements FirebaseService {
         System.out.println(response.body().string());
     }
 
+    @Value("${app.img}")
+    private String img;
     private String makeMessage(String targetToken, String title, String body, String str, String phone ) throws JsonParseException, JsonProcessingException {
+
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                         .token(targetToken)
                         .notification(FcmMessage.Notification.builder()
                                 .title(title)
                                 .body(body)
-                                .image(null)
+                                .image(img)
                                 .build())
                         .data(FcmMessage.Data.builder()
                                 .screenName("Absence")  // 예: "product_detail"
