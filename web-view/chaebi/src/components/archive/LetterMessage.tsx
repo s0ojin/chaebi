@@ -7,15 +7,25 @@ interface LetterMessageProps {
 }
 
 export default function LetterMessage({ content }: LetterMessageProps) {
+  const backgroundStyle: React.CSSProperties = {
+    backgroundImage: 'url("/images/letter-background.jpg")',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+  }
+
   return (
-    <div className="h-full flex flex-col justify-between overflow-y-auto">
+    <div
+      className="p-2 h-full flex flex-col justify-start overflow-y-auto"
+      style={backgroundStyle}
+    >
       <div className="mt-2 px-1">
         <TopEmblem className="w-full" />
       </div>
-      <div className={`${SoBangGwan.variable} font-SoBangGwan p-3 text-xs`}>
+      <div className={`${SoBangGwan.variable} font-SoBangGwan p-3 text-2xl`}>
         {content}
       </div>
-      <div className="mb-2 px-1">
+      <div className="mt-auto mb-2 px-1">
         <BottomEmblem className="w-full" />
       </div>
     </div>
