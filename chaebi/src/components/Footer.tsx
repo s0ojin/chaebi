@@ -8,7 +8,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../types/navigator';
 
 interface FooterProps {
-  currentPage: string;
+  currentPage: 'home' | 'remain' | 'mypage' | 'album';
   navigation: StackNavigationProp<RootStackParamList>;
 }
 
@@ -18,12 +18,12 @@ export default function Footer({currentPage, navigation}: FooterProps) {
       {currentPage === 'home' ? (
         <View className="items-center w-20">
           <HomeIcon width={32} height={32} color="#444444" />
-          <Text className="text-xs text-center text-[#444444]">홈ddd</Text>
+          <Text className="text-xs text-center text-primary-400">홈</Text>
         </View>
       ) : (
         <Pressable
           onPress={() => {
-            navigation.navigate('Main');
+            navigation.replace('Main');
           }}
           className="items-center w-20">
           <HomeIcon width={32} height={32} color="#D2D2D2" />
@@ -34,7 +34,7 @@ export default function Footer({currentPage, navigation}: FooterProps) {
       {currentPage === 'remain' ? (
         <View className="items-center w-20">
           <BoxIcon width={32} height={32} color="#444444" />
-          <Text className="text-xs text-center text-[#444444]">남기기</Text>
+          <Text className="text-xs text-center text-primary-400">남기기</Text>
         </View>
       ) : (
         <Pressable
@@ -47,10 +47,10 @@ export default function Footer({currentPage, navigation}: FooterProps) {
         </Pressable>
       )}
 
-      {currentPage === 'fill' ? (
+      {currentPage === 'album' ? (
         <View className="items-center w-20">
           <LayoutIcon width={32} height={32} color="#444444" />
-          <Text className="text-xs text-center text-[#444444]">채우기</Text>
+          <Text className="text-xs text-center text-primary-400">채우기</Text>
         </View>
       ) : (
         <Pressable
@@ -67,7 +67,7 @@ export default function Footer({currentPage, navigation}: FooterProps) {
       {currentPage === 'mypage' ? (
         <View className="items-center w-20">
           <PersonIcon width={32} height={32} color="#444444" />
-          <Text className="text-xs text-center text-[#444444]">마이페이지</Text>
+          <Text className="text-xs text-center text-primary-400">마이페이지</Text>
         </View>
       ) : (
         <Pressable

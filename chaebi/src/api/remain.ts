@@ -7,10 +7,10 @@ export interface Letter {
   content: string;
   lastModifiedDate: string;
   recipient: Recipient;
-  sort: string;
+  sort: 'center' | 'left';
 }
 
-export const postSaveRemain: (
+export const postSaveLetter: (
   payload: Remain,
   recipientId: number,
 ) => Promise<string> = async (payload: Remain, recipientId: number) => {
@@ -21,7 +21,7 @@ export const postSaveRemain: (
   return response.data;
 };
 
-export const getLetter: (recipientId: number) => Promise<Letter> = async (
+export const getSavedLetter: (recipientId: number) => Promise<Letter> = async (
   recipientId: number,
 ) => {
   const response = await privateApi.get(`/letter/${recipientId}`);

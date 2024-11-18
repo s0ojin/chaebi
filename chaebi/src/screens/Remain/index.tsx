@@ -9,11 +9,11 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import RecipientCard from '../../components/RecipientCard';
 import Footer from '../../components/Footer';
 import {NO_ONE_HEADLINE, NO_ONE_INFO} from '../../constants/remain';
-import {deleteRecipient, getRecipient} from '../../api/recipient';
+import {deleteRecipient, getRecipientList} from '../../api/recipient';
 import {RootStackParamList} from '../../types/navigator';
 
 export interface Recipient {
-  id?: number;
+  id: number;
   name: string;
   phone: string;
   secretQuestion?: string;
@@ -41,7 +41,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
   const [moveToList, setMoveToList] = useState<ModalElement[]>([]);
 
   useEffect(() => {
-    getRecipient()
+    getRecipientList()
       .then(data => {
         // 최근 수정일 기준으로 정렬하기
         const dataList: Recipient[] = data.sort((a, b) => {
@@ -60,7 +60,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
   }, []);
 
   return (
-    <View className="bg-white flex-1 p-4">
+    <View className="bg-white flex-1">
       <Modal
         showAuth={showAuth}
         setShowAuth={setShowAuth}
@@ -75,23 +75,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
             <Text className="text-center text-lg">{NO_ONE_INFO}</Text>
             <TouchableOpacity
               className="bg-gray-500 rounded-full w-16 h-16 justify-center items-center mt-5"
-              onPress={() => {
-                setMoveToList([
-                  {
-                    title: '연락처에서 받아오기',
-                    moveTo: () => {
-                      navigation.navigate('Contacts');
-                    },
-                  },
-                  {
-                    title: '직접 입력하기',
-                    moveTo: () => {
-                      navigation.navigate('RemainWrite');
-                    },
-                  },
-                ]);
-                setShowAuth(true);
-              }}>
+              onPress={()=>{navigation.navigate('Contacts');}}>
               <Plus className="m-auto" />
             </TouchableOpacity>
           </View>
@@ -101,7 +85,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
               data={recipientList}
               keyExtractor={item => item.id?.toString() ?? item.name}
               renderItem={({item}) => (
-                <View className="my-2">
+                <View className="my-2 px-4">
                   <RecipientCard
                     recipient={item}
                     isSetting={false}
@@ -129,29 +113,33 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
             />
             <TouchableOpacity
               className="absolute bottom-4 right-8 bg-gray-500 rounded-full w-14 h-14 justify-center items-center"
-              onPress={() => {
-                setMoveToList([
-                  {
-                    title: '연락처에서 받아오기',
-                    moveTo: () => {
-                      navigation.navigate('Contacts');
-                    },
-                  },
-                  {
-                    title: '직접 입력하기',
-                    moveTo: () => {
-                      navigation.navigate('RemainWrite');
-                    },
-                  },
-                ]);
-                setShowAuth(true);
-              }}>
+              onPress={()=>{navigation.navigate('Contacts');}}
+              //   () => {
+              //   setMoveToList([
+              //     {
+              //       title: '연락처에서 받아오기',
+              //       moveTo: () => {
+              //         navigation.navigate('Contacts');
+              //       },
+              //     },
+              //     {
+              //       title: '직접 입력하기',
+              //       moveTo: () => {
+              //         navigation.navigate('RemainWrite');
+              //       },
+              //     },
+              //   ]);
+              //   setShowAuth(true);
+              // }}
+              >
               <Plus className="m-auto" />
             </TouchableOpacity>
           </View>
         )}
       </View>
-      <Footer currentPage="remain" navigation={navigation}></Footer>
+      <View>
+        <Footer currentPage="remain" navigation={navigation}></Footer>
+      </View>
     </View>
   );
 }

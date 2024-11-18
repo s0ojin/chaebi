@@ -45,7 +45,7 @@ export default function AppIntroScreen({navigation}: AppIntroScreenProps) {
         ) : (
           <RoundButton content={'다음'} onPress={() => setStep(step + 1)} />
         )}
-        {step === 4 && (
+        {/* {step === 4 && (
           <View className="flex-row justify-center mt-9 mb-4 gap-2">
             <Text className="text-xl">이미 회원이신가요?</Text>
             <Text
@@ -54,7 +54,7 @@ export default function AppIntroScreen({navigation}: AppIntroScreenProps) {
               로그인
             </Text>
           </View>
-        )}
+        )} */}
       </View>
     </View>
   );

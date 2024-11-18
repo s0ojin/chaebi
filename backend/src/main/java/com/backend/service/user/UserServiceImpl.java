@@ -1,6 +1,7 @@
 package com.backend.service.user;
 
 import com.backend.dto.*;
+import com.backend.exception.UserNotFoundException;
 import com.backend.service.sms.SmsService;
 import jakarta.servlet.http.Cookie;
 import com.backend.domain.User;
@@ -77,7 +78,12 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = userRepository.findByPhone(userPhone);
         System.out.println("user : " + user.get().getPhone());
         System.out.println("user OP : " + user);
-        return userRepository.findByPhone(userPhone);
+        Optional<User> userInfo =  userRepository.findByPhone(userPhone);
+        if(userInfo.isEmpty()){
+            throw new UserNotFoundException("user not found " + userPhone);
+        }
+
+        return userInfo;
         //return userRepository.findByPhone("01011111111"); //테스트
     }
 
