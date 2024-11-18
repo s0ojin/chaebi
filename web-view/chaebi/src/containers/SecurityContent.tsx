@@ -39,7 +39,10 @@ export default function SecurityContent({ onNextClick }: SecurityContentProps) {
     if (inputValue === recipientRes?.secretAnswer) {
       onNextClick()
     } else {
-      toast.error('정답이 일치하지 않습니다. 다시 시도해 주세요.')
+      const hint = recipientRes?.secretAnswer.length ?? 0
+      toast.error(
+        `정답이 일치하지 않습니다. 다시 시도해 주세요. (힌트: ${hint}글자)`,
+      )
     }
   }
 

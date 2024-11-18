@@ -25,7 +25,7 @@ function TabButton({ name, isActive, onClick }: TabButtonProps) {
     <button
       onClick={() => onClick(name)}
       className={`
-        text-xl font-medium transition-colors z-10
+        text-xl font-medium transition-colors
         ${isActive ? 'text-primary' : 'text-gray-500'}
       `}
     >
@@ -88,7 +88,7 @@ export default function CustomTab({ onTabChange }: TabsProps) {
   }
 
   return (
-    <div className="relative w-[12.5rem] h-10 bg-gray-300 rounded-3xl">
+    <div className="relative w-[12.5rem] h-10 bg-gray-300 rounded-3xl z-10">
       <TabIndicator activeTabName={activeTab} />
       <TabNavigation
         tabs={TABS}
