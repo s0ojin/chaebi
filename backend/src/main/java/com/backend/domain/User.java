@@ -23,8 +23,10 @@ public class User {
 
     private LocalDateTime createdAt; //생성날짜
     private LocalDateTime lastLogin; //마지막 로그인
-    private boolean status; //살아있는가 아닌가
-    private int loginAttemptPeriod; //로그인 시도주기
+
+    @Enumerated(EnumType.STRING) // Enum을 문자열로 저장
+    private UserStatus status; // 상태 (살아있음, 탈퇴, 사망)
+
     private boolean admin; //관리자 인지 아닌지
     private String fcmToken;
     private boolean push; // 푸쉬알림
