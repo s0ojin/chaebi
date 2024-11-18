@@ -33,11 +33,8 @@ export default function GuideContent({
   async function handleNextClick() {
     try {
       const data = await verifyEnterCode(enterCode)
-      console.log('API Response Data:', data)
       if (data) {
         const { userInfo, enterRecipient } = data
-        console.log('Extracted userInfo:', userInfo)
-        console.log('Extracted recipientRes:', enterRecipient)
         setUserInfo(userInfo)
         setRecipientRes(enterRecipient)
         router.push('/security')
