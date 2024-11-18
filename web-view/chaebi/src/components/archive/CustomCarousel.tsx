@@ -137,7 +137,7 @@ export default function CustomCarousel() {
                 className="rounded-xl transition-opacity duration-300"
               />
               <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/50 to-transparent"></div>
-              <div className="absolute bottom-3 right-4 text-_white text-4xl font-NotoSansKR">
+              <div className="absolute bottom-3 right-4 text-_white text-3xl font-semibold font-NotoSansKR">
                 {theme.name}
               </div>
             </div>
