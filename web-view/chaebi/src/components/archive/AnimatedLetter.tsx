@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import Image from 'next/image'
+import CloseIcon from 'public/svg/close.svg'
 
 export default function AnimatedLetter({
   children,
@@ -30,7 +30,11 @@ export default function AnimatedLetter({
   }
 
   return (
-    <div className="relative h-full flex items-center justify-center">
+    <div
+      className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center ${
+        isOpening ? 'z-50' : 'z-0'
+      }`}
+    >
       <AnimatePresence>
         {!isFullyOpen ? (
           <motion.div
@@ -75,30 +79,22 @@ export default function AnimatedLetter({
         {isOpening && (
           <motion.div
             key="letter"
-            className="absolute top-0 left-0 w-full h-full max-w-full"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
+            className={`fixed w-full h-full bg-white shadow-lg rounded-lg overflow-hidden`}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.5, duration: 1 }}
           >
             <motion.div
               className="w-full h-full bg-white shadow-lg rounded-lg overflow-hidden relative"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.5, duration: 1 }}
+              transition={{ delay: 0.1, duration: 1 }}
             >
-              {/* Close Button */}
               <button
                 onClick={handleCloseClick}
                 className="absolute top-2 right-2"
               >
-                {/* Using next/image for optimization */}
-                <Image
-                  src="/svg/close.svg"
-                  alt="Close"
-                  width={24}
-                  height={24}
-                  priority
-                />
+                <CloseIcon width={24} height={24} />
               </button>
               <motion.div
                 initial={{ opacity: 0 }}
