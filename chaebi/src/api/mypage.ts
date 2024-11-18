@@ -18,6 +18,6 @@ export const getUsersAlert: () => Promise<boolean> = async () => {
 export const postUsersAlert: (value: boolean) => Promise<string> = async (
   value: boolean,
 ) => {
-  const response = await privateApi.post(`api/users/setting?push=${value}`);
+  const response = await privateApi.post(`/users/setting?push=${value}`);
   return response.data;
 };

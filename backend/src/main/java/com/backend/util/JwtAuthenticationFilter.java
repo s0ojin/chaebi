@@ -45,7 +45,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 path.startsWith("/api/recipient/enter") ||
                 path.startsWith("/api/letter/") ||
                 path.startsWith("/api/fcm/test") ||
-                path.startsWith("/api/gallery/recipientList")
+                path.startsWith("/api/gallery/recipientList") ||
+                path.startsWith("/api/gallery/filterList")
                 ;}
 
     @Override
