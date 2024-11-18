@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Image, View} from 'react-native';
 import Text from '../../components/CustomText';
+import InfoCircle from '../../assets/icon/info-circle.svg';
 import InputField from '../../components/InputField';
 import RoundButton from '../../components/RoundButton';
 import {
@@ -127,7 +128,8 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
 
     console.log('Response:', response);
     if (response && response.status === 200) {
-      handleSignin();
+      setStep(step + 1);
+      //handleSignin();
     }
   };
 
@@ -223,9 +225,12 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
             </Text>
           </View>
           <View className="p-4 w-full justify-end">
-            <Text className="text-center text-xl mb-8 text-primary-300">
-              알림에 동의하지 않아도 서비스를 이용할 수 있습니다.
-            </Text>
+            <View className="mb-8">
+              <InfoCircle width={4} height={4} />
+              <Text className="text-center text-xl text-primary-300">
+                알림에 동의하지 않아도 서비스를 이용할 수 있습니다.
+              </Text>
+            </View>
             <RoundButton content="알림 받기" onPress={handleNotice} />
             <Text
               className="text-center text-2xl my-9 text-primary-300"
@@ -237,6 +242,15 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
       )}
       {step === 3 && (
         //step3
+        <View>
+          <Text>원활한 서비스 이용을 위해</Text>
+          <Text>다음 전화번호를 고객님의 연락처에 저장해주세요.</Text>
+          <Text>채비 서비스 : 010-7659-6450</Text>
+          <Text onPress={handleSignin} >시작하기</Text>
+        </View>
+      )}
+      {step === 4 && (
+        //error
         <View>
           <Text>Something went wrong while sign-up process.</Text>
           <Text>Please restart app.</Text>
