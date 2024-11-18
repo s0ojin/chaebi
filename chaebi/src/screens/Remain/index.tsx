@@ -6,11 +6,11 @@ import Modal from '../../components/CustomModal';
 import {ModalElement} from '../../components/CustomModal';
 import Plus from '../../assets/icon/plus.svg';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
 import RecipientCard from '../../components/RecipientCard';
 import Footer from '../../components/Footer';
 import {NO_ONE_HEADLINE, NO_ONE_INFO} from '../../constants/remain';
 import {deleteRecipient, getRecipient} from '../../api/recipient';
+import {RootStackParamList} from '../../types/navigator';
 
 export interface Recipient {
   id?: number;
@@ -43,7 +43,16 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
   useEffect(() => {
     getRecipient()
       .then(data => {
-        setRecipientList(data);
+        // 최근 수정일 기준으로 정렬하기
+        const dataList: Recipient[] = data.sort((a, b) => {
+          if (a.lastModified && b.lastModified) {
+            const aDate = new Date(a.lastModified).getTime();
+            const bDate = new Date(b.lastModified).getTime();
+            return bDate - aDate;
+          }
+          return 0;
+        });
+        setRecipientList(dataList);
       })
       .catch(error => {
         console.log(error);
@@ -108,7 +117,7 @@ export default function RemainScreen({navigation}: AppIntroScreenProps) {
                           title: '편지 삭제하기',
                           moveTo: () => {
                             // 편지삭제 API
-                            if(item.id) deleteRecipient(item.id);
+                            if (item.id) deleteRecipient(item.id);
                           },
                         },
                       ]);

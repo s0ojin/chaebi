@@ -12,11 +12,11 @@ import SupportIcon from '../../assets/icon/support.svg';
 import WrenchIcon from '../../assets/icon/wrench.svg';
 import Footer from '../../components/Footer';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal from '../../components/mypage/MypageModal';
 import {LOGOUT_WARNING, RESIGN_WARNING} from '../../constants/mypage';
-import {deleteResignUser, postLogoutUser} from '../../api/mypage';
+import {deleteResignUser} from '../../api/mypage';
+import {RootStackParamList} from '../../types/navigator';
 
 interface SettingScreenProps {
   navigation: StackNavigationProp<RootStackParamList>;
@@ -45,8 +45,20 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
       <View className="flex-1 mt-4 gap-9">
         <View className="gap-5">
           <View className="mb-2">
-            <SettingItem icon={<AlertIcon />} title="푸시알림 설정" onPress={()=>{navigation.navigate('SetAlert')}}/>
-            <SettingItem icon={<LockIcon />} title="화면 잠금" onPress={()=>{navigation.navigate('SetLock')}}/>
+            <SettingItem
+              icon={<AlertIcon />}
+              title="푸시알림 설정"
+              onPress={() => {
+                navigation.navigate('SetAlert');
+              }}
+            />
+            <SettingItem
+              icon={<LockIcon />}
+              title="화면 잠금"
+              onPress={() => {
+                navigation.navigate('SetLock');
+              }}
+            />
             <SettingItem
               icon={<FontIcon />}
               title="글씨 스타일"
@@ -65,12 +77,11 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
                   AsyncStorage.setItem('token', '');
                   navigation.reset({
                     index: 0,
-                    routes: [{ name: 'AppIntro' }],
+                    routes: [{name: 'AppIntro'}],
                   });
                 });
                 setModalVisible(true);
               }}
-              
             />
             <SettingItem
               icon={<QuitIcon />}
@@ -79,13 +90,13 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
                 // 모달
                 setIsWarn(true);
                 setContent(RESIGN_WARNING);
-                setMessage('탈퇴하기')
+                setMessage('탈퇴하기');
                 setAction(() => () => {
                   deleteResignUser();
                   AsyncStorage.setItem('token', '');
                   navigation.reset({
                     index: 0,
-                    routes: [{ name: 'AppIntro' }],
+                    routes: [{name: 'AppIntro'}],
                   });
                 });
                 setModalVisible(true);
@@ -93,11 +104,16 @@ export default function MypageScreen({navigation}: SettingScreenProps) {
             />
           </View>
           <View className="my-2">
-            <SettingItem icon={<SupportIcon />} title="문의하기" />
+            <SettingItem
+              icon={<SupportIcon />}
+              title="문의하기"
+              onPress={() => {}}
+            />
             <SettingItem
               icon={<WrenchIcon />}
               title="버전 정보"
               content={<Text className="p-4">v 1.0.0</Text>}
+              onPress={() => {}}
             />
           </View>
         </View>

@@ -1,0 +1,9 @@
+# 빌드 파일 및 폴더
+.next/
+build/
+
+# 번들링 관련 파일
+webpack.config.js
+
+# 타사 라이브러리 폴더
+node_modules/
