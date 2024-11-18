@@ -1,5 +1,5 @@
 import {AxiosResponse} from 'axios';
-import {publicApi} from './instance';
+import {privateApi, publicApi} from './instance';
 
 export interface SmsCertRequest {
   phoneNum: string;
@@ -122,7 +122,7 @@ export const sendNoticeRequest = async (
 ): Promise<NoticeResponse | null> => {
   try {
     console.log('Sending Notice request with data:', data);
-    const response = await publicApi.post<NoticeResponse>(
+    const response = await privateApi.post<NoticeResponse>(
       '/users/setting',
       data,
     );
