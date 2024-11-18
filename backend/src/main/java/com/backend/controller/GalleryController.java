@@ -4,6 +4,8 @@ import com.backend.domain.User;
 import com.backend.dto.*;
 import com.backend.exception.NotFoundException;
 import com.backend.exception.UnauthorizedException;
+import com.backend.service.classify.ClassifyService;
+import com.backend.service.classify.ClassifyServiceImpl;
 import com.backend.service.gallery.GalleryService;
 import com.backend.service.gallery.GalleryServiceImpl;
 import com.backend.service.user.UserService;
@@ -28,6 +30,7 @@ public class GalleryController {
 
     private final GalleryService galleryService;
     private final UserService userService;
+    private final ClassifyService classifyService;
 
 //    @Operation(summary = "PresignedURL 생성")
 //    @PostMapping("/presigned")
@@ -69,6 +72,19 @@ public class GalleryController {
         return ResponseEntity.ok(list);
     }
 
+    @Operation(summary = "열람자만의 필터링 갤러리")
+    @PostMapping("/filterList")
+    public ResponseEntity<?> getClassifiedGalleries(
+            @RequestParam Long userId,
+            @RequestParam Long recipientId) {
+        try {
+            ClassifiedGalleries classifiedGalleries = classifyService.getClassifiedGalleries(userId, recipientId);
+            return ResponseEntity.ok(classifiedGalleries);
+        } catch (Exception e) {
+            return ResponseEntity.ok(e.getMessage());
+        }
+    }
+
     @PostMapping(value = "/upload",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -90,9 +106,19 @@ public class GalleryController {
 //            MultipartFile multipartFile = convertToMultipartFile(imageBytes, "image.jpg");
 
             // 각 파일별로 처리
-            for (MultipartFile file : files) {
-                if (!file.isEmpty()) {
-                    GalleryResDTO response = galleryService.uploadFile(file, uploadDTO, user);
+            for (int i = 0; i < files.size(); i++) {
+                if (!files.get(i).isEmpty()) {
+                    System.out.println(i + "번째");
+
+                    String location = (i < uploadDTO.getLocation().size())
+                            ? uploadDTO.getLocation().get(i)
+                            : null; // 값이 없으면 null
+                    String capturedTime = (i < uploadDTO.getCapturedTime().size())
+                            ? uploadDTO.getCapturedTime().get(i)
+                            : null; // 값이 없으면 null
+
+                    GalleryResDTO response = response = galleryService.uploadFile(files.get(i), uploadDTO, user, location, capturedTime);
+
                     responses.add(response);
                 }
             }

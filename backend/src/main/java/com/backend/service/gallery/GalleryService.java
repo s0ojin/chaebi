@@ -13,7 +13,7 @@ public interface GalleryService {
     void markAsRead(Long galleryId, Long recipientId);
     GalleryPageResDTO getFileUrlByUser(User user, int page, int size);
     List<GalleryRecipientRes> getFileUrlByUserAndRecipient(Long userId, Long recipientId);
-    GalleryResDTO uploadFile(MultipartFile file, UploadDTO uploadDTO, User user);
+    GalleryResDTO uploadFile(MultipartFile file, UploadDTO uploadDTO, User user, String locate, String date);
     String uploadProfile(MultipartFile file, Long id, User user);
     void deleteFiles(List<Long> ids, User user);
 }
