@@ -5,13 +5,14 @@
 :root {
   --font-ChosunNm: 'ChosunNm', sans-serif;
   --font-SoBangGwan: 'SoBangGwan', sans-serif;
+  --font-NotoSansKR: 'NotoSansKR', sans-serif;
   --background: #444444;
 }
 
 html,
 body {
-  height: 100%; /* 추가 */
-  overflow: hidden; /* 스크롤 방지 */
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
@@ -21,4 +22,8 @@ body {
 
 .font-SoBangGwan {
   font-family: var(--font-SoBangGwan);
+}
+
+.font-NotoSansKR {
+  font-family: var(--font-NotoSansKR);
 }

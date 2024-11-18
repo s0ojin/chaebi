@@ -114,7 +114,8 @@ export default function CustomCarousel() {
                 style={{ objectFit: 'cover' }}
                 className="rounded-xl transition-opacity duration-300"
               />
-              <div className="absolute bottom-3 right-4 text-_white text-4xl">
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/50 to-transparent"></div>
+              <div className="absolute bottom-3 right-4 text-_white text-4xl font-NotoSansKR">
                 {theme.name}
               </div>
             </div>
