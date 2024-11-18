@@ -5,9 +5,11 @@ import CloseIcon from 'public/svg/close.svg'
 export default function AnimatedLetter({
   children,
   onOpenComplete,
+  onCloseComplete,
 }: {
   children: React.ReactNode
   onOpenComplete?: () => void
+  onCloseComplete?: () => void // 추가된 prop
 }) {
   const [isOpening, setIsOpening] = useState(false)
   const [isFullyOpen, setIsFullyOpen] = useState(false)
@@ -26,7 +28,12 @@ export default function AnimatedLetter({
 
   function handleCloseClick() {
     setIsFullyOpen(false)
-    setIsOpening(false)
+    setTimeout(() => {
+      setIsOpening(false)
+      if (onCloseComplete) {
+        onCloseComplete() // 콜백 호출
+      }
+    }, 500)
   }
 
   return (
@@ -46,7 +53,7 @@ export default function AnimatedLetter({
               scale: isOpening ? 1.2 : 1,
               y: isOpening ? 0 : [0, -10, 0],
             }}
-            exit={{ opacity: 0 }}
+            exit={{ scale: 1, rotateX: '0deg', opacity: 1 }}
             transition={{
               duration: 0.5,
               y: {
@@ -70,6 +77,7 @@ export default function AnimatedLetter({
                 animate={
                   isOpening ? { rotateX: '-180deg' } : { rotateX: '0deg' }
                 }
+                exit={{ rotateX: '0deg' }}
                 transition={{ duration: 0.5 }}
               />
             </div>
@@ -79,31 +87,32 @@ export default function AnimatedLetter({
         {isOpening && (
           <motion.div
             key="letter"
-            className={`fixed w-full h-full bg-white shadow-lg rounded-lg overflow-hidden`}
+            className={`fixed w-full h-full shadow-lg rounded-lg overflow-hidden`}
+            style={{
+              backgroundImage: 'url("/images/letter-background.jpg")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
             transition={{ delay: 0.5, duration: 1 }}
           >
-            <motion.div
-              className="w-full h-full bg-white shadow-lg rounded-lg overflow-hidden relative"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.1, duration: 1 }}
+            {/* Close Button */}
+            <button
+              onClick={handleCloseClick}
+              className="absolute top-2 right-2"
             >
-              <button
-                onClick={handleCloseClick}
-                className="absolute top-2 right-2"
-              >
-                <CloseIcon width={24} height={24} />
-              </button>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.8, duration: 1 }}
-                className="h-full overflow-y-auto"
-              >
-                {children}
-              </motion.div>
+              <CloseIcon width={24} height={24} />
+            </button>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 1.8, duration: 1 }}
+              className="h-full overflow-y-auto"
+            >
+              {children}
             </motion.div>
           </motion.div>
         )}
