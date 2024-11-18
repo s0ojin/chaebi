@@ -31,10 +31,14 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -60,7 +64,7 @@ public class GalleryServiceImpl implements GalleryService {
     String fastApiUrl;
 
     @Transactional
-    public GalleryResDTO uploadFile(MultipartFile file, UploadDTO uploadDTO, User user) {
+    public GalleryResDTO uploadFile(MultipartFile file, UploadDTO uploadDTO, User user, String locate, String date) {
         try {
             Set<Long> recipientIds = uploadDTO.getRecipientIds();
 
@@ -123,13 +127,29 @@ public class GalleryServiceImpl implements GalleryService {
                     gallery.addRecipient(recipient);
                 }
             }
-            Location location = Location.builder()
-                            .longitude("127.101313354")
-                            .latitude("37.402352535")
-                            .build();
+            // location 정보가 있을 때만 DB 저장
 
-            gallery.setLocate(addressService.addAddress(location));
+            if(locate != null){
+                String[] lo = locate.split(",");
+                System.out.println("좌표 : " + locate);
+                String latitude = truncateToFourDecimals(lo[0]);
+                String longitude = truncateToFourDecimals(lo[1]);
+
+                System.out.println(longitude + " " + latitude);
+                Location location = Location.builder()
+                        .longitude(longitude) // 경도
+                        .latitude(latitude) // 위도
+                        .build();
+                gallery.setLocate(addressService.addAddress(location));
+            }
+            //날 짜 변환
+            if(date != null){
+                LocalDateTime capturedDate = this.convertDateTime(date);
+                System.out.println("찍은 날짜: " +capturedDate);
+                gallery.setCapturedDate(capturedDate);
+            }
             gallery = galleryRepository.save(gallery);
+            System.out.println("끝");
             return new GalleryResDTO(gallery);
 
         } catch (IOException e) {
@@ -433,5 +453,29 @@ public class GalleryServiceImpl implements GalleryService {
             log.error("예상치 못한 에러 발생: {}", e.getMessage());
             throw new RuntimeException("FastAPI 통신 중 에러 발생: " + e.getMessage());
         }
+    }
+
+    private LocalDateTime convertDateTime(String dateStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy:MM:dd");
+
+        // 문자열을 LocalDate로 파싱
+        LocalDate date = LocalDate.parse(dateStr, formatter);
+
+        // LocalDate를 LocalDateTime으로 변환 (시간을 자정으로 설정)
+        return date.atStartOfDay();
+    }
+
+    private String truncateToFourDecimals(String number) {
+        double value = Double.parseDouble(number);
+        // 소수점 이하 자릿수를 구함
+        String strValue = String.valueOf(value);
+        int decimalIndex = strValue.indexOf('.');
+
+        if (decimalIndex != -1 && strValue.length() > decimalIndex + 5) {
+            // 소수점 + 4자리까지만 잘라냄
+            return strValue.substring(0, decimalIndex + 5);
+        }
+
+        return strValue;
     }
 }

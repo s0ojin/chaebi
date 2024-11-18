@@ -1,5 +1,4 @@
 import {AlbumListRes, Media, UploadMediaListReq} from '../types/album';
-import {Recipient} from '../types/remain';
 import {privateApi} from './instance';
 
 export const getMediaList: (
@@ -30,11 +29,6 @@ export const postUploadMediaList: (
     },
   });
 
-  return response.data;
-};
-
-export const getRecipientList: () => Promise<Recipient[]> = async () => {
-  const response = await privateApi.get('/recipient/list');
   return response.data;
 };
 

@@ -125,60 +125,81 @@ export default function App() {
   const [receiveSmsPermission, setReceiveSmsPermission] = useState('');
   const [smsContent, setSmsContent] = useState();
 
-  useEffect(() => {
-    const requestSmsPermission = async () => {
-      try {
-        const permission = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,
-        );
+  // SMS 권한을 요청하는 함수
+  const requestSmsPermission = async () => {
+    try {
+      const permission = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,
+      );
+
+      console.log('SMS Permission Status:', permission); // 권한 상태 출력
+
+      if (permission === PermissionsAndroid.RESULTS.GRANTED) {
         setReceiveSmsPermission(permission);
-      } catch (err) {
-        console.log(err);
+      } else {
+        console.log('SMS Permission denied');
+        setReceiveSmsPermission(PermissionsAndroid.RESULTS.DENIED);
       }
-    };
+    } catch (err) {
+      console.log('Error requesting SMS permission:', err);
+    }
+  };
+
+  useEffect(() => {
     requestSmsPermission();
   }, []);
 
   useEffect(() => {
     if (receiveSmsPermission === PermissionsAndroid.RESULTS.GRANTED) {
+      // SMS 리스너 설정
       const subscriber = SmsListener.addListener(async message => {
+        console.log('SMS received:', message); // SMS가 수신될 때 로그 출력
         setSmsContent(message);
-        console.log(message);
 
-        // message를 바로 postSms 함수에 전달
-        const postSms = async message => {
+        // 서버에 SMS 내용 전송
+        const postSms = async content => {
           try {
             const response = await fetch(
-              'http://k11a309.p.ssafy.io/api/sms/analyze',
+              'http://k11a309.p.ssafy.io:8080/api/sms/analyze',
               {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                  body: message.body,
-                  originatingAddress: message.originatingAddress,
-                  timestamp: message.timestamp,
+                  body: content.body,
+                  originatingAddress: content.originatingAddress,
+                  timestamp: content.timestamp,
                 }),
               },
             );
-            if (!response.ok) {
+
+            console.log('Response status:', response.status);
+            const text = await response.text();
+            console.log('Response text:', text);
+
+            if (response.ok && text) {
+              const data = JSON.parse(text); // JSON 변환
+              console.log('Fetched data:', data);
+            } else if (!text) {
+              console.log('Empty response from server');
+            } else {
               throw new Error('Failed to fetch data');
             }
-            const data = await response.json();
-            console.log('Fetching data successfully');
           } catch (error) {
-            console.log('Error fetching data:', error);
+            console.log('Error posting SMS:', error);
           }
         };
 
-        // postSms 함수 호출
         postSms(message);
       });
 
+      // 컴포넌트가 언마운트되면 리스너를 제거
       return () => {
         subscriber.remove();
       };
+    } else {
+      console.log('SMS Permission not granted');
     }
   }, [receiveSmsPermission]);
 

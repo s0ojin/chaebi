@@ -1,8 +1,7 @@
 import {Recipient} from '../screens/Remain';
 import {privateApi} from './instance';
 
-// 조회하기 (등록할 때 편지도 함께 만들지는 백엔드와 상의하기)
-export const getRecipient: () => Promise<Recipient[]> = async () => {
+export const getRecipientList: () => Promise<Recipient[]> = async () => {
   const response = await privateApi.get('/recipient/list');
   return response.data;
 };

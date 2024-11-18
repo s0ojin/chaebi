@@ -4,8 +4,8 @@ import Text from '../CustomText';
 import SettingAdjustIcon from '../../assets/icon/settings-adjust.svg';
 import useAlbumStore from '../../stores/albumStore';
 import {useQuery} from '@tanstack/react-query';
-import {getRecipientList} from '../../api/album';
 import {Recipient} from '../../types/remain';
+import {getRecipientList} from '../../api/recipient';
 
 export default function RecipientFilterBtn() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
