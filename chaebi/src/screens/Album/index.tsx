@@ -16,8 +16,15 @@ import {AlbumListResWithHeight, Media} from '../../types/album';
 import RecipientFilterBtn from '../../components/album/RecipientFilterBtn';
 import Text from '../../components/CustomText';
 import MediaDeleteModal from '../../components/modal/MediaDeleteModal';
+import Footer from '../../components/Footer';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../types/navigator';
 
-export default function AlbumScreen() {
+interface AlbumScreenProps {
+  navigation: StackNavigationProp<RootStackParamList>;
+}
+
+export default function AlbumScreen({navigation}: AlbumScreenProps) {
   const {
     isSelectMode,
     setIsSelectMode,
@@ -111,7 +118,7 @@ export default function AlbumScreen() {
 
       <Pressable
         onPress={albumAccessModal.openModal}
-        className="bg-_white w-16 h-16 rounded-full absolute bottom-5 right-5 justify-center items-center">
+        className="bg-_white w-16 h-16 rounded-full absolute bottom-24 right-5 justify-center items-center">
         <CrossIcon
           style={{transform: [{rotate: '45deg'}]}}
           width={60}
@@ -122,7 +129,7 @@ export default function AlbumScreen() {
       {isSelectMode && (
         <Pressable
           onPress={mediaDeleteModal.openModal}
-          className="bg-white w-full h-[72px] rounded-t-xl absolute bottom-0 justify-center items-center">
+          className="bg-white w-full h-[72px] rounded-t-xl absolute bottom-0 justify-center items-center z-10">
           <TrashCanIcon width={32} height={32} />
         </Pressable>
       )}
@@ -145,7 +152,7 @@ export default function AlbumScreen() {
         onClose={mediaDeleteModal.closeModal}
       />
       <View className="justify-end">
-        <Footer currentPage="home" navigation={navigation} />
+        <Footer currentPage="album" navigation={navigation} />
       </View>
     </>
   );

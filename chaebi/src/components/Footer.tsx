@@ -8,7 +8,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../types/navigator';
 
 interface FooterProps {
-  currentPage: string;
+  currentPage: 'home' | 'remain' | 'mypage' | 'album';
   navigation: StackNavigationProp<RootStackParamList>;
 }
 
@@ -47,7 +47,7 @@ export default function Footer({currentPage, navigation}: FooterProps) {
         </Pressable>
       )}
 
-      {currentPage === 'fill' ? (
+      {currentPage === 'album' ? (
         <View className="items-center w-20">
           <LayoutIcon width={32} height={32} color="#444444" />
           <Text className="text-xs text-center text-primary-400">채우기</Text>
