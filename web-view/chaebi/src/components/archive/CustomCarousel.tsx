@@ -10,6 +10,7 @@ import { Theme } from '@/types/archive'
 import { fetchFilteredGallery } from '@/services/archive'
 import useUserStore from '@/stores/useUserStore'
 import { keywordMap } from '@/constants/keywordMap'
+import { groupByCity } from '@/utils/groupByCity'
 
 function shuffleArray(array: Theme[]): Theme[] {
   return array.sort(() => Math.random() - 0.5)
@@ -33,6 +34,16 @@ export default function CustomCarousel() {
             keywordClassification,
           } = await fetchFilteredGallery(userInfo.userId, recipientRes.id)
 
+          const locationGroups = groupByCity(locationClassification)
+
+          const locationThemes = Object.keys(locationGroups).map(
+            (groupName, index) => ({
+              id: Object.keys(yearClassification).length + index + 3,
+              name: groupName,
+              images: locationGroups[groupName],
+            }),
+          )
+
           const generatedThemes: Theme[] = [
             {
               id: 1,
@@ -49,17 +60,11 @@ export default function CustomCarousel() {
               name: `${year}년`,
               images: yearClassification[year].map((item) => item.fileUrl),
             })),
-            ...Object.keys(locationClassification).map((location, index) => ({
-              id: Object.keys(yearClassification).length + index + 3,
-              name: location,
-              images: locationClassification[location].map(
-                (item) => item.fileUrl,
-              ),
-            })),
+            ...locationThemes,
             ...Object.keys(keywordClassification).map((keyword, index) => ({
               id:
                 Object.keys(yearClassification).length +
-                Object.keys(locationClassification).length +
+                Object.keys(locationGroups).length +
                 index +
                 3,
               name: keywordMap[keyword] || keyword,
@@ -92,7 +97,7 @@ export default function CustomCarousel() {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: themes.length > 2,
+    autoplay: true,
     autoplaySpeed: 3000,
     centerMode: true,
   }
