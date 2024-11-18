@@ -54,7 +54,7 @@ export default function MainScreen({navigation}: MainScreenProps) {
               onPress={() => navigation.navigate('Remain')}
             />
           </View>
-          {recipientList ? (
+          {recipientList && recipientList.length!==0  ? (
             <RemainListView recipient={recipientList[0]} isSetting={false} />
           ) : (
             <View className="flex-row w-full h-24 bg-[#F4F4F4] rounded-xl items-center justify-center">
