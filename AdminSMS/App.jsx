@@ -146,27 +146,35 @@ export default function App() {
         console.log(message);
 
         // message를 바로 postSms 함수에 전달
-        const postSms = async message => {
+        const postSms = async content => {
           try {
             const response = await fetch(
-              'http://k11a309.p.ssafy.io/api/sms/analyze',
+              'http://k11a309.p.ssafy.io:8080/api/sms/analyze',
               {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                  body: message.body,
-                  originatingAddress: message.originatingAddress,
-                  timestamp: message.timestamp,
+                  body: content.body,
+                  originatingAddress: content.originatingAddress,
+                  timestamp: content.timestamp,
                 }),
               },
             );
-            if (!response.ok) {
+
+            console.log('Response status:', response.status);
+            const text = await response.text();
+            console.log('Response text:', text);
+
+            if (response.ok && text) {
+              const data = JSON.parse(text); // JSON 변환
+              console.log('Fetched data:', data);
+            } else if (!text) {
+              console.log('Empty response from server');
+            } else {
               throw new Error('Failed to fetch data');
             }
-            const data = await response.json();
-            console.log('Fetching data successfully');
           } catch (error) {
             console.log('Error fetching data:', error);
           }
