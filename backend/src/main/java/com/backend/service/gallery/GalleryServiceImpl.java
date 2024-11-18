@@ -397,7 +397,7 @@ public class GalleryServiceImpl implements GalleryService {
         List<Gallery> galleries = galleryRepository.findAll();
         for(Gallery g : galleries) {
             Keyword keyword;
-            if(g.getKeyword() == null && g.getFileType().equals("IMAGE")){ // 이미지만 
+            if(g.getKeyword() == null && g.getFileType().equals("IMAGE")){ // 이미지만
                keyword  = sendToFastApi(g.getFileUrl());
                g.setKeyword(keyword);
                galleryRepository.save(g); // 키워드가 null인 경우만 저장

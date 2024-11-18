@@ -107,7 +107,7 @@ public class ClassifyServiceImpl implements ClassifyService{
         // 상위 2개 키워드 선택
         Map<Keyword, List<GalleryRecipientRes>> topKeywordMap = getTopEntries(keywordMap, usedGalleryIds, 2);
 
-        return new ClassifiedGalleries(topYearMap, topLocationMap, topKeywordMap);
+        return new ClassifiedGalleries(filteredSpecialDatesMap,topYearMap, topLocationMap, topKeywordMap);
     }
 
     // 상위 엔트리 선택을 위한 제네릭 메서드
@@ -116,7 +116,7 @@ public class ClassifyServiceImpl implements ClassifyService{
             Set<Long> usedGalleryIds,
             int limit) {
         return map.entrySet().stream()
-                .filter(e -> e.getValue().size() >= 5) // 최소 5개 이상인 경우만 선택
+                .filter(e -> e.getValue().size() >= 4) // 최소 5개 이상인 경우만 선택
                 .sorted((e1, e2) -> e2.getValue().size() - e1.getValue().size())
                 .limit(limit)
                 .collect(Collectors.toMap(
