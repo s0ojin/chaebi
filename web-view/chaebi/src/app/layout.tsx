@@ -26,11 +26,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${ChosunNm.variable} font-ChosunNm w-full h-screen`}>
-        <div className="h-full flex flex-col">
+        <div className="h-screen flex flex-col">
           <header className="hidden md:flex w-full p-5 bg-_gray-800 justify-start shrink-0">
             <Logo />
           </header>
-          {children}
+          <main className="flex-1 overflow-auto">{children}</main>
         </div>
         <ToastContainer position="top-center" autoClose={3000} />
       </body>
