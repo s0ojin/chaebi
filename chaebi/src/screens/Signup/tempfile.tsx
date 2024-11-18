@@ -4,6 +4,7 @@ import Text from '../../components/CustomText';
 import InputField from '../../components/InputField';
 import RoundButton from '../../components/RoundButton';
 import {
+  sendNoticeRequest,
   sendSigninRequest,
   sendSignupRequest,
   sendSmsCertRequest,
@@ -74,18 +75,11 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
   };
 
   const handleSignin = async () => {
-    const token = await getFcmToken();
-    const signinResponse = await sendSigninRequest({
-      phone: phoneNumber,
-      fcmToken: token,
-    });
+    const signinResponse = await sendSigninRequest({phone: phoneNumber});
     console.log('Signin Response:', signinResponse);
     if (signinResponse && signinResponse.status === 200) {
       await AsyncStorage.setItem('name', signinResponse.data.name);
-      await AsyncStorage.setItem(
-        'phoneNumber',
-        signinResponse.data.phoneNumber,
-      );
+      await AsyncStorage.setItem('phoneNumber', signinResponse.data.phoneNumber);
       await AsyncStorage.setItem(
         'accessToken',
         signinResponse.data.accessToken,
@@ -99,44 +93,46 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
       console.log('accessToken:', await AsyncStorage.getItem('accessToken'));
       console.log('refreshToken:', await AsyncStorage.getItem('refreshToken'));
       showToast(`${signinResponse.data.name}님 환영합니다.`);
-      navigation.replace('Main');
+      navigation.navigate('Main');
     } else if (signinResponse && signinResponse.status === 215) {
       setStep(step + 1);
     }
   };
 
-  const getFcmToken = async () => {
-    try {
-      const token = await messaging().getToken();
-      console.log('token is : ', token);
-      return token;
-    } catch (error) {
-      console.log('Error getting FcmToken : ', error);
-      return '';
-    }
-  };
-
-  const handleSignup = async (push: boolean) => {
+  const handleSignup = async () => {
+    const getFcmToken = async () => {
+      try {
+        const token = await messaging().getToken();
+        console.log('token is : ', token);
+        return token;
+      } catch (error) {
+        console.log('Error getting FcmToken : ', error);
+        return '';
+      }
+    };
     const token = await getFcmToken();
     const response = await sendSignupRequest({
       phone: phoneNumber,
       name: name,
       fcmToken: token,
-      push: push,
     });
 
     console.log('Response:', response);
     if (response && response.status === 200) {
-      handleSignin();
+      setStep(step + 1);
     }
   };
 
   const handleNotice = () => {
-    handleSignup(true);
+    handleSignin();
   };
 
   const handleUnnotice = async () => {
-    handleSignup(false);
+    const response = await sendNoticeRequest({push: false});
+    console.log('Response:', response);
+    if (response && response.status === 200) {
+      handleSignin();
+    }
   };
 
   return (
@@ -200,7 +196,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
               value={name}
               onChangeText={setName}
             />
-            <RoundButton content="회원가입" onPress={() => setStep(step + 1)} />
+            <RoundButton content="회원가입" onPress={handleSignup} />
           </View>
         </View>
       )}
@@ -208,10 +204,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
         //step2
         <View className="flex-1">
           <View className="flex-1 items-center justify-center">
-            <Image
-              className="w-32 h-32"
-              source={require('../../assets/icon/Bell.gif')}
-            />
+            <Image className="w-32 h-32" source={require('../../assets/icon/Bell.gif')} />
             <Text className="text-center text-4xl mt-10">푸시 알림 받기</Text>
             <Text className="text-center text-2xl mt-20">
               채비는 7일 간격으로 앱에 방문하지 않을 시{'\n'}사용자의 생존여부를
