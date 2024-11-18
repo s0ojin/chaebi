@@ -27,6 +27,7 @@ public class FcmMessage {
         private String title;
         private String body;
         private String image;
+        private String android_channel_id;
     }
 
     @Builder
