@@ -51,12 +51,13 @@ export default function AnimatedLetter({
             key="envelope"
             className="relative cursor-pointer"
             onClick={handleEnvelopeClick}
-            initial={{ scale: 1, y: 0 }}
+            initial={{ scale: 0.8, opacity: 0, y: 0 }}
             animate={{
               scale: isOpening ? 1.2 : 1,
+              opacity: 1,
               y: isOpening ? 0 : [0, -10, 0],
             }}
-            exit={{ scale: 1, rotateX: '0deg', opacity: 1 }}
+            exit={{ scale: 0.8, rotateX: '0deg', opacity: 0 }}
             transition={{
               duration: 0.5,
               y: {
