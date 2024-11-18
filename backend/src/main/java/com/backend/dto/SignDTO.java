@@ -11,4 +11,6 @@ public class SignDTO {
     private String name;
     @NotBlank(message = "fcmToken is required")
     private String fcmToken;
+    @NotBlank(message = "push is required")
+    private boolean push;
 }

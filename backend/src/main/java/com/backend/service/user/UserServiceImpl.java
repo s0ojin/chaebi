@@ -15,9 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.backend.domain.UserStatus;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import static com.backend.domain.UserStatus.ALIVE;
+import static com.backend.domain.UserStatus.DEACTIVATED;
 
 @Service
 @RequiredArgsConstructor
@@ -32,11 +36,10 @@ public class UserServiceImpl implements UserService {
     public TokenRes signup(SignDTO signDTO, HttpServletResponse response) { //회원가입
         User user = User.builder()
                 .phone(signDTO.getPhone())
-                .status(true)
+                .status(ALIVE)
                 .name(signDTO.getName())
-                .loginAttemptPeriod(0)
                 .fcmToken(signDTO.getFcmToken()) // fcm 토큰 저장
-                .push(true) // 푸쉬알림 디폴트로 true
+                .push(signDTO.isPush()) // 푸쉬알림 디폴트로 true
                 .build();
 
         userRepository.save(user);
@@ -90,7 +93,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void quit(HttpServletRequest request) {
         User user = this.getUserByToken(request).get();
-        user.setStatus(false);
+        user.setStatus(DEACTIVATED);
         userRepository.save(user); // soft Delete
     }
 
