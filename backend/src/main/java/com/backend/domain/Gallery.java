@@ -39,10 +39,8 @@ public class Gallery {
         private String locate; // 사진위치
         private LocalDateTime capturedDate; //찍은 시간
 
-        @ElementCollection(targetClass = Keyword.class)
-        @CollectionTable(name = "image_keywords", joinColumns = @JoinColumn(name = "image_id"))
         @Enumerated(EnumType.STRING)
-        private Set<Keyword> keywords = new HashSet<>();
+        private Keyword keyword;
 
         @PrePersist
         protected void onCreate() {
@@ -62,11 +60,5 @@ public class Gallery {
                 galleryRecipients.clear();
         }
 
-        public void addKeyword(Keyword keyword) {
-                if (keywords.size() < 3) {
-                        keywords.add(keyword);
-                } else {
-                        throw new IllegalArgumentException("이미지는 최대 3개의 키워드만 가질 수 있습니다.");
-                }
-        }
+
 }

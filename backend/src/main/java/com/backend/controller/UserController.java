@@ -16,6 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 @RestController
 @RequestMapping("api/users")
 @RequiredArgsConstructor
@@ -47,6 +50,9 @@ public class UserController {
            TokenRes token =  userServiceImpl.login(loginDTO.getPhone(), response);
             //로그인 되었을 때 토큰 발급
             System.out.println("로그인 성공  token : " + token.getAccessToken());
+            User user = userRepository.findByPhone(loginDTO.getPhone()).get();
+            if(user.getLastLogin() == null || ChronoUnit.DAYS.between(user.getLastLogin(), LocalDateTime.now()) >= 7)
+                return ResponseEntity.status(205).body(token); // 만약 7일 지난 로그인일 경우;
             return ResponseEntity.ok().body(token); // 로그인 성공
         }
     }

@@ -206,14 +206,16 @@ public class SmsServiceImpl implements SmsService {
         User user = userRepository.findByPhone(phoneNumber).get();
         System.out.println(phoneNumber);
         if(user != null && user.getName().equals(name)) { // 전화번호와 이름이 일치할 경우
-            for(RecipientResDTO r : recipientService.getRecipients(user)){
+            for (RecipientResDTO r : recipientService.getRecipients(user)) {
                 //String code = idConverterService.combineIds(user.getId(), r.getId());
                 String code = idConverterService.generateRandomCode(r.getId()); //난수 코드
                 System.out.println("code 생성");
-                smsCertificationUtil.sendCode(r.getName(),r.getPhone(), code); // 유저의 열람인 모두에게 문자 발송
+                smsCertificationUtil.sendCode(r.getName(), r.getPhone(), code); // 유저의 열람인 모두에게 문자 발송
             }
+        }else {
+            System.out.println("이용자 확인 불가");
         }
-        System.out.println("이용자 확인 불가");
+
     }
 }
 

@@ -24,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -105,10 +106,9 @@ public class GalleryServiceImpl implements GalleryService {
 
             //1. presignedUrl을 FastAPI에 전송
             //2. 메타데이터 토대로 정보 추출
-            List<Keyword> keywords = new ArrayList<>();
+
             String type = determineFileType(file.getContentType());
-            if(type.equals("IMAGE"))
-                 keywords = this.sendToFastApi(presignedUrl);
+
             // 3. Gallery 엔티티 생성 및 저장
 //            this.sendToFastApi(presignedUrl);
             Gallery gallery = new Gallery();
@@ -116,10 +116,6 @@ public class GalleryServiceImpl implements GalleryService {
             gallery.setFileUrl(presignedUrl.toString());
             gallery.setFileType(type);
             gallery.setFileName(fileName);
-
-            for(Keyword keyword : keywords){
-                gallery.addKeyword(keyword);
-            }
 
             if (recipientIds != null && !recipientIds.isEmpty()) {
                 List<Recipient> recipients = recipientRepository.findAllById(recipientIds);
@@ -239,16 +235,6 @@ public class GalleryServiceImpl implements GalleryService {
         return new GalleryResDTO(gallery);
     }
 
-    //읽었는지 확인
-    @Transactional
-    public void markAsRead(Long galleryId, Long recipientId) {
-        GalleryRecipient galleryRecipient = galleryRecipientRepository
-                .findByGalleryIdAndRecipientId(galleryId, recipientId)
-                .orElseThrow(() -> new NotFoundException("Gallery access not found"));
-
-        galleryRecipient.markAsRead();
-        galleryRecipientRepository.save(galleryRecipient);
-    }
 
 
 
@@ -406,17 +392,29 @@ public class GalleryServiceImpl implements GalleryService {
                 .collect(Collectors.toList());
     }
 
+    @Scheduled(cron = "0 0 0 * * *")
+    public void analyzeGallery(){
+        List<Gallery> galleries = galleryRepository.findAll();
+        for(Gallery g : galleries) {
+            Keyword keyword;
+            if(g.getKeyword() == null && g.getFileType().equals("IMAGE")){ // 이미지만 
+               keyword  = sendToFastApi(g.getFileUrl());
+               g.setKeyword(keyword);
+               galleryRepository.save(g); // 키워드가 null인 경우만 저장
+            }
+        }
 
+    }
 
-    //Fast API 통신
-    private List<Keyword> sendToFastApi(URL presignedUrl) {
+    //Fast API 통신 키워드 하나만 반환
+    private Keyword sendToFastApi(String presignedUrl) {
         log.info("FastAPI 통신 시작");
         StringBuilder sb = new StringBuilder();
         try {
-            log.info("Original Presigned URL: {}", presignedUrl.toString());
+            log.info("Original Presigned URL: {}", presignedUrl);
 
             // URLEncoder를 사용하여 파라미터 인코딩
-            String encodedPresignedUrl = URLEncoder.encode(presignedUrl.toString(), StandardCharsets.UTF_8);
+            String encodedPresignedUrl = URLEncoder.encode(presignedUrl, StandardCharsets.UTF_8);
             String url = fastApiUrl + "/categorize?presigned_url=" + encodedPresignedUrl;
 
             log.info("Encoded Request URL: {}", url);
@@ -432,7 +430,7 @@ public class GalleryServiceImpl implements GalleryService {
                     .block(Duration.ofSeconds(30));
             // JSON 문자열을 String 배열로 변환
             ObjectMapper objectMapper = new ObjectMapper();
-            String[] keywords = objectMapper.readValue(response, String[].class);
+            String keyword = objectMapper.readValue(response, String.class);
 
             if (response != null) {
                 log.info("FastAPI 응답: {}", response);
@@ -440,9 +438,7 @@ public class GalleryServiceImpl implements GalleryService {
                 throw new RuntimeException("FastAPI로부터 응답이 없습니다.");
             }
 
-            return Arrays.stream(keywords)
-                    .map(keyword -> Keyword.valueOf(keyword.toLowerCase()))
-                    .collect(Collectors.toList());
+            return Keyword.valueOf(keyword.toLowerCase());
 
 
 
