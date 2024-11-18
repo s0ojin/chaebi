@@ -7,17 +7,23 @@ import CheckIcon from '../assets/icon/check.svg';
 import useEditorStore from '../stores/editorStore';
 import {useMutation} from '@tanstack/react-query';
 import {Remain} from '../types/remain';
-import {postSaveRemain} from '../api/remain';
+import {postSaveLetter} from '../api/remain';
+import {useToast} from './ToastContext';
 
 interface EditorInputAccessoryProps {
   recipientId: number;
 }
 
-export default function EditorInputAccessory({recipientId}: EditorInputAccessoryProps) {
+export default function EditorInputAccessory({
+  recipientId,
+}: EditorInputAccessoryProps) {
+  const {showToast} = useToast();
   const {text, align, setText, setAlign, blurTextInput} = useEditorStore();
   const textMutation = useMutation({
-    mutationFn: (payload: Remain) => postSaveRemain(payload, recipientId),
-    onSuccess: data => console.log(data),
+    mutationFn: (payload: Remain) => postSaveLetter(payload, recipientId),
+    onSuccess: data => {
+      showToast(data);
+    },
   });
 
   const handleInsertCurrentTime = () => {
@@ -52,7 +58,7 @@ export default function EditorInputAccessory({recipientId}: EditorInputAccessory
         {align === 'left' ? <SortCenterIcon /> : <SortLeftIcon />}
       </Pressable>
       <Pressable onPress={handleSaveText} className="ml-auto">
-        <CheckIcon width={32} height={32} />
+        <CheckIcon width={32} height={32} color="#444444" />
       </Pressable>
     </View>
   );

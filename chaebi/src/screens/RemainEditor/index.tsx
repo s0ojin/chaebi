@@ -8,9 +8,11 @@ import EditorInputAccessory from '../../components/EditorInputAccessory';
 import useEditorStore from '../../stores/editorStore';
 import {Recipient} from '../Remain';
 import {Route} from '@react-navigation/native';
-import {getLetter} from '../../api/remain';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../types/navigator';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {getSavedLetter, postSaveLetter} from '../../api/remain';
+import {Remain} from '../../types/remain';
 
 type RemainEditorScreenProps = {
   route: Route<string, Recipient>;
@@ -22,21 +24,45 @@ export default function RemainEditorScreen({
   navigation,
 }: RemainEditorScreenProps) {
   const recipient: Recipient = route.params;
-  const {align, text, setText} = useEditorStore();
+
+  const {align, text, setText, setAlign} = useEditorStore();
   const textInputRef = useRef<TextInputType>(null);
 
+  const {data: savedLetter} = useQuery({
+    queryKey: ['savedLetter', recipient.id],
+    queryFn: () => getSavedLetter(recipient.id),
+  });
+
+  const LetterSaveMutation = useMutation({
+    mutationFn: (payload: Remain) => postSaveLetter(payload, recipient.id),
+  });
+
   useEffect(() => {
-    // const checkId = async ()=> {
-    //   if(!recipient.id)
-    // }
-    // checkId();
-    getLetter(recipient.id ? recipient.id : 0).then(data => {
-      setText(data.content);
-      useEditorStore.setState({
-        blurTextInput: () => textInputRef.current?.blur(),
-      });
+    if (savedLetter?.content) {
+      setText(savedLetter.content);
+      setAlign(savedLetter.sort);
+    }
+  }, [savedLetter, setText, setAlign]);
+
+  useEffect(() => {
+    useEditorStore.setState({
+      blurTextInput: () => textInputRef.current?.blur(),
     });
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', () => {
+      if (text && text !== savedLetter?.content) {
+        const payload = {
+          content: text,
+          sort: align,
+        };
+        LetterSaveMutation.mutate(payload);
+      }
+      setText('');
+    });
+    return unsubscribe;
+  }, [navigation, text, savedLetter, LetterSaveMutation, setText, align]);
 
   return (
     <>
@@ -46,7 +72,6 @@ export default function RemainEditorScreen({
           height={24}
           onPress={() => navigation.push('Remain')}
         />
-        <Text className="text-xl font-bold ml-2 -mb-0.5 font-notosans"></Text>
       </View>
       <View className="flex flex-row items-center justify-between w-full h-20 border-y border-primary-400 border-dashed px-5">
         <View className="flex flex-row items-center gap-4 my-auto">

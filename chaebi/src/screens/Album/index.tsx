@@ -144,6 +144,9 @@ export default function AlbumScreen() {
         visible={mediaDeleteModal.isVisible}
         onClose={mediaDeleteModal.closeModal}
       />
+      <View className="justify-end">
+        <Footer currentPage="home" navigation={navigation} />
+      </View>
     </>
   );
 }
