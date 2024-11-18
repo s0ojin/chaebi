@@ -88,7 +88,7 @@ export default function CustomCarousel() {
   const sliderSettings = {
     dots: false,
     arrows: false,
-    infinite: themes.length > 1,
+    infinite: themes.length > 2,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
