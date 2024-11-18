@@ -3,8 +3,13 @@ import React, {useEffect, useRef} from 'react';
 import Logo from '../../assets/logo/logo.svg';
 import RoundButton from '../../components/RoundButton';
 import {INFO_TEXT} from '../../constants/sendcode';
+import {sendSendCodeRequest} from '../../api/sendcode';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useToast} from '../../components/ToastContext';
 
 const SendCodeScreen: React.FC = () => {
+  const {showToast} = useToast();
+
   const animations = useRef<Animated.Value[]>([
     new Animated.Value(0),
     new Animated.Value(0),
@@ -29,6 +34,17 @@ const SendCodeScreen: React.FC = () => {
       }, index * 1000);
     });
   }, [animations]);
+
+  const handleSendcode = async () => {
+    const name = await AsyncStorage.getItem('name');
+    const phoneNum = await AsyncStorage.getItem('phoneNumber');
+    const sendcodeResponse = await sendSendCodeRequest({phoneNum: phoneNum});
+    if (sendcodeResponse && sendcodeResponse.status === 200) {
+      showToast(`${name}님이 지정하신 열람들에게 코드가 전송되었습니다.`);
+    } else {
+      showToast('코드전송에 실패하였습니다.');
+    }
+  };
 
   return (
     <View className="flex-1 p-5 gap-16">
@@ -75,7 +91,7 @@ const SendCodeScreen: React.FC = () => {
               },
             ],
           }}>
-          <RoundButton content="코드 전송하기" onPress={() => {}} />
+          <RoundButton content="코드 전송하기" onPress={handleSendcode} />
         </Animated.View>
       </View>
     </View>
