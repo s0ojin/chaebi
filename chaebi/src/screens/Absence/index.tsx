@@ -4,9 +4,9 @@ import React, {useEffect, useState} from 'react';
 import Logo from '../../assets/logo/logo.svg';
 import RoundButton from '../../components/RoundButton';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
-import WarningModal from '../../components/WarningModal'; // 모달 컴포넌트 import
+import WarningModal from '../../components/WarningModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {RootStackParamList} from '../../types/navigator';
 
 type AbsenceScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Absence'>;

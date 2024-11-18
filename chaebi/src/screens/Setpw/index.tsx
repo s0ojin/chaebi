@@ -5,7 +5,8 @@ import Cross from '../../assets/icon/cross.svg';
 import CustomNumberpad from '../../components/CustomNumberpad';
 import PasswordState from '../../components/PasswordState';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {RootStackParamList} from '../../types/navigator';
 
 type SetPasswordScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'SetPw'>;
@@ -37,6 +38,8 @@ export default function SetPasswordScreen({
           if (password === checkword + num) {
             setError('');
             // 비밀번호 일치 처리 (다음 단계로 이동)
+            AsyncStorage.setItem('password', password);
+            navigation.goBack();
           } else {
             setError('비밀번호가 일치하지 않습니다.');
             setCheckword('');

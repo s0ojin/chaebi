@@ -3,7 +3,8 @@ import Text from '../../components/CustomText';
 import Logo from '../../assets/logo/logo.svg';
 import React, {useEffect} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {RootStackParamList} from '../../types/navigator';
 
 type SplashScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Splash'>;
@@ -11,15 +12,30 @@ type SplashScreenProps = {
 
 export default function SplashScreen({navigation}: SplashScreenProps) {
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (true) {
-        navigation.replace('AppIntro');
-      } else {
-        navigation.replace('SignIn');
+    const checkLock = async () => {
+      try {
+        const accessToken = await AsyncStorage.getItem('accessToken');
+        if (!accessToken) {
+          setTimeout(() => {
+            navigation.replace('AppIntro');
+          }, 1000);
+        } else {
+          const bioType = await AsyncStorage.getItem('bioType');
+          const password = await AsyncStorage.getItem('password');
+          setTimeout(() => {
+            if (password || bioType) {
+              navigation.replace('CheckPw');
+            } else {
+              navigation.replace('Main');
+            }
+          });
+        }
+      } catch (error) {
+        console.log(error);
       }
-    }, 1000);
+    };
 
-    return () => clearTimeout(timer);
+    checkLock();
   }, [navigation]);
 
   return (

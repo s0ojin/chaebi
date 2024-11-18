@@ -7,8 +7,8 @@ import LightPlus from '../../assets/icon/light-plus.svg';
 import RemainListView from '../../components/RecipientCard';
 import {Message} from '../Remain';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../App';
 import BannerContent from '../../components/main/BannerContent';
+import {RootStackParamList} from '../../types/navigator';
 
 interface MainScreenProps {
   navigation: StackNavigationProp<RootStackParamList>;
