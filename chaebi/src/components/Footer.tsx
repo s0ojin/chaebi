@@ -5,22 +5,20 @@ import BoxIcon from '../assets/icon/box.svg';
 import LayoutIcon from '../assets/icon/layout.svg';
 import PersonIcon from '../assets/icon/person.svg';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../App';
+import {RootStackParamList} from '../types/navigator';
 
 interface FooterProps {
-  // 이동할 경로
   currentPage: string;
-  // 이동 시킬 네비게이션
   navigation: StackNavigationProp<RootStackParamList>;
 }
 
 export default function Footer({currentPage, navigation}: FooterProps) {
   return (
-    <View className="flex-row items-center justify-between bg-white h-20 p-4">
+    <View className="flex-row items-center justify-between bg-white h-[74px] p-4 rounded-t-xl">
       {currentPage === 'home' ? (
         <View className="items-center w-20">
           <HomeIcon width={32} height={32} color="#444444" />
-          <Text className="text-xs text-center text-[#444444]">홈</Text>
+          <Text className="text-xs text-center text-[#444444]">홈ddd</Text>
         </View>
       ) : (
         <Pressable
