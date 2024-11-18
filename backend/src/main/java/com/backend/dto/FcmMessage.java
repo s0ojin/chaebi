@@ -17,6 +17,7 @@ public class FcmMessage {
     public static class Message {
         private Notification notification;
         private String token;
+        private Data data;
     }
 
     @Builder
@@ -26,5 +27,14 @@ public class FcmMessage {
         private String title;
         private String body;
         private String image;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @Getter
+    public static class Data {
+        private String screenName;  // 이동할 화면 이름
+        private String name;  // 추가 파라미터
+        private String phoneNumber;
     }
 }
