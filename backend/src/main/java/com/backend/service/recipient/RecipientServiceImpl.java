@@ -139,18 +139,18 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
             throw new NotFoundException("Not found: " + req.getEnterCode());
         }
         EnterRecipient enterR = EnterRecipient.builder()
-                        .id(recipient.getId())
-                        .phone(recipient.getPhone())
-                        .secretQuestion(recipient.getSecurityQuestion())
-                        .secretAnswer(recipient.getSecurityAnswer())
-                        .name(recipient.getName())
-                        .build();
+                .id(recipient.getId())
+                .phone(recipient.getPhone())
+                .secretQuestion(recipient.getSecurityQuestion())
+                .secretAnswer(recipient.getSecurityAnswer())
+                .name(recipient.getName())
+                .build();
 
         UserInfoDTO userInfoDTO = UserInfoDTO.builder()
-                        .userName(recipient.getUser().getName())
-                                .userId(recipient.getUser().getId())
-                                        .phoneNumber(recipient.getUser().getPhone())
-                                                .build();
+                .userName(recipient.getUser().getName())
+                .userId(recipient.getUser().getId())
+                .phoneNumber(recipient.getUser().getPhone())
+                .build();
 
         EnterRes res = EnterRes.builder()
                 .enterRecipient(enterR)
