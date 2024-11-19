@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface LetterService { // 편지
-    Letter createLetter(User user, Recipient recipient);
+    void createLetter(User user, Recipient recipient);
     LetterResDTO getLetter(long id);
     List<LetterResDTO> getLetters(User user);
     void updateLetter(Long letterId, LetterDTO letterDTO, User user);

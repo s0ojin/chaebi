@@ -11,6 +11,7 @@ import com.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.MonthDay;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,9 +43,38 @@ public class ClassifyServiceImpl implements ClassifyService{
         Map<String, List<GalleryRecipientRes>> locationMap = new HashMap<>();
         // 키워드별로 정렬
         Map<Keyword, List<GalleryRecipientRes>> keywordMap = new HashMap<>();
+        // 특별한 날짜별로 정렬
+        Map<String, List<GalleryRecipientRes>> specialDatesMap = new HashMap<>();
 
         // 이미 분류된 갤러리 ID를 추적
         Set<Long> usedGalleryIds = new HashSet<>();
+
+        // 특별한 날짜 분류 (크리스마스와 연말연시)
+        galleries.stream()
+                .filter(g -> g.getCapturedDate() != null && !usedGalleryIds.contains(g.getId()))
+                .forEach(gallery -> {
+                    MonthDay monthDay = MonthDay.from(gallery.getCapturedDate());
+
+                    // 크리스마스 (12월 25일)
+                    if (monthDay.getMonthValue() == 12 && monthDay.getDayOfMonth() == 25) {
+                        specialDatesMap.computeIfAbsent("christmas", k -> new ArrayList<>()).add(gallery);
+                    }
+                    // 연말연시 (12월 26일 ~ 1월 1일)
+                    else if ((monthDay.getMonthValue() == 12 && monthDay.getDayOfMonth() >= 26) ||
+                            (monthDay.getMonthValue() == 1 && monthDay.getDayOfMonth() == 1)) {
+                        specialDatesMap.computeIfAbsent("endstart", k -> new ArrayList<>()).add(gallery);
+                    }
+                });
+
+        // 특별한 날짜 분류에서 조건을 만족하는 항목 선택
+        Map<String, List<GalleryRecipientRes>> filteredSpecialDatesMap = specialDatesMap.entrySet().stream()
+                .filter(e -> e.getValue().size() >= 5)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> limitAndMarkUsed(e.getValue(), usedGalleryIds),
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
 
         // 1. 연도별 분류
         galleries.stream()
@@ -65,21 +95,19 @@ public class ClassifyServiceImpl implements ClassifyService{
                 });
 
         // 상위 2개 지역 선택
-        Map<String, List<GalleryRecipientRes>> topLocationMap = getTopEntries(locationMap, usedGalleryIds, 2);
+        Map<String, List<GalleryRecipientRes>> topLocationMap = getTopEntries(locationMap, usedGalleryIds, 1);
 
         // 3. 키워드별 분류
         galleries.stream()
                 .filter(g -> !usedGalleryIds.contains(g.getId()))
                 .forEach(gallery -> {
-                    gallery.getKeywords().forEach(keyword -> {
-                        keywordMap.computeIfAbsent(keyword, k -> new ArrayList<>()).add(gallery);
-                    });
+                        keywordMap.computeIfAbsent(gallery.getKeyword(), k -> new ArrayList<>()).add(gallery);
                 });
 
         // 상위 2개 키워드 선택
-        Map<Keyword, List<GalleryRecipientRes>> topKeywordMap = getTopEntries(keywordMap, usedGalleryIds, 2);
+        Map<Keyword, List<GalleryRecipientRes>> topKeywordMap = getTopEntries(keywordMap, usedGalleryIds, 1);
 
-        return new ClassifiedGalleries(topYearMap, topLocationMap, topKeywordMap);
+        return new ClassifiedGalleries(filteredSpecialDatesMap,topYearMap, topLocationMap, topKeywordMap);
     }
 
     // 상위 엔트리 선택을 위한 제네릭 메서드
@@ -88,7 +116,7 @@ public class ClassifyServiceImpl implements ClassifyService{
             Set<Long> usedGalleryIds,
             int limit) {
         return map.entrySet().stream()
-                .filter(e -> e.getValue().size() >= 5) // 최소 5개 이상인 경우만 선택
+                .filter(e -> e.getValue().size() >= 4) // 최소 5개 이상인 경우만 선택
                 .sorted((e1, e2) -> e2.getValue().size() - e1.getValue().size())
                 .limit(limit)
                 .collect(Collectors.toMap(
@@ -105,7 +133,7 @@ public class ClassifyServiceImpl implements ClassifyService{
         }
         return galleries.stream()
                 .filter(g -> !usedGalleryIds.contains(g.getId()))
-                .limit(5) // 15개 미만으로 제한
+                .limit(10) // 15개 미만으로 제한
                 .peek(g -> usedGalleryIds.add(g.getId()))
                 .collect(Collectors.toList());
     }

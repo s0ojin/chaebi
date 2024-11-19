@@ -150,6 +150,12 @@ public class GalleryController {
         }
     }
 
+    @GetMapping("/analyze")
+    public ResponseEntity<?> analyzeGallery(){
+        galleryService.analyzeGallery(); // 분석 시작
+        return ResponseEntity.ok("");
+    }
+
 //    // byte[]를 MultipartFile로 변환하는 유틸리티 메서드
 //    private MultipartFile convertToMultipartFile(byte[] fileData, String filename) {
 //        return new MockMultipartFile(

@@ -15,9 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.backend.domain.UserStatus;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import static com.backend.domain.UserStatus.ALIVE;
+import static com.backend.domain.UserStatus.DEACTIVATED;
 
 @Service
 @RequiredArgsConstructor
@@ -32,22 +36,22 @@ public class UserServiceImpl implements UserService {
     public TokenRes signup(SignDTO signDTO, HttpServletResponse response) { //회원가입
         User user = User.builder()
                 .phone(signDTO.getPhone())
-                .status(true)
+                .status(ALIVE)
                 .name(signDTO.getName())
-                .loginAttemptPeriod(0)
                 .fcmToken(signDTO.getFcmToken()) // fcm 토큰 저장
-                .push(true) // 푸쉬알림 디폴트로 true
+                .push(signDTO.isPush()) // 푸쉬알림 디폴트로 true
                 .build();
 
         userRepository.save(user);
-        return this.login(signDTO.getPhone(), response); // 회원가입 후 로그인 까지
+        return this.login(signDTO.getPhone(),signDTO.getFcmToken(), response); // 회원가입 후 로그인 까지
     }
 
     @Transactional
-    public TokenRes login(String phone, HttpServletResponse response) {
+    public TokenRes login(String phone, String fcmToken, HttpServletResponse response) {
         User user = userRepository.findByPhone(phone)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
             user.setLastLogin(LocalDateTime.now());
+            user.setFcmToken(fcmToken);
             TokenRes token = new TokenRes(user.getName(),user.getPhone(),jwtUtil.generateAccessToken(user.getPhone()),jwtUtil.generateRefreshToken(user.getPhone()));
             System.out.println(" token " + " " + token.getAccessToken());
             userRepository.save(user);
@@ -90,7 +94,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void quit(HttpServletRequest request) {
         User user = this.getUserByToken(request).get();
-        user.setStatus(false);
+        user.setStatus(DEACTIVATED);
         userRepository.save(user); // soft Delete
     }
 
