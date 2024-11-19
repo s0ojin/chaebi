@@ -1,11 +1,10 @@
 package com.backend.service.user;
 
-import com.backend.dto.CertReqDTO;
+import com.backend.dto.*;
+import com.backend.exception.UserNotFoundException;
 import com.backend.service.sms.SmsService;
 import jakarta.servlet.http.Cookie;
 import com.backend.domain.User;
-import com.backend.dto.LoginDTO;
-import com.backend.dto.SignDTO;
 import com.backend.repository.UserRepository;
 import com.backend.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,9 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.backend.domain.UserStatus;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import static com.backend.domain.UserStatus.ALIVE;
+import static com.backend.domain.UserStatus.DEACTIVATED;
 
 @Service
 @RequiredArgsConstructor
@@ -30,56 +33,41 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public void signup(SignDTO signDTO) { //회원가입
-        if (userRepository.existsByPhone(signDTO.getPhone())) {
-            throw new RuntimeException("이미 존재하는 아이디입니다.");
-        }
-
+    public TokenRes signup(SignDTO signDTO, HttpServletResponse response) { //회원가입
         User user = User.builder()
                 .phone(signDTO.getPhone())
-                .password(passwordEncoder.encode(signDTO.getPassword()))
-                .status(true)
+                .status(ALIVE)
                 .name(signDTO.getName())
-                .loginAttemptPeriod(0)
+                .fcmToken(signDTO.getFcmToken()) // fcm 토큰 저장
+                .push(signDTO.isPush()) // 푸쉬알림 디폴트로 true
                 .build();
 
         userRepository.save(user);
+        return this.login(signDTO.getPhone(),signDTO.getFcmToken(), response); // 회원가입 후 로그인 까지
     }
 
     @Transactional
-    public void login(LoginDTO loginDTO, HttpServletResponse response) {
-        User user = userRepository.findByPhone(loginDTO.getPhone())
+    public TokenRes login(String phone, String fcmToken, HttpServletResponse response) {
+        User user = userRepository.findByPhone(phone)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
-        if (loginDTO.getPassword() != null) { //비밀번호로 로그인했을 시
-            if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
-                user.setLoginAttemptPeriod(user.getLoginAttemptPeriod() + 1);
-                userRepository.save(user);
-                throw new RuntimeException("비밀번호가 일치하지 않습니다.");
-            }
-
             user.setLastLogin(LocalDateTime.now());
-            user.setLoginAttemptPeriod(0);
-
-            Cookie accessCookie = new Cookie("accessToken", jwtUtil.generateAccessToken(user.getPhone()));
-            //accessCookie.setHttpOnly(true);
-            //accessCookie.setSecure(true);
-            accessCookie.setPath("/");
-            accessCookie.setMaxAge(60 * 60 * 12);
-            Cookie refreshCookie = new Cookie("refreshToken", jwtUtil.generateRefreshToken(user.getPhone()));
-            //refreshCookie.setHttpOnly(true);
-            //refreshCookie.setSecure(true);
-            refreshCookie.setPath("/");
-            refreshCookie.setMaxAge(60 * 60 * 24 * 3);
-            response.addCookie(accessCookie);
-            response.addCookie(refreshCookie);
-            System.out.println(" token " + " " + accessCookie.getValue());
+            user.setFcmToken(fcmToken);
+            TokenRes token = new TokenRes(user.getName(),user.getPhone(),jwtUtil.generateAccessToken(user.getPhone()),jwtUtil.generateRefreshToken(user.getPhone()));
+            System.out.println(" token " + " " + token.getAccessToken());
             userRepository.save(user);
-        }
+            return token;
     }
 
     @Transactional
     public void logout(HttpServletRequest request) { //로그아웃 로직 고민
         User user = this.getUserByToken(request).get();
+    }
+
+    @Override
+    public void setting(SettingDTO settingDTO, HttpServletRequest request) {
+        User user = this.getUserByToken(request).get();
+        user.setPush(settingDTO.isPush());
+        userRepository.save(user);
     }
 
     @Override
@@ -89,13 +77,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getUserByToken(HttpServletRequest request) { //JWT 토큰을 해석한 결과값으로 유저를 추출
-//        String userPhone = jwtUtil.getUserByJwt(request);
-//        System.out.println("email : " + userPhone);
-//        Optional<User> user = userRepository.findByPhone(userPhone);
-//        System.out.println("user : " + user.get().getPhone());
-//        System.out.println("user OP : " + user);
-//        return userRepository.findByPhone(userPhone);
-        return userRepository.findByPhone("010-1111-1111"); //테스트
+        String userPhone = jwtUtil.getUserByJwt(request);
+        System.out.println("phone : " + userPhone);
+        Optional<User> user = userRepository.findByPhone(userPhone);
+        System.out.println("user : " + user.get().getPhone());
+        System.out.println("user OP : " + user);
+        Optional<User> userInfo =  userRepository.findByPhone(userPhone);
+        if(userInfo.isEmpty()){
+            throw new UserNotFoundException("user not found " + userPhone);
+        }
+
+        return userInfo;
+        //return userRepository.findByPhone("01011111111"); //테스트
+    }
+
+    @Override
+    public void quit(HttpServletRequest request) {
+        User user = this.getUserByToken(request).get();
+        user.setStatus(DEACTIVATED);
+        userRepository.save(user); // soft Delete
+    }
+
+    @Override
+    public boolean ispush(HttpServletRequest request) {
+        User user = this.getUserByToken(request).get();
+        return user.isPush();
     }
 
 

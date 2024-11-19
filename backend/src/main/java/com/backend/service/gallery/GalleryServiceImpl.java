@@ -4,32 +4,48 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.backend.domain.Gallery;
-import com.backend.domain.GalleryRecipient;
-import com.backend.domain.Recipient;
-import com.backend.domain.User;
+import com.backend.domain.*;
 import com.backend.dto.*;
+import com.backend.exception.FileValidationException;
 import com.backend.exception.NotFoundException;
 import com.backend.exception.UnauthorizedException;
 import com.backend.repository.GalleryRecipientRepository;
 import com.backend.repository.GalleryRepository;
 import com.backend.repository.RecipientRepository;
+import com.backend.repository.UserRepository;
+import com.backend.service.address.AddressService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GalleryServiceImpl implements GalleryService {
@@ -37,13 +53,22 @@ public class GalleryServiceImpl implements GalleryService {
     private final RecipientRepository recipientRepository;
     private final GalleryRecipientRepository galleryRecipientRepository;
     private final AmazonS3 s3Client;
+    private final WebClient webClient;
+    private final UserRepository userRepository;
+    private final AddressService addressService;
+    private static final Set<String> ALLOWED_FILE_TYPES = Set.of("IMAGE", "VIDEO");
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Value("${fastApi.url}")
+    String fastApiUrl;
+
     @Transactional
-    public GalleryResDTO uploadFile(MultipartFile file, Set<Long> recipientIds, User user) {
+    public GalleryResDTO uploadFile(MultipartFile file, UploadDTO uploadDTO, User user, String locate, String date) {
         try {
+            Set<Long> recipientIds = uploadDTO.getRecipientIds();
+
             System.out.println("1. Starting file upload process");
             System.out.println("File name: " + file.getOriginalFilename());
             System.out.println("File size: " + file.getSize());
@@ -79,11 +104,17 @@ public class GalleryServiceImpl implements GalleryService {
 
             URL presignedUrl = s3Client.generatePresignedUrl(presignedUrlRequest);
 
+            //1. presignedUrl을 FastAPI에 전송
+            //2. 메타데이터 토대로 정보 추출
+
+            String type = determineFileType(file.getContentType());
+
             // 3. Gallery 엔티티 생성 및 저장
+//            this.sendToFastApi(presignedUrl);
             Gallery gallery = new Gallery();
             gallery.setUser(user);
             gallery.setFileUrl(presignedUrl.toString());
-            gallery.setFileType(determineFileType(file.getContentType()));
+            gallery.setFileType(type);
             gallery.setFileName(fileName);
 
             if (recipientIds != null && !recipientIds.isEmpty()) {
@@ -92,8 +123,29 @@ public class GalleryServiceImpl implements GalleryService {
                     gallery.addRecipient(recipient);
                 }
             }
+            // location 정보가 있을 때만 DB 저장
 
+            if(locate != null){
+                String[] lo = locate.split(",");
+                System.out.println("좌표 : " + locate);
+                String latitude = truncateToFourDecimals(lo[0]);
+                String longitude = truncateToFourDecimals(lo[1]);
+
+                System.out.println(longitude + " " + latitude);
+                Location location = Location.builder()
+                        .longitude(longitude) // 경도
+                        .latitude(latitude) // 위도
+                        .build();
+                gallery.setLocate(addressService.addAddress(location));
+            }
+            //날 짜 변환
+            if(date != null){
+                LocalDateTime capturedDate = this.convertDateTime(date);
+                System.out.println("찍은 날짜: " +capturedDate);
+                gallery.setCapturedDate(capturedDate);
+            }
             gallery = galleryRepository.save(gallery);
+            System.out.println("끝");
             return new GalleryResDTO(gallery);
 
         } catch (IOException e) {
@@ -102,6 +154,48 @@ public class GalleryServiceImpl implements GalleryService {
             throw new RuntimeException("Error during file upload: " + e.getMessage(), e);
         }
     }
+
+    @Override //열람인의 프로필 업로드
+    public String uploadProfile(MultipartFile file, Long id, User user) {
+       
+        try {
+            if(id != null) {
+                Recipient recipient = recipientRepository.findById(id).get();
+                if (recipient.getImgurl() != null) { // 열람인의 프로필이 이미 있을 때
+                    String key = extractFileKeyFromUrl(recipient.getImgurl());
+                    deleteFileFromS3(key); // S3의 프로필 삭제
+                }
+            }
+            // 유니크 키(파일명) 생성
+            String fileName = file.getOriginalFilename();
+            String uniqueKey = generateUniqueKey(fileName);
+            // 1. 먼저 파일을 S3에 업로드
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
+
+            try (var inputStream = file.getInputStream()) {
+                PutObjectRequest putObjectRequest = new PutObjectRequest(
+                        bucket,
+                        uniqueKey,
+                        inputStream,
+                        metadata
+                );
+                s3Client.putObject(putObjectRequest); //프로필 S3에 업로드
+                GeneratePresignedUrlRequest presignedUrlRequest = new GeneratePresignedUrlRequest(bucket, uniqueKey)
+                        .withMethod(HttpMethod.GET)
+                        .withExpiration(getPresignedUrlExpiration());
+                //preSignedURL 반환
+                return s3Client.generatePresignedUrl(presignedUrlRequest).toString();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload file to S3: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error during file upload: " + e.getMessage(), e);
+        }
+        
+    }
+
 
     //Presigned URL 반환
     @Transactional
@@ -141,16 +235,6 @@ public class GalleryServiceImpl implements GalleryService {
         return new GalleryResDTO(gallery);
     }
 
-    //읽었는지 확인
-    @Transactional
-    public void markAsRead(Long galleryId, Long recipientId) {
-        GalleryRecipient galleryRecipient = galleryRecipientRepository
-                .findByGalleryIdAndRecipientId(galleryId, recipientId)
-                .orElseThrow(() -> new NotFoundException("Gallery access not found"));
-
-        galleryRecipient.markAsRead();
-        galleryRecipientRepository.save(galleryRecipient);
-    }
 
 
 
@@ -165,11 +249,9 @@ public class GalleryServiceImpl implements GalleryService {
         if (file.getSize() > maxSize) {
             throw new IllegalArgumentException("File size exceeds maximum limit (10MB)");
         }
-
-        // 허용된 파일 타입 검사
-        String contentType = file.getContentType();
-        if (contentType == null || !(contentType.startsWith("image/") || contentType.startsWith("video/"))) {
-            throw new IllegalArgumentException("Invalid file type. Only images and videos are allowed");
+        String fileType = determineFileType(file.getContentType());
+        if (!ALLOWED_FILE_TYPES.contains(fileType)) {
+            throw new FileValidationException("Invalid file type. Only IMAGE and VIDEO files are allowed");
         }
     }
 
@@ -196,32 +278,105 @@ public class GalleryServiceImpl implements GalleryService {
         return expiration;
     }
 
-    //File 타입 확인
+    //타입 확인
     private String determineFileType(String contentType) {
+        if (contentType == null) {
+            throw new FileValidationException("Content type cannot be null");
+        }
+
         if (contentType.startsWith("image/")) {
             return "IMAGE";
         } else if (contentType.startsWith("video/")) {
             return "VIDEO";
         } else {
-            return "OTHER";
+            return "UNKNOWN";
         }
     }
 
-    //유저의 갤러리 파일명 들을 반환
-    public List<GalleryResDTO> getFileUrlByUser(User user) {
-        List<Gallery> urls = galleryRepository.findAllByUser(user);
-        List<GalleryResDTO> list = toGalleryResDTOList(urls);
-        return list;
+    //유저의 파일 들을 반환
+    public GalleryPageResDTO getFileUrlByUser(User user, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdDate").descending());
+
+        Page<Gallery> galleryPage = galleryRepository.findAllByUser(user, pageRequest);
+        Page<GalleryResDTO> dtoPage = galleryPage.map(GalleryResDTO::new);
+
+        return new GalleryPageResDTO(dtoPage);
     }
 
-    //갤러리 소유자이거나 지정된 수신자인 경우 파일 URL을 반환
+    @Transactional
+    public void deleteFiles(List<Long> ids, User user) {
+        if (ids == null || ids.isEmpty()) {
+            throw new IllegalArgumentException("Gallery IDs list cannot be empty");
+        }
+
+        List<Gallery> galleries = galleryRepository.findAllById(ids); //id에 해당하는 객체 모두 불러옴
+
+        // 조회된 앨범 개수 확인
+        if (galleries.size() != ids.size()) {
+            throw new NotFoundException(ids.size() - galleries.size() + "개의 앨범을 찾지 못했습니다.");
+        }
+
+        galleries.forEach(gallery -> {
+            if(!gallery.getUser().getId().equals(user.getId())) {
+                throw new UnauthorizedException("소유가 아닌 앨범이 있습니다.");
+            }
+        });
+
+        // 삭제 실패 키 값 저장
+        List<String> failedDeletions = new ArrayList<>();
+
+        for(Gallery g : galleries) {
+            try{
+                String key = extractFileKeyFromUrl(g.getFileUrl());
+                deleteFileFromS3(key);
+            }catch (Exception e) {
+                failedDeletions.add(g.getFileName());
+                continue;
+            }
+        }
+        galleryRepository.deleteAll(galleries); // DB 삭제
+        if (!failedDeletions.isEmpty()) {
+            throw new RuntimeException("삭제 실패 목록 : " + String.join(", ", failedDeletions));
+        }
+
+    }
+
+    // S3에서 실제로 파일을 삭제하는 private 메소드
+    private void deleteFileFromS3(String fileKey) {
+        String dir = "uploads/";
+        try {
+            System.out.println("key : " + fileKey );
+            // S3에서 파일 확인
+            if (s3Client.doesObjectExist(bucket, dir + fileKey)) {
+
+                s3Client.deleteObject(bucket, dir + fileKey);
+            } else {
+                throw new NotFoundException("S3에서 찾을 수 없습니다.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("S3에서 삭제 실패: " + e.getMessage(), e);
+        }
+    }
+
+    // URL에서 파일 키 추출하는 private 메소드
+    private String extractFileKeyFromUrl(String fileUrl) {
+        try {
+            // Presigned URL에서 파일 키 추출
+            URL url = new URL(fileUrl);
+            String path = url.getPath();
+
+            return path.substring(path.indexOf("/", 1) + 1);
+        } catch (Exception e) {
+            throw new RuntimeException("키값 추출에 실패했습니다.: " + e.getMessage(), e);
+        }
+    }
 
     //유저와 열람자의 파일명을 반환(마지막 송신했을 때 용)
-    public List<GalleryResDTO> getFileUrlByUserAndRecipient(User user, Long recipientId) {
-
+    public List<GalleryRecipientRes> getFileUrlByUserAndRecipient(Long userId, Long recipientId) {
+        User user = userRepository.findById(userId).get();
         List<Gallery> urls = galleryRepository.findByRecipientUserAndRecipientId(user, recipientId);
         // 갤러리 소유자 체크
-        List<GalleryResDTO> list = toGalleryResDTOList(urls);
+        List<GalleryRecipientRes> list = toGalleryRecipientResList(urls);
         return list;
     }
 
@@ -229,5 +384,94 @@ public class GalleryServiceImpl implements GalleryService {
         return galleries.stream()
                 .map(gallery -> new GalleryResDTO(gallery))
                 .collect(Collectors.toList());
+    }
+
+    private static List<GalleryRecipientRes> toGalleryRecipientResList(List<Gallery> galleries) {
+        return galleries.stream()
+                .map(gallery -> new GalleryRecipientRes(gallery))
+                .collect(Collectors.toList());
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void analyzeGallery(){
+        List<Gallery> galleries = galleryRepository.findAll();
+        for(Gallery g : galleries) {
+            Keyword keyword;
+            if(g.getKeyword() == null && g.getFileType().equals("IMAGE")){ // 이미지만
+               keyword  = sendToFastApi(g.getFileUrl());
+               g.setKeyword(keyword);
+               galleryRepository.save(g); // 키워드가 null인 경우만 저장
+            }
+        }
+
+    }
+
+    //Fast API 통신 키워드 하나만 반환
+    private Keyword sendToFastApi(String presignedUrl) {
+        log.info("FastAPI 통신 시작");
+        StringBuilder sb = new StringBuilder();
+        try {
+            log.info("Original Presigned URL: {}", presignedUrl);
+
+            // URLEncoder를 사용하여 파라미터 인코딩
+            String encodedPresignedUrl = URLEncoder.encode(presignedUrl, StandardCharsets.UTF_8);
+            String url = fastApiUrl + "/categorize?presigned_url=" + encodedPresignedUrl;
+
+            log.info("Encoded Request URL: {}", url);
+
+            String response = webClient
+                    .get()
+                    .uri(url)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .doOnError(error -> log.error("FastAPI 통신 중 에러 발생: {}", error.getMessage()))
+                    .doOnSuccess(result -> log.info("FastAPI 응답 성공: {}", result))
+                    .block(Duration.ofSeconds(30));
+            // JSON 문자열을 String 배열로 변환
+            ObjectMapper objectMapper = new ObjectMapper();
+            String keyword = objectMapper.readValue(response, String.class);
+
+            if (response != null) {
+                log.info("FastAPI 응답: {}", response);
+            } else {
+                throw new RuntimeException("FastAPI로부터 응답이 없습니다.");
+            }
+
+            return Keyword.valueOf(keyword.toLowerCase());
+
+
+
+        } catch (WebClientResponseException e) {
+            log.error("FastAPI 응답 에러: {} - {}", e.getRawStatusCode(), e.getResponseBodyAsString());
+            throw new RuntimeException("FastAPI 통신 실패: " + e.getMessage());
+        } catch (Exception e) {
+            log.error("예상치 못한 에러 발생: {}", e.getMessage());
+            throw new RuntimeException("FastAPI 통신 중 에러 발생: " + e.getMessage());
+        }
+    }
+
+    private LocalDateTime convertDateTime(String dateStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy:MM:dd");
+
+        // 문자열을 LocalDate로 파싱
+        LocalDate date = LocalDate.parse(dateStr, formatter);
+
+        // LocalDate를 LocalDateTime으로 변환 (시간을 자정으로 설정)
+        return date.atStartOfDay();
+    }
+
+    private String truncateToFourDecimals(String number) {
+        double value = Double.parseDouble(number);
+        // 소수점 이하 자릿수를 구함
+        String strValue = String.valueOf(value);
+        int decimalIndex = strValue.indexOf('.');
+
+        if (decimalIndex != -1 && strValue.length() > decimalIndex + 5) {
+            // 소수점 + 4자리까지만 잘라냄
+            return strValue.substring(0, decimalIndex + 5);
+        }
+
+        return strValue;
     }
 }
