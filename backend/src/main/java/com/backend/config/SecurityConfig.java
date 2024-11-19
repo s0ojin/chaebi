@@ -1,14 +1,17 @@
 package com.backend.config;
 
+import com.backend.util.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -44,15 +47,36 @@ public class SecurityConfig {
         MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화
-                .authorizeHttpRequests(auth -> auth
-                        // 모든 요청에 대해 인증을 요구하지 않음
-                        .requestMatchers(
-                                mvcMatcherBuilder.pattern("/**") // 모든 요청 허용
-                        ).permitAll()
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .formLogin(AbstractHttpConfigurer::disable) // 로그인 폼 비활성화
-                .httpBasic(AbstractHttpConfigurer::disable); // HTTP Basic 인증 비활성화
+                .authorizeHttpRequests(auth -> auth
+                        // 공개 API 엔드포인트 설정
+                        .requestMatchers(
+                                mvcMatcherBuilder.pattern("/api/users/**"),
+                                mvcMatcherBuilder.pattern("/api/deposit/**"),
+                                mvcMatcherBuilder.pattern("/api/sms/**"),
+                                mvcMatcherBuilder.pattern("/api/fcm/**"),
+                                mvcMatcherBuilder.pattern("/error"),
+                                mvcMatcherBuilder.pattern("/api/gallery/recipientList"),
+                                mvcMatcherBuilder.pattern("/api/gallery/filterList"),
+                                mvcMatcherBuilder.pattern("/api/letter/**"),
+                                mvcMatcherBuilder.pattern("/api/recipient/enter"),
+                                mvcMatcherBuilder.pattern("/")
+                        ).permitAll()
+                        // Swagger UI 접근 허용
+                        .requestMatchers(mvcMatcherBuilder.pattern("/api/letter/{id}/update")).hasRole("USER")
+                        .requestMatchers(
+                                mvcMatcherBuilder.pattern("/swagger-ui/**"),
+                                mvcMatcherBuilder.pattern("/v3/api-docs/**")
+                        ).permitAll()
+                        // 나머지 요청은 인증 필요
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
@@ -60,5 +84,10 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
     }
 }

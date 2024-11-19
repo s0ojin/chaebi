@@ -36,6 +36,12 @@ public class Gallery {
         @Column(name = "created_date")
         private LocalDateTime createdDate;
 
+        private String locate; // 사진위치
+        private LocalDateTime capturedDate; //찍은 시간
+
+        @Enumerated(EnumType.STRING)
+        private Keyword keyword;
+
         @PrePersist
         protected void onCreate() {
                 createdDate = LocalDateTime.now();
@@ -53,4 +59,6 @@ public class Gallery {
         public void clearRecipients() {
                 galleryRecipients.clear();
         }
+
+
 }

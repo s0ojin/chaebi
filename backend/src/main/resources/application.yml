@@ -1,0 +1,51 @@
+spring:
+  jackson:
+    time-zone: Asia/Seoul
+  data:
+    redis:
+      host: host  # Redis 서버 호스트
+      port: 6379      # Redis 서버 포트
+      password: pw
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: name
+    password: pw
+    url: jdbc:mysql://server:3306/name?serverTimezone=Asia/Seoul&useUnicode=true&character_set_server=utf8mb4
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: false
+    hibernate:
+        ddl-auto: update
+    properties:
+        hibernate:
+          format_sql: true
+    show-sql: true
+
+jwt:
+    secret : secret
+    expiration : 4320000
+    refreshexpiration : 25920000
+
+cloud:
+  aws:
+    s3:
+      bucket: bucket
+    stack.auto: false
+    region.static: region
+    credentials:
+        accessKey: key
+        secretKey: secret
+
+coolsms:
+  apikey: apikey
+  apisecret: secret
+  fromnumber: phone
+    #전화번호는 '-' 빼고
+
+cors:
+  allowed-origins: http://localhost:3000,http://localhost:8080,http://k11a309.p.ssafy.io:3000, http://k11a309.p.ssafy.io
+
+fastApi:
+  url: http://k11a309.p.ssafy.io:8000/

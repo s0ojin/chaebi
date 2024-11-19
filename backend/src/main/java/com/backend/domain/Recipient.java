@@ -41,6 +41,8 @@ public class Recipient {
 
     private String imgurl;
 
+    private String enterCode; // 입장 코드
+
     @PrePersist
     @PreUpdate
     protected void onCreate() {
