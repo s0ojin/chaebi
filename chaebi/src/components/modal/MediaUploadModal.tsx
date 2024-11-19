@@ -112,26 +112,29 @@ export default function MediaUploadModal({closeModal}: MediaUploadModalProps) {
       </Text>
 
       <RecipientTagList />
-
-      <View className="relative w-32 h-32 flex-row my-8">
-        <View
-          className="absolute top-0 left-0 w-full h-full bg-primary-200 rounded-lg"
-          style={{zIndex: -2, transform: [{rotate: '-8deg'}]}}
-        />
-        <View
-          className="absolute top-1 left-1 w-full h-full bg-primary-200 rounded-lg"
-          style={{zIndex: -1, transform: [{rotate: '6deg'}]}}
-        />
-        <Image
-          source={{
-            uri: selectedLocalMediaList[0]?.path,
-          }}
-          className="w-full h-full rounded-lg"
-        />
-        <Text className="mt-2 text-primary-400 text-lg self-end ml-3">
-          {`(${selectedLocalMediaList.length}장)`}
-        </Text>
-      </View>
+      {mediaUploadMutation.isPending ? (
+        <Text className="p-10">Loading...</Text>
+      ) : (
+        <View className="relative w-32 h-32 flex-row my-8">
+          <View
+            className="absolute top-0 left-0 w-full h-full bg-primary-200 rounded-lg"
+            style={{zIndex: -2, transform: [{rotate: '-8deg'}]}}
+          />
+          <View
+            className="absolute top-1 left-1 w-full h-full bg-primary-200 rounded-lg"
+            style={{zIndex: -1, transform: [{rotate: '6deg'}]}}
+          />
+          <Image
+            source={{
+              uri: selectedLocalMediaList[0]?.path,
+            }}
+            className="w-full h-full rounded-lg"
+          />
+          <Text className="mt-2 text-primary-400 text-lg self-end ml-3">
+            {`(${selectedLocalMediaList.length}장)`}
+          </Text>
+        </View>
+      )}
 
       <View className="flex-row gap-2 h-11">
         <Pressable
