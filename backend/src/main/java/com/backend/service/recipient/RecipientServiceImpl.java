@@ -1,12 +1,10 @@
 package com.backend.service.recipient;
 
-import com.backend.domain.GalleryRecipient;
-import com.backend.domain.Letter;
-import com.backend.domain.Recipient;
-import com.backend.domain.User;
+import com.backend.domain.*;
 import com.backend.dto.*;
 import com.backend.exception.AlreadyExistsException;
 import com.backend.exception.NotFoundException;
+import com.backend.repository.GalleryRepository;
 import com.backend.repository.RecipientRepository;
 import com.backend.service.gallery.GalleryService;
 import com.backend.service.idconvert.IdConverterServiceImpl;
@@ -29,6 +27,7 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     private final LetterService letterService;
     private final GalleryService galleryService;
     private final IdConverterServiceImpl idConverterService;
+    private final GalleryRepository galleryRepository;
 
     @Override
     public Long createRecipient(RecipientDTO recipientDTO, User user, MultipartFile file) {
@@ -125,6 +124,11 @@ public class RecipientServiceImpl implements RecipientService{ //열람인 CRUD 
     @Override
     public void deleteRecipient(long id) {  //열람자 삭제
         repository.deleteById(id);
+
+        List<Gallery> emptyGalleries = galleryRepository.findGalleriesWithNoRecipients();
+
+        // 3. 열람자가 없는 갤러리들 삭제
+        galleryRepository.deleteAll(emptyGalleries);
     }
 
     @Override

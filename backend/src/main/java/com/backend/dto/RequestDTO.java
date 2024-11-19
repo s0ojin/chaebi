@@ -9,4 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RequestDTO { //FCM
     private String targetToken;
+    private String title;
+    private String body;
 }

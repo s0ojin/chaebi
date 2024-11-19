@@ -10,6 +10,7 @@ import com.google.common.net.HttpHeaders;
 import com.google.gson.JsonParseException;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -28,8 +29,8 @@ public class FirebaseServiceImpl implements FirebaseService {
     private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
 
-    public void sendMessageTo(String targetToken, String title, String body) throws IOException {
-        String message = makeMessage(targetToken, title, body);
+    public void sendMessageTo(String targetToken, String title, String body, String name, String phone) throws IOException {
+        String message = makeMessage(targetToken, title, body, name,phone);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(message,
@@ -46,14 +47,22 @@ public class FirebaseServiceImpl implements FirebaseService {
         System.out.println(response.body().string());
     }
 
-    private String makeMessage(String targetToken, String title, String body) throws JsonParseException, JsonProcessingException {
+    @Value("${app.img}")
+    private String img;
+    private String makeMessage(String targetToken, String title, String body, String str, String phone ) throws JsonParseException, JsonProcessingException {
+
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                         .token(targetToken)
                         .notification(FcmMessage.Notification.builder()
                                 .title(title)
                                 .body(body)
-                                .image(null)
+                                .image(img)
+                                .build())
+                        .data(FcmMessage.Data.builder()
+                                .screenName("Absence")  // 예: "product_detail"
+                                .name(str)
+                                .phoneNumber(phone)// 예: 상품 ID 등
                                 .build()
                         ).build()).validateOnly(false).build();
 
@@ -82,8 +91,8 @@ public class FirebaseServiceImpl implements FirebaseService {
             System.out.println(u.getName() + "님 발송");
             System.out.println("토큰 : " + u.getFcmToken());
             if(token != null && u.isPush()){
-                String body = u.getName() + "님 입장하세요!";
-                this.sendMessageTo(token, "채비", body);
+                String body = u.getName() + "님이 남기신 유언을 확인해주세요.";
+                this.sendMessageTo(token, "채비", body, u.getName(),u.getPhone());
             }
         }
     }

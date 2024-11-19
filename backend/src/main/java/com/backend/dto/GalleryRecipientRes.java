@@ -16,7 +16,7 @@ public class GalleryRecipientRes {
     private String fileType;
     private String fileName;
     private LocalDateTime createdDate;
-    private Set<Keyword> keywords;
+    private Keyword keyword;
     private String locate;
     private LocalDateTime capturedDate;
 
@@ -26,7 +26,7 @@ public class GalleryRecipientRes {
         this.fileType = gallery.getFileType();
         this.fileName = gallery.getFileName();
         this.createdDate = gallery.getCreatedDate();
-        this.keywords = gallery.getKeywords();
+        this.keyword = gallery.getKeyword();
         this.locate = gallery.getLocate();
         this.capturedDate = gallery.getCapturedDate();
     }
