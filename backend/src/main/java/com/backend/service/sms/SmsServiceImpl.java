@@ -210,7 +210,7 @@ public class SmsServiceImpl implements SmsService {
                 //String code = idConverterService.combineIds(user.getId(), r.getId());
                 String code = idConverterService.generateRandomCode(r.getId()); //난수 코드
                 System.out.println("code 생성");
-                smsCertificationUtil.sendCode(r.getName(), r.getPhone(), code); // 유저의 열람인 모두에게 문자 발송
+                smsCertificationUtil.sendCode(user.getName(),r.getName(), r.getPhone(), code); // 유저의 열람인 모두에게 문자 발송
             }
         }else {
             System.out.println("이용자 확인 불가");
