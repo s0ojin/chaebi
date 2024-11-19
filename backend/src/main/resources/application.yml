@@ -3,14 +3,14 @@ spring:
     time-zone: Asia/Seoul
   data:
     redis:
-      host: 43.201.33.45  # Redis 서버 호스트
+      host: host  # Redis 서버 호스트
       port: 6379      # Redis 서버 포트
-      password: roWjsmsvmffpdl
+      password: pw
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: a309
-    password: todwjsrhdls
-    url: jdbc:mysql://43.201.33.45:3306/free?serverTimezone=Asia/Seoul&useUnicode=true&character_set_server=utf8mb4
+    username: name
+    password: pw
+    url: jdbc:mysql://server:3306/name?serverTimezone=Asia/Seoul&useUnicode=true&character_set_server=utf8mb4
 
   jpa:
     database: mysql
@@ -24,7 +24,7 @@ spring:
     show-sql: true
 
 jwt:
-    secret : 5543db1f2e54b5626c948f4cf35481aa1fb3f43446ac583aacdabf46afc3a81d946388442fd5c9e6df0fce58d4f877a8467cbe3095ef40cd2e877f9a586a00a7
+    secret : secret
     expiration : 4320000
     refreshexpiration : 25920000
 
@@ -33,7 +33,7 @@ cloud:
     s3:
       bucket: bucket
     stack.auto: false
-    region.static: ap-northeast-2
+    region.static: region
     credentials:
         accessKey: key
         secretKey: secret
