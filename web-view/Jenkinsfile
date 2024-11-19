@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+
+    environment {
+        // 공통 환경 변수
+        GITLAB_CREDENTIALS_ID = "gitlab"
+        GITLAB_REPO = "https://lab.ssafy.com/s11-final/S11P31A309.git"
+        BRANCH = "yoonha"
+ 
+        SSH_CREDENTIALS_ID = "ssafy-ec2-user"
+        SERVER_IP = "43.201.33.45"
+    }
+
+   stages {
+        stage('Github Clone') {
+            steps {
+                git branch: "${BRANCH}",
+                credentialsId: "${GITLAB_CREDENTIALS_ID}",
+                url: "${GITLAB_REPO}"
+            }
+        }
+
+        stage('Shutdown') {
+            steps {
+                script {
+                    // 이미 실행 중인 컨테이너가 있다면 종료
+                    sh 'docker container rm -f frontend-app || true'
+                }
+            }
+        }
+
+        stage('Front - Docker - Build') {
+          steps {
+            dir('./web-view/chaebi') {
+              sh 'docker build -t frontend . '
+            }
+          }
+        }
+
+
+        stage('Docker Run') {
+            parallel {
+                stage('Next Docker Run') {
+                    steps {
+                        dir('./web-view') {
+                            sh 'docker run --name frontend-app -d -v data:/data -p 3000:3000 -e TZ=Asia/Seoul frontend'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

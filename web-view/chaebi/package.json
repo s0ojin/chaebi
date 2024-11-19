@@ -1,0 +1,51 @@
+{
+  "name": "chaebi",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format:fix": "prettier --write --ignore-path .gitignore .",
+    "lint:fix": "eslint --fix './src/**/*.{ts,tsx,js,jsx}'"
+  },
+  "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "axios": "^1.7.7",
+    "framer-motion": "^11.11.11",
+    "next": "15.0.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-player": "^2.16.0",
+    "react-slick": "^0.30.2",
+    "react-toastify": "^10.0.6",
+    "slick-carousel": "^1.8.1",
+    "zustand": "^5.0.1"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/react-slick": "^0.23.13",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-next": "15.0.2",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "4.6.2",
+    "file-loader": "^6.2.0",
+    "postcss": "^8.4.47",
+    "prettier": "^3.3.3",
+    "rimraf": "^5.0.1",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5"
+  }
+}
