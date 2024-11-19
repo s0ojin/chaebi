@@ -111,7 +111,7 @@
 ![개발일정](results/schedule.png)
 
 ### ERD
-![ERD](results/erd.png)
+![ERD](results/ERD.png)
 
 
 ### 서비스
