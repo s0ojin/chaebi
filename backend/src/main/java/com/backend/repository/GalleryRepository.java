@@ -5,6 +5,8 @@ import com.backend.domain.Recipient;
 import com.backend.domain.User;
 import com.backend.dto.GalleryResDTO;
 import com.backend.dto.PresignedUrlResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,4 +38,8 @@ public interface GalleryRepository extends JpaRepository<Gallery, Long> {
             @Param("user") User user,
             @Param("recipientId") Long recipientId
     );
+    Page<Gallery> findAllByUser(User user, Pageable pageable);
+
+    @Query("SELECT g FROM Gallery g WHERE SIZE(g.galleryRecipients) = 0")
+    List<Gallery> findGalleriesWithNoRecipients();
 }

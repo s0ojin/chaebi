@@ -28,8 +28,6 @@ public class GalleryRecipient {
     @JsonBackReference
     private Recipient recipient;
 
-    @Column(name = "read_status")
-    private boolean readStatus = false;
 
     @Column(name = "first_viewed_date")
     private LocalDateTime firstViewedDate;
@@ -43,10 +41,18 @@ public class GalleryRecipient {
         this.grantedDate = LocalDateTime.now();
     }
 
-    public void markAsRead() {
-        if (!this.readStatus) {
-            this.readStatus = true;
-            this.firstViewedDate = LocalDateTime.now();
+
+    public void setRecipient(Recipient recipient) {
+        // 기존 관계 제거
+        if (this.recipient != null && this.recipient != recipient) {
+            this.recipient.getGalleryRecipients().remove(this);
+        }
+
+        this.recipient = recipient;
+
+        // 새로운 관계 설정
+        if (recipient != null && !recipient.getGalleryRecipients().contains(this)) {
+            recipient.getGalleryRecipients().add(this);
         }
     }
 }

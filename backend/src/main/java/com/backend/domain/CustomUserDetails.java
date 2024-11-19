@@ -27,8 +27,8 @@ public class CustomUserDetails implements UserDetails {
         return authorities;
     }
     @Override
-    public String getPassword() {
-        return user.getPassword();
+    public String getPassword() { // 비밀 번호 없음
+        return "";
     }
 
     @Override
