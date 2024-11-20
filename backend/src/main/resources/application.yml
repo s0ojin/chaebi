@@ -1,60 +1,51 @@
 spring:
-  servlet:
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 30MB
   jackson:
     time-zone: Asia/Seoul
-    parser:
-      allow-unquoted-control-chars: true
   data:
     redis:
-      host: 43.201.33.45  # Redis 서버 호스트
+      host: host  # Redis 서버 호스트
       port: 6379      # Redis 서버 포트
-      password: roWjsmsvmffpdl
+      password: pw
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: a309
-    password: todwjsrhdls
-    url: jdbc:mysql://43.201.33.45:3306/free?serverTimezone=Asia/Seoul&useUnicode=true&character_set_server=utf8mb4
+    username: name
+    password: pw
+    url: jdbc:mysql://server:3306/name?serverTimezone=Asia/Seoul&useUnicode=true&character_set_server=utf8mb4
 
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     generate-ddl: false
     hibernate:
-      ddl-auto: update
+        ddl-auto: update
     properties:
-      hibernate:
-        format_sql: true
+        hibernate:
+          format_sql: true
     show-sql: true
 
 jwt:
-  secret : 5543db1f2e54b5626c948f4cf35481aa1fb3f43446ac583aacdabf46afc3a81d946388442fd5c9e6df0fce58d4f877a8467cbe3095ef40cd2e877f9a586a00a7
-  expiration : 4320000
-  refreshexpiration : 25920000
+    secret : secret
+    expiration : 4320000
+    refreshexpiration : 25920000
 
 cloud:
   aws:
     s3:
-      bucket: amzn-s3-s11p31a309-rip
+      bucket: bucket
     stack.auto: false
-    region.static: ap-northeast-2
+    region.static: region
     credentials:
-      accessKey: AKIA5WLTTCNVNVR7ZEVC
-      secretKey: 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
+        accessKey: key
+        secretKey: secret
 
 coolsms:
-  apikey: NCSGBQN2HXPT0MSU
-  apisecret: RROVJJKXTHXUJGGCNFLH4LPRN4NEBEWI
-  fromnumber: 01083812922
-  #전화번호는 '-' 빼고
+  apikey: apikey
+  apisecret: secret
+  fromnumber: phone
+    #전화번호는 '-' 빼고
 
 cors:
   allowed-origins: http://localhost:3000,http://localhost:8080,http://k11a309.p.ssafy.io:3000, http://k11a309.p.ssafy.io
 
 fastApi:
   url: http://k11a309.p.ssafy.io:8000/
-
-app:
-  img: https://amzn-s3-s11p31a309-rip.s3.ap-northeast-2.amazonaws.com/uploads/20241118183757_fb2f6a9c.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241118T093758Z&X-Amz-SignedHeaders=host&X-Amz-Expires=518400&X-Amz-Credential=AKIA5WLTTCNVMRCYO2WO%2F20241118%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=cfed12186e2cae35cd6df147da7878c343fba56f3f0ac99b8279379d113409fd
