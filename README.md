@@ -36,10 +36,7 @@
 ![MatterMost](https://img.shields.io/badge/mattermost-0058CC.svg?&style=for-the-badge&logo=mattermost&logoColor=white)
 
 ## 서비스 설명  
-예치금을 걸고 금융 목표에 도전하는 SOL인앱 챌린지 서비스
-
-예치금을 걸고 다양한 금융 챌린지에 도전하여 상금을 분배받는다 ~
-사용자의 이체 내역을 자동 추적하여 별도의 인증이 필요없습니다 !!!!
+삶을 기록하고, 사후 열람인에게 기록을 전달하는 유언장 서비스
 
 
 ## 기능 소개
